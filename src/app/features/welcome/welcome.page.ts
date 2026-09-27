@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserApiService } from '../../core/services/user-api.service';
+import { firstNameFrom } from '../../shared/user-display-name';
 
 @Component({
   selector: 'app-welcome-page',
@@ -16,7 +17,9 @@ export class WelcomePage implements OnInit {
   protected readonly user = this.authService.currentUser;
   protected readonly username = signal('');
   protected readonly animationVisible = signal(true);
-  protected readonly displayName = computed(() => this.username() || this.user()?.sub || 'usuario');
+  protected readonly displayName = computed(() =>
+    firstNameFrom(this.username() || this.user()?.sub, 'usuario'),
+  );
   protected readonly role = computed(() => this.user()?.role ?? 'ADMIN');
 
   ngOnInit(): void {

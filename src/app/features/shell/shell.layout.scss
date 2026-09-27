@@ -2,3 +2,24 @@
   display: block;
 }
 
+.shell-user-name {
+  animation: user-glow 2.8s ease-in-out infinite;
+  text-shadow: 0 0 16px rgba(52, 211, 153, 0.36);
+}
+
+@keyframes user-glow {
+  0%,
+  100% {
+    color: #a7f3d0;
+    opacity: 0.78;
+    text-shadow: 0 0 10px rgba(52, 211, 153, 0.22);
+  }
+
+  50% {
+    color: #ffffff;
+    opacity: 1;
+    text-shadow:
+      0 0 14px rgba(52, 211, 153, 0.58),
+      0 0 28px rgba(34, 211, 238, 0.24);
+  }
+}

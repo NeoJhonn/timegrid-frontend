@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserApiService } from '../../core/services/user-api.service';
+import { firstNameFrom } from '../../shared/user-display-name';
 
 interface QuickLink {
   label: string;
@@ -22,7 +23,9 @@ export class ShellLayout implements OnInit {
   protected readonly menuOpen = signal(false);
   protected readonly username = signal('');
   protected readonly user = this.authService.currentUser;
-  protected readonly displayName = computed(() => this.username() || this.user()?.sub || 'Usuario');
+  protected readonly displayName = computed(() =>
+    firstNameFrom(this.username() || this.user()?.sub, 'Usuario'),
+  );
   protected readonly role = computed(() => this.user()?.role ?? 'ADMIN');
   protected readonly isManager = computed(() => this.role() === 'MANAGER');
 

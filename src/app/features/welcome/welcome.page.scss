@@ -2,6 +2,14 @@
   display: block;
 }
 
+.welcome-name {
+  display: inline-block;
+  color: #a7f3d0;
+  font-size: 1.35rem;
+  font-weight: 900;
+  text-shadow: 0 0 24px rgba(52, 211, 153, 0.42);
+}
+
 .welcome-ring {
   animation: pulse-ring 3.5s ease-in-out infinite;
 }
@@ -60,4 +68,3 @@
     }
   }
 }
-
