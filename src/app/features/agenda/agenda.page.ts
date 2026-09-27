@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { forkJoin, finalize } from 'rxjs';
 import { AppointmentResponse, TimeGrid } from '../../core/models/appointment.model';
 import { ClientResponse } from '../../core/models/client.model';
@@ -12,7 +13,7 @@ import { TIME_GRID_OPTIONS, timeGridLabel } from '../../shared/time-grid-options
 
 @Component({
   selector: 'app-agenda-page',
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [DatePipe, ReactiveFormsModule, RouterLink],
   templateUrl: './agenda.page.html',
   styleUrl: './agenda.page.scss',
 })
@@ -33,6 +34,11 @@ export class AgendaPage implements OnInit {
   protected readonly message = signal('');
   protected readonly errorMessage = signal('');
   protected readonly timeOptions = TIME_GRID_OPTIONS;
+  protected readonly availableTimeOptions = computed(() => {
+    const occupied = this.occupiedTimeValues();
+    return this.timeOptions.filter((option) => !occupied.has(option.value));
+  });
+  protected readonly hasAvailableSlots = computed(() => this.availableTimeOptions().length > 0);
 
   protected readonly appointmentForm = this.formBuilder.nonNullable.group({
     clientId: ['', Validators.required],
@@ -64,6 +70,25 @@ export class AgendaPage implements OnInit {
     return this.clients().find((client) => client.id === clientId) ?? null;
   });
 
+  private readonly occupiedTimeValues = computed(() => {
+    const occupied = new Set<TimeGrid>();
+
+    for (const appointment of this.appointments()) {
+      const startIndex = this.timeOptions.findIndex((option) => option.value === appointment.startTime);
+      const endIndex = this.timeOptions.findIndex((option) => option.value === appointment.endTime);
+
+      if (startIndex < 0 || endIndex < 0) {
+        continue;
+      }
+
+      for (let index = startIndex; index <= endIndex; index += 1) {
+        occupied.add(this.timeOptions[index].value);
+      }
+    }
+
+    return occupied;
+  });
+
   ngOnInit(): void {
     this.loadInitialData();
   }
@@ -87,6 +112,7 @@ export class AgendaPage implements OnInit {
         next: ({ clients, appointments }) => {
           this.clients.set(clients);
           this.appointments.set(this.sortAppointments(appointments));
+          this.adjustAvailableTimeDefaults();
         },
         error: (error: unknown) => {
           this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar a agenda.'));
@@ -114,7 +140,10 @@ export class AgendaPage implements OnInit {
       .listByDate(userId, this.selectedDate())
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (appointments) => this.appointments.set(this.sortAppointments(appointments)),
+        next: (appointments) => {
+          this.appointments.set(this.sortAppointments(appointments));
+          this.adjustAvailableTimeDefaults();
+        },
         error: (error: unknown) => {
           this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar agendamentos.'));
         },
@@ -124,7 +153,7 @@ export class AgendaPage implements OnInit {
   protected submitAppointment(): void {
     const userId = this.userId();
 
-    if (!userId || this.appointmentForm.invalid || this.saving()) {
+    if (!userId || this.appointmentForm.invalid || this.saving() || !this.hasAvailableSlots()) {
       this.appointmentForm.markAllAsTouched();
       return;
     }
@@ -225,6 +254,27 @@ export class AgendaPage implements OnInit {
   }
 
   protected labelForTime = timeGridLabel;
+
+  private adjustAvailableTimeDefaults(): void {
+    const available = this.availableTimeOptions();
+
+    if (available.length === 0) {
+      return;
+    }
+
+    const startTime = this.appointmentForm.controls.startTime.value;
+    const endTime = this.appointmentForm.controls.endTime.value;
+    const firstAvailable = available[0].value;
+    const secondAvailable = available[1]?.value ?? firstAvailable;
+
+    if (!available.some((option) => option.value === startTime)) {
+      this.appointmentForm.controls.startTime.setValue(firstAvailable);
+    }
+
+    if (!available.some((option) => option.value === endTime)) {
+      this.appointmentForm.controls.endTime.setValue(secondAvailable);
+    }
+  }
 
   private sortAppointments(appointments: AppointmentResponse[]): AppointmentResponse[] {
     return [...appointments].sort((a, b) => a.startTime.localeCompare(b.startTime));

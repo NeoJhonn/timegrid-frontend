@@ -44,7 +44,10 @@
               }
             } @else {
               <div class="rounded-lg border border-amber-300/20 bg-amber-300/10 px-3 py-3 text-sm text-amber-100">
-                Cliente nao cadastrado. Cadastre antes de agendar.
+                Cliente nao cadastrado.
+                <a routerLink="/app/clients" class="font-bold underline decoration-amber-100/60 underline-offset-4">
+                  Cadastre antes de agendar.
+                </a>
               </div>
             }
           </div>
@@ -68,7 +71,7 @@
             formControlName="startTime"
             class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
           >
-            @for (time of timeOptions; track time.value) {
+            @for (time of availableTimeOptions(); track time.value) {
               <option [value]="time.value">{{ time.label }}</option>
             }
           </select>
@@ -80,7 +83,7 @@
             formControlName="endTime"
             class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
           >
-            @for (time of timeOptions; track time.value) {
+            @for (time of availableTimeOptions(); track time.value) {
               <option [value]="time.value">{{ time.label }}</option>
             }
           </select>
@@ -99,10 +102,16 @@
         </div>
       }
 
+      @if (!hasAvailableSlots()) {
+        <div class="rounded-lg border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm text-amber-100">
+          Todos os horarios desta data ja estao ocupados. Escolha outro dia.
+        </div>
+      }
+
       <button
         type="submit"
         class="h-12 w-full rounded-lg bg-emerald-400 px-5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
-        [disabled]="saving() || appointmentForm.invalid"
+        [disabled]="saving() || appointmentForm.invalid || !hasAvailableSlots()"
       >
         {{ saving() ? 'Salvando...' : 'Criar agendamento' }}
       </button>
@@ -220,4 +229,3 @@
     </form>
   </div>
 }
-

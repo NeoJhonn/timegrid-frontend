@@ -22,6 +22,8 @@ export class HistoryPage implements OnInit {
 
   protected readonly clients = signal<ClientResponse[]>([]);
   protected readonly selectedClientId = signal('');
+  protected readonly clientQuery = signal('');
+  protected readonly clientSuggestionsOpen = signal(false);
   protected readonly appointments = signal<AppointmentResponse[]>([]);
   protected readonly loading = signal(false);
   protected readonly errorMessage = signal('');
@@ -31,6 +33,17 @@ export class HistoryPage implements OnInit {
   protected readonly selectedClient = computed(
     () => this.clients().find((client) => client.id === this.selectedClientId()) ?? null,
   );
+  protected readonly filteredClients = computed(() => {
+    const query = this.clientQuery().trim().toLowerCase();
+
+    if (!query) {
+      return this.clients().slice(0, 6);
+    }
+
+    return this.clients()
+      .filter((client) => client.name.toLowerCase().includes(query))
+      .slice(0, 8);
+  });
 
   protected readonly labelForTime = timeGridLabel;
 
@@ -55,7 +68,7 @@ export class HistoryPage implements OnInit {
         next: (clients) => {
           this.clients.set(clients);
           if (clients.length > 0 && !this.selectedClientId()) {
-            this.selectedClientId.set(clients[0].id);
+            this.selectClient(clients[0]);
             this.loadHistory();
           }
         },
@@ -67,6 +80,28 @@ export class HistoryPage implements OnInit {
 
   protected changeClient(clientId: string): void {
     this.selectedClientId.set(clientId);
+    this.loadHistory();
+  }
+
+  protected updateClientQuery(value: string): void {
+    this.clientQuery.set(value);
+    this.clientSuggestionsOpen.set(true);
+    this.selectedClientId.set('');
+    this.appointments.set([]);
+  }
+
+  protected selectClient(client: ClientResponse): void {
+    this.selectedClientId.set(client.id);
+    this.clientQuery.set(client.name);
+    this.clientSuggestionsOpen.set(false);
+  }
+
+  protected openClientSuggestions(): void {
+    this.clientSuggestionsOpen.set(true);
+  }
+
+  protected selectClientAndLoad(client: ClientResponse): void {
+    this.selectClient(client);
     this.loadHistory();
   }
 
@@ -131,4 +166,3 @@ export class HistoryPage implements OnInit {
     return this.authService.currentUser()?.userId ?? null;
   }
 }
-

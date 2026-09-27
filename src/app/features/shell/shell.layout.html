@@ -90,6 +90,17 @@
             {{ link.label }}
           </a>
         }
+        @if (isManager()) {
+          <a
+            [routerLink]="managerLink.path"
+            routerLinkActive="bg-emerald-300/10 text-emerald-100"
+            class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            (click)="closeMenu()"
+          >
+            <span class="grid h-8 w-8 place-items-center rounded-lg bg-emerald-300/10 text-xs font-bold text-emerald-100">{{ managerLink.symbol }}</span>
+            {{ managerLink.label }}
+          </a>
+        }
       </nav>
 
       <button
@@ -106,4 +117,3 @@
     <router-outlet />
   </main>
 </div>
-
