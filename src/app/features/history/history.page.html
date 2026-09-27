@@ -1,0 +1,110 @@
+<section class="grid gap-5 lg:grid-cols-[360px_1fr]">
+  <aside class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
+    <p class="text-sm font-semibold text-emerald-200">Historico</p>
+    <h1 class="mt-2 text-3xl font-black text-white">Por cliente</h1>
+    <p class="mt-3 text-sm leading-6 text-slate-400">
+      Consulte uma janela de agendamentos e veja tudo que pertence ao cliente selecionado.
+    </p>
+
+    <label class="mt-6 block">
+      <span class="mb-2 block text-sm font-medium text-slate-300">Cliente</span>
+      <select
+        class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+        [value]="selectedClientId()"
+        (change)="changeClient($any($event.target).value)"
+      >
+        @for (client of clients(); track client.id) {
+          <option [value]="client.id">{{ client.name }}</option>
+        }
+      </select>
+    </label>
+
+    <div class="mt-5 grid gap-2">
+      <button
+        type="button"
+        class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        (click)="setWindow(7, 7)"
+      >
+        Ultimos 7 dias + proximos 7
+      </button>
+      <button
+        type="button"
+        class="rounded-lg border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-left text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/15"
+        (click)="setWindow(30, 30)"
+      >
+        Ultimos 30 dias + proximos 30
+      </button>
+      <button
+        type="button"
+        class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        (click)="setWindow(90, 30)"
+      >
+        Ultimos 90 dias + proximos 30
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="mt-5 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+        {{ errorMessage() }}
+      </div>
+    }
+  </aside>
+
+  <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
+    <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-sm font-semibold text-white">
+          {{ selectedClient()?.name || 'Selecione um cliente' }}
+        </p>
+        <p class="mt-1 text-sm text-slate-400">
+          {{ appointments().length }} registro(s) na janela selecionada
+        </p>
+      </div>
+      <button
+        type="button"
+        class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        (click)="loadHistory()"
+      >
+        Atualizar
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="grid min-h-64 place-items-center text-sm text-slate-400">Montando historico...</div>
+    } @else if (clients().length === 0) {
+      <div class="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/10 text-center">
+        <div>
+          <p class="font-semibold text-white">Nenhum cliente cadastrado</p>
+          <p class="mt-2 text-sm text-slate-400">Cadastre clientes para consultar historicos.</p>
+        </div>
+      </div>
+    } @else if (appointments().length === 0) {
+      <div class="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/10 text-center">
+        <div>
+          <p class="font-semibold text-white">Sem historico nesta janela</p>
+          <p class="mt-2 text-sm text-slate-400">Ajuste o periodo ou crie um agendamento para este cliente.</p>
+        </div>
+      </div>
+    } @else {
+      <div class="space-y-3">
+        @for (appointment of appointments(); track appointment.id) {
+          <article class="rounded-lg border border-white/10 bg-slate-950/45 p-4 transition hover:border-emerald-300/30">
+            <div class="grid gap-4 md:grid-cols-[150px_1fr] md:items-center">
+              <div class="rounded-lg border border-white/10 bg-white/[0.055] px-3 py-3">
+                <p class="text-sm font-bold text-white">{{ appointment.appointmentDate | date: 'dd/MM/yyyy' }}</p>
+                <p class="mt-1 text-xs text-slate-400">
+                  {{ labelForTime(appointment.startTime) }} - {{ labelForTime(appointment.endTime) }}
+                </p>
+              </div>
+              <div>
+                <p class="font-semibold text-white">{{ appointment.service }}</p>
+                <p class="mt-1 text-sm text-slate-400">{{ appointment.clientName }}</p>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+

@@ -1,0 +1,63 @@
+:host {
+  display: block;
+}
+
+.welcome-ring {
+  animation: pulse-ring 3.5s ease-in-out infinite;
+}
+
+.welcome-ring-delay {
+  animation-delay: 0.9s;
+}
+
+.orbit-item {
+  animation: orbit 10s linear infinite;
+}
+
+.orbit-item:nth-of-type(2) {
+  animation-delay: -2.5s;
+}
+
+.orbit-item:nth-of-type(3) {
+  animation-delay: -5s;
+}
+
+.orbit-item:nth-of-type(4) {
+  animation-delay: -7.5s;
+}
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(132px) rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg) translateX(132px) rotate(-360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  @keyframes orbit {
+    from {
+      transform: rotate(0deg) translateX(96px) rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg) translateX(96px) rotate(-360deg);
+    }
+  }
+}
+

@@ -1,0 +1,223 @@
+<section class="grid gap-5 xl:grid-cols-[430px_1fr]">
+  <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
+    <p class="text-sm font-semibold text-emerald-200">Agenda</p>
+    <h1 class="mt-2 text-3xl font-black text-white">Novo agendamento</h1>
+    <p class="mt-3 text-sm leading-6 text-slate-400">
+      Busque um cliente cadastrado, escolha servico e horario, e o backend valida conflitos.
+    </p>
+
+    <form class="mt-6 space-y-4" [formGroup]="appointmentForm" (ngSubmit)="submitAppointment()">
+      <label class="block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Data</span>
+        <input
+          type="date"
+          formControlName="appointmentDate"
+          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+          (change)="changeDate($any($event.target).value)"
+        />
+      </label>
+
+      <div class="relative">
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-300">Cliente</span>
+          <input
+            type="text"
+            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+            placeholder="Digite as primeiras letras"
+            [value]="clientQuery()"
+            (input)="updateClientQuery($any($event.target).value)"
+          />
+        </label>
+
+        @if (clientQuery() && !selectedClient()) {
+          <div class="absolute z-20 mt-2 max-h-56 w-full overflow-auto rounded-lg border border-white/10 bg-[#101722] p-2 shadow-2xl">
+            @if (filteredClients().length > 0) {
+              @for (client of filteredClients(); track client.id) {
+                <button
+                  type="button"
+                  class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm text-slate-200 transition hover:bg-emerald-300/10 hover:text-white"
+                  (click)="selectClient(client)"
+                >
+                  <span>{{ client.name }}</span>
+                  <span class="text-xs text-slate-500">{{ client.phone }}</span>
+                </button>
+              }
+            } @else {
+              <div class="rounded-lg border border-amber-300/20 bg-amber-300/10 px-3 py-3 text-sm text-amber-100">
+                Cliente nao cadastrado. Cadastre antes de agendar.
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <label class="block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Servico</span>
+        <input
+          type="text"
+          formControlName="service"
+          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+          placeholder="Ex: Corte, consultoria, revisao"
+        />
+      </label>
+
+      <div class="grid gap-3 sm:grid-cols-2">
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-300">Inicio</span>
+          <select
+            formControlName="startTime"
+            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+          >
+            @for (time of timeOptions; track time.value) {
+              <option [value]="time.value">{{ time.label }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-300">Fim</span>
+          <select
+            formControlName="endTime"
+            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+          >
+            @for (time of timeOptions; track time.value) {
+              <option [value]="time.value">{{ time.label }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      @if (message()) {
+        <div class="rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+          {{ message() }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="h-12 w-full rounded-lg bg-emerald-400 px-5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+        [disabled]="saving() || appointmentForm.invalid"
+      >
+        {{ saving() ? 'Salvando...' : 'Criar agendamento' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
+    <div class="mb-5 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div>
+        <p class="text-sm font-semibold text-white">Agenda de {{ selectedDate() | date: 'dd/MM/yyyy' }}</p>
+        <p class="mt-1 text-sm text-slate-400">{{ appointments().length }} agendamento(s) encontrado(s)</p>
+      </div>
+      <button
+        type="button"
+        class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        (click)="loadInitialData()"
+      >
+        Recarregar
+      </button>
+    </div>
+
+    @if (loading()) {
+      <div class="grid min-h-64 place-items-center text-sm text-slate-400">Carregando agenda...</div>
+    } @else if (appointments().length === 0) {
+      <div class="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/10 text-center">
+        <div>
+          <p class="font-semibold text-white">Dia livre por enquanto</p>
+          <p class="mt-2 text-sm text-slate-400">Crie o primeiro agendamento para esta data.</p>
+        </div>
+      </div>
+    } @else {
+      <div class="space-y-3">
+        @for (appointment of appointments(); track appointment.id) {
+          <article class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
+            <div class="grid gap-4 lg:grid-cols-[120px_1fr_auto] lg:items-center">
+              <div class="rounded-lg border border-emerald-300/20 bg-emerald-300/10 px-3 py-3 text-center">
+                <p class="text-lg font-black text-emerald-100">{{ labelForTime(appointment.startTime) }}</p>
+                <p class="text-xs text-emerald-200/80">ate {{ labelForTime(appointment.endTime) }}</p>
+              </div>
+              <div class="min-w-0">
+                <h2 class="truncate text-base font-bold text-white">{{ appointment.clientName }}</h2>
+                <p class="mt-1 text-sm text-slate-300">{{ appointment.service }}</p>
+                <p class="mt-2 text-xs text-slate-500">Criado em {{ appointment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  class="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10"
+                  (click)="startEdit(appointment)"
+                >
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  class="rounded-lg border border-red-300/20 px-3 py-2 text-xs font-semibold text-red-100 transition hover:bg-red-400/10"
+                  (click)="deleteAppointment(appointment)"
+                >
+                  Remover
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+@if (editingAppointment()) {
+  <div class="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 backdrop-blur-sm">
+    <form
+      class="w-full max-w-md rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
+      [formGroup]="updateForm"
+      (ngSubmit)="saveEdit()"
+    >
+      <h2 class="text-xl font-bold text-white">Editar agendamento</h2>
+      <p class="mt-2 text-sm text-slate-400">O backend permite alterar apenas servico e horario final.</p>
+
+      <label class="mt-5 block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Servico</span>
+        <input
+          type="text"
+          formControlName="service"
+          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+        />
+      </label>
+
+      <label class="mt-4 block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Novo horario final</span>
+        <select
+          formControlName="endTime"
+          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+        >
+          @for (time of timeOptions; track time.value) {
+            <option [value]="time.value">{{ time.label }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="mt-6 flex gap-2">
+        <button
+          type="submit"
+          class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300"
+        >
+          Salvar
+        </button>
+        <button
+          type="button"
+          class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          (click)="cancelEdit()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+}
+

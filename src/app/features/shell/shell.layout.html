@@ -1,0 +1,109 @@
+<div class="min-h-screen bg-[#080b10] text-slate-100">
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(21,128,61,0.18),transparent_34%),linear-gradient(135deg,#080b10_0%,#111827_48%,#0f172a_100%)]"></div>
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/50 to-transparent"></div>
+  </div>
+
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-[#080b10]/88 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+      <button
+        type="button"
+        class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.06] text-slate-100 transition hover:border-emerald-300/50 hover:bg-emerald-300/10"
+        aria-label="Abrir menu"
+        (click)="toggleMenu()"
+      >
+        <span class="flex h-4 w-5 flex-col justify-between">
+          <span class="h-0.5 rounded-full bg-current"></span>
+          <span class="h-0.5 rounded-full bg-current"></span>
+          <span class="h-0.5 rounded-full bg-current"></span>
+        </span>
+      </button>
+
+      <a
+        routerLink="/app/welcome"
+        class="mr-auto flex min-w-0 items-center gap-3"
+        (click)="closeMenu()"
+      >
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-400 text-sm font-black text-slate-950 shadow-[0_0_34px_rgba(52,211,153,0.35)]">
+          TG
+        </span>
+        <span class="min-w-0">
+          <span class="block truncate text-sm font-semibold tracking-wide text-white">TimeGrid</span>
+          <span class="block truncate text-xs text-slate-400">{{ displayName() }}</span>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-2 md:flex">
+        @for (link of quickLinks; track link.path) {
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="border-emerald-300/50 bg-emerald-300/10 text-emerald-100"
+            class="rounded-lg border border-white/10 px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-emerald-300/40 hover:text-white"
+          >
+            {{ link.label }}
+          </a>
+        }
+      </nav>
+
+      <div class="hidden rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-slate-300 sm:block">
+        {{ role() }}
+      </div>
+    </div>
+  </header>
+
+  @if (menuOpen()) {
+    <div class="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm" (click)="closeMenu()"></div>
+    <aside class="fixed left-0 top-0 z-50 h-full w-[min(86vw,340px)] border-r border-white/10 bg-[#0b111b] p-4 shadow-2xl">
+      <div class="mb-7 flex items-center justify-between">
+        <div>
+          <p class="text-sm font-semibold text-white">Navegacao</p>
+          <p class="text-xs text-slate-400">Acesso rapido ao TimeGrid</p>
+        </div>
+        <button
+          type="button"
+          class="grid h-9 w-9 place-items-center rounded-lg border border-white/10 text-lg text-slate-300 transition hover:bg-white/10"
+          aria-label="Fechar menu"
+          (click)="closeMenu()"
+        >
+          x
+        </button>
+      </div>
+
+      <nav class="space-y-2">
+        <a
+          routerLink="/app/welcome"
+          routerLinkActive="bg-white/10 text-white"
+          class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+          (click)="closeMenu()"
+        >
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-white/10 text-xs font-bold">I</span>
+          Inicio
+        </a>
+        @for (link of quickLinks; track link.path) {
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="bg-emerald-300/10 text-emerald-100"
+            class="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+            (click)="closeMenu()"
+          >
+            <span class="grid h-8 w-8 place-items-center rounded-lg bg-white/10 text-xs font-bold">{{ link.symbol }}</span>
+            {{ link.label }}
+          </a>
+        }
+      </nav>
+
+      <button
+        type="button"
+        class="absolute inset-x-4 bottom-4 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-left text-sm font-semibold text-red-100 transition hover:bg-red-400/15"
+        (click)="logout()"
+      >
+        Sair da conta
+      </button>
+    </aside>
+  }
+
+  <main class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:py-8">
+    <router-outlet />
+  </main>
+</div>
+
