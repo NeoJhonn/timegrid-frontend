@@ -45,7 +45,7 @@
           class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
           [disabled]="saving()"
         >
-          {{ editingClient() ? 'Salvar alteracoes' : 'Cadastrar cliente' }}
+          {{ editingClient() ? 'Salvar alterações' : 'Cadastrar cliente' }}
         </button>
         @if (editingClient()) {
           <button
@@ -120,4 +120,3 @@
     }
   </div>
 </section>
-

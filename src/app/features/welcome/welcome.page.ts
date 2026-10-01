@@ -18,7 +18,7 @@ export class WelcomePage implements OnInit {
   protected readonly username = signal('');
   protected readonly animationVisible = signal(true);
   protected readonly displayName = computed(() =>
-    firstNameFrom(this.username() || this.user()?.sub, 'usuario'),
+    firstNameFrom(this.username() || this.user()?.sub, 'usuário'),
   );
   protected readonly role = computed(() => this.user()?.role ?? 'ADMIN');
 

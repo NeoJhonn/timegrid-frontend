@@ -1,0 +1,99 @@
+<section class="grid gap-5 lg:grid-cols-[1fr_420px]">
+  <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
+    <p class="text-sm font-semibold text-emerald-200">Conta</p>
+    <h1 class="mt-2 text-3xl font-black text-white">Minha conta</h1>
+    <p class="mt-3 text-sm leading-6 text-slate-400">
+      Consulte as informações do seu usuário e atualize sua senha quando necessário.
+    </p>
+
+    @if (loading()) {
+      <div class="mt-6 grid min-h-48 place-items-center text-sm text-slate-400">Carregando conta...</div>
+    } @else if (account()) {
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+        <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Usuário</p>
+          <p class="mt-2 break-words text-lg font-bold text-white">{{ account()?.username }}</p>
+        </div>
+        <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</p>
+          <p class="mt-2 break-words text-lg font-bold text-white">{{ account()?.email }}</p>
+        </div>
+        <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Role</p>
+          <p class="mt-2 text-lg font-bold text-emerald-100">{{ account()?.role }}</p>
+        </div>
+        <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Criado em</p>
+          <p class="mt-2 text-lg font-bold text-white">{{ account()?.createdAt | date: 'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="mt-5 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+        {{ errorMessage() }}
+      </div>
+    }
+  </div>
+
+  <aside class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
+    <p class="text-sm font-semibold text-white">Atualizar senha</p>
+    <p class="mt-2 text-sm leading-6 text-slate-400">
+      Por segurança, apenas a senha pode ser alterada nesta página.
+    </p>
+
+    <form class="mt-6 space-y-4" [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
+      <label class="block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Senha atual</span>
+        <span class="flex h-12 rounded-lg border border-white/10 bg-slate-950/70 transition focus-within:border-emerald-300/70 focus-within:ring-4 focus-within:ring-emerald-300/10">
+          <input
+            [type]="showCurrentPassword() ? 'text' : 'password'"
+            formControlName="currentPassword"
+            class="min-w-0 flex-1 bg-transparent px-4 text-sm text-white outline-none"
+            placeholder="Digite a senha atual"
+          />
+          <button
+            type="button"
+            class="w-24 border-l border-white/10 text-xs font-semibold text-slate-300 transition hover:text-white"
+            (click)="toggleCurrentPassword()"
+          >
+            {{ showCurrentPassword() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </span>
+      </label>
+
+      <label class="block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Nova senha</span>
+        <span class="flex h-12 rounded-lg border border-white/10 bg-slate-950/70 transition focus-within:border-emerald-300/70 focus-within:ring-4 focus-within:ring-emerald-300/10">
+          <input
+            [type]="showNewPassword() ? 'text' : 'password'"
+            formControlName="newPassword"
+            class="min-w-0 flex-1 bg-transparent px-4 text-sm text-white outline-none"
+            placeholder="Digite a nova senha"
+          />
+          <button
+            type="button"
+            class="w-24 border-l border-white/10 text-xs font-semibold text-slate-300 transition hover:text-white"
+            (click)="toggleNewPassword()"
+          >
+            {{ showNewPassword() ? 'Ocultar' : 'Mostrar' }}
+          </button>
+        </span>
+      </label>
+
+      @if (message()) {
+        <div class="rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+          {{ message() }}
+        </div>
+      }
+
+      <button
+        type="submit"
+        class="h-12 w-full rounded-lg bg-emerald-400 px-5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+        [disabled]="saving() || passwordForm.invalid"
+      >
+        {{ saving() ? 'Atualizando...' : 'Atualizar senha' }}
+      </button>
+    </form>
+  </aside>
+</section>

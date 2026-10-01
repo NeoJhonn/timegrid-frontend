@@ -1,28 +1,129 @@
-<section class="grid gap-5 xl:grid-cols-[430px_1fr]">
+<section class="space-y-5">
   <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
-    <p class="text-sm font-semibold text-emerald-200">Agenda</p>
-    <h1 class="mt-2 text-3xl font-black text-white">Novo agendamento</h1>
-    <p class="mt-3 text-sm leading-6 text-slate-400">
-      Busque um cliente cadastrado, escolha servico e horario, e o backend valida conflitos.
-    </p>
+    <div class="grid gap-5 lg:grid-cols-[360px_1fr] lg:items-end">
+      <div>
+        <p class="text-sm font-semibold text-emerald-200">Agenda</p>
+        <h1 class="mt-2 text-3xl font-black text-white">Agenda por horários</h1>
+        <p class="mt-3 text-sm leading-6 text-slate-400">
+          Escolha a data e agende diretamente no horário desejado.
+        </p>
+      </div>
 
-    <form class="mt-6 space-y-4" [formGroup]="appointmentForm" (ngSubmit)="submitAppointment()">
-      <label class="block">
-        <span class="mb-2 block text-sm font-medium text-slate-300">Data</span>
-        <input
-          type="date"
-          formControlName="appointmentDate"
-          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
-          (change)="changeDate($any($event.target).value)"
-        />
-      </label>
+      <div class="grid gap-3 sm:grid-cols-[220px_1fr] sm:items-end">
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-300">Data</span>
+          <input
+            type="date"
+            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+            [value]="selectedDate()"
+            (change)="changeDate($any($event.target).value)"
+          />
+        </label>
 
-      <div class="relative">
+        <div class="rounded-lg border border-emerald-300/20 bg-emerald-300/10 px-4 py-3">
+          <p class="text-sm font-bold capitalize text-emerald-100">{{ selectedDateInfo().weekday }}</p>
+          <p class="mt-1 text-lg font-black capitalize text-white">{{ selectedDateInfo().date }}</p>
+        </div>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="mt-5 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (message()) {
+      <div class="mt-5 rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+        {{ message() }}
+      </div>
+    }
+  </div>
+
+  <div class="overflow-hidden rounded-lg border border-white/10 bg-white/[0.055]">
+    @if (loading()) {
+      <div class="grid min-h-80 place-items-center text-sm text-slate-400">Carregando agenda...</div>
+    } @else {
+      <div class="grid gap-3 p-3">
+        @for (time of timeOptions; track time.value) {
+          @if (appointmentStartingAt(time.value); as appointment) {
+            <article
+              class="appointment-card rounded-lg border border-emerald-300/25 bg-gradient-to-br from-emerald-300/16 to-sky-300/10 p-4 shadow-[0_16px_45px_rgba(16,185,129,0.12)] transition hover:-translate-y-0.5 hover:border-emerald-300/45 hover:shadow-[0_20px_55px_rgba(16,185,129,0.2)] active:scale-[0.99]"
+            >
+              <div class="flex h-full flex-col justify-between gap-4">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-wide text-emerald-200">
+                    {{ labelForTime(appointment.startTime) }} até {{ labelForTime(appointment.endTime) }}
+                  </p>
+                  <h2 class="mt-2 break-words text-lg font-black text-white">{{ appointment.clientName }}</h2>
+                  <p class="mt-1 break-words text-sm text-slate-300">{{ appointment.service }}</p>
+                </div>
+                <div class="flex flex-col gap-2 min-[380px]:flex-row">
+                  <button
+                    type="button"
+                    class="h-10 flex-1 rounded-lg border border-white/10 px-3 text-xs font-semibold text-slate-100 transition hover:bg-white/10 active:scale-[0.98] active:bg-white/10"
+                    (click)="openEditModal(appointment)"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    class="h-10 flex-1 rounded-lg border border-red-300/20 px-3 text-xs font-semibold text-red-100 transition hover:bg-red-400/10 active:scale-[0.98] active:bg-red-400/10"
+                    (click)="openDeleteModal(appointment)"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            </article>
+          } @else if (!isCoveredByPreviousAppointment(time.value)) {
+            <article class="group grid grid-cols-[72px_1fr] gap-3 rounded-lg border border-white/10 bg-slate-950/40 p-3 transition hover:-translate-y-0.5 hover:border-emerald-300/35 hover:bg-emerald-300/[0.055] hover:shadow-[0_16px_42px_rgba(16,185,129,0.1)] active:scale-[0.99] active:border-emerald-300/40 active:bg-emerald-300/10">
+              <div class="grid h-14 place-items-center rounded-lg bg-slate-950/70 text-sm font-black text-emerald-100 transition group-hover:bg-emerald-300/10 group-hover:text-white group-active:bg-emerald-300/15">
+                {{ time.label }}
+              </div>
+              <div class="flex min-w-0 items-center justify-between gap-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-white">Horário livre</p>
+                  <p class="text-xs text-slate-500">Sem cliente agendado</p>
+                </div>
+                <button
+                  type="button"
+                  class="h-10 shrink-0 rounded-lg bg-emerald-400 px-4 text-xs font-bold text-slate-950 transition group-hover:bg-emerald-300 hover:bg-emerald-300 active:scale-[0.98] active:bg-emerald-200"
+                  (click)="openScheduleModal(time.value)"
+                >
+                  Agendar
+                </button>
+              </div>
+            </article>
+          }
+        }
+      </div>
+    }
+  </div>
+</section>
+
+@if (selectedStartTime()) {
+  <div class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
+    <form
+      class="w-full max-w-lg rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
+      [formGroup]="appointmentForm"
+      (ngSubmit)="submitAppointment()"
+    >
+      <h2 class="text-xl font-bold text-white">Novo agendamento</h2>
+      <p class="mt-2 text-sm text-slate-400">
+        Início selecionado: <strong class="text-emerald-100">{{ labelForTime(selectedStartTime()!) }}</strong>
+      </p>
+
+      <div class="relative mt-5">
         <label class="block">
           <span class="mb-2 block text-sm font-medium text-slate-300">Cliente</span>
           <input
             type="text"
-            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
+            class="h-12 w-full rounded-lg border bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:ring-4 focus:ring-emerald-300/10"
+            [class.border-red-300]="appointmentForm.controls.clientId.invalid && appointmentForm.controls.clientId.touched"
+            [class.border-white\/10]="!(appointmentForm.controls.clientId.invalid && appointmentForm.controls.clientId.touched)"
+            [class.focus:border-red-300]="appointmentForm.controls.clientId.invalid && appointmentForm.controls.clientId.touched"
+            [class.focus:border-emerald-300\/70]="!(appointmentForm.controls.clientId.invalid && appointmentForm.controls.clientId.touched)"
             placeholder="Digite as primeiras letras"
             [value]="clientQuery()"
             (input)="updateClientQuery($any($event.target).value)"
@@ -44,7 +145,7 @@
               }
             } @else {
               <div class="rounded-lg border border-amber-300/20 bg-amber-300/10 px-3 py-3 text-sm text-amber-100">
-                Cliente nao cadastrado.
+                Cliente não cadastrado.
                 <a routerLink="/app/clients" class="font-bold underline decoration-amber-100/60 underline-offset-4">
                   Cadastre antes de agendar.
                 </a>
@@ -54,144 +155,80 @@
         }
       </div>
 
-      <label class="block">
-        <span class="mb-2 block text-sm font-medium text-slate-300">Servico</span>
+      <label class="mt-4 block">
+        <span class="mb-2 block text-sm font-medium text-slate-300">Serviço</span>
         <input
           type="text"
           formControlName="service"
-          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
-          placeholder="Ex: Corte, consultoria, revisao"
+          class="h-12 w-full rounded-lg border bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:ring-4 focus:ring-emerald-300/10"
+          [class.border-red-300]="appointmentForm.controls.service.invalid && appointmentForm.controls.service.touched"
+          [class.border-white\/10]="!(appointmentForm.controls.service.invalid && appointmentForm.controls.service.touched)"
+          [class.focus:border-red-300]="appointmentForm.controls.service.invalid && appointmentForm.controls.service.touched"
+          [class.focus:border-emerald-300\/70]="!(appointmentForm.controls.service.invalid && appointmentForm.controls.service.touched)"
+          placeholder="Ex: Corte, consultoria, revisão"
         />
       </label>
 
-      <div class="grid gap-3 sm:grid-cols-2">
-        <label class="block">
-          <span class="mb-2 block text-sm font-medium text-slate-300">Inicio</span>
-          <select
-            formControlName="startTime"
-            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
-          >
-            @for (time of availableTimeOptions(); track time.value) {
-              <option [value]="time.value">{{ time.label }}</option>
+      <div class="mt-4">
+        <p class="mb-2 text-sm font-medium text-slate-300">Horário fim</p>
+        <div class="max-h-44 overflow-y-auto rounded-lg border border-white/10 bg-slate-950/50 p-2">
+          <div class="grid gap-2">
+            @for (time of availableEndOptions(); track time.value) {
+              <button
+                type="button"
+                class="h-10 w-full rounded-lg border px-3 text-left text-sm font-bold transition hover:border-emerald-300/50 hover:bg-emerald-300/10 hover:text-white active:scale-[0.99]"
+                [class.border-emerald-300]="appointmentForm.controls.endTime.value === time.value"
+                [class.bg-emerald-300]="appointmentForm.controls.endTime.value === time.value"
+                [class.text-slate-950]="appointmentForm.controls.endTime.value === time.value"
+                [class.border-white\/10]="appointmentForm.controls.endTime.value !== time.value"
+                [class.text-slate-200]="appointmentForm.controls.endTime.value !== time.value"
+                (click)="setAppointmentEndTime(time.value)"
+              >
+                {{ time.label }}
+              </button>
             }
-          </select>
-        </label>
-
-        <label class="block">
-          <span class="mb-2 block text-sm font-medium text-slate-300">Fim</span>
-          <select
-            formControlName="endTime"
-            class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
-          >
-            @for (time of availableTimeOptions(); track time.value) {
-              <option [value]="time.value">{{ time.label }}</option>
-            }
-          </select>
-        </label>
+          </div>
+        </div>
       </div>
 
-      @if (errorMessage()) {
-        <div class="rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
-          {{ errorMessage() }}
+      @if (scheduleValidationMessage()) {
+        <div class="mt-4 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+          {{ scheduleValidationMessage() }}
         </div>
       }
 
-      @if (message()) {
-        <div class="rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
-          {{ message() }}
-        </div>
-      }
-
-      @if (!hasAvailableSlots()) {
-        <div class="rounded-lg border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm text-amber-100">
-          Todos os horarios desta data ja estao ocupados. Escolha outro dia.
-        </div>
-      }
-
-      <button
-        type="submit"
-        class="h-12 w-full rounded-lg bg-emerald-400 px-5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
-        [disabled]="saving() || appointmentForm.invalid || !hasAvailableSlots()"
-      >
-        {{ saving() ? 'Salvando...' : 'Criar agendamento' }}
-      </button>
+      <div class="mt-6 flex flex-col gap-2 sm:flex-row">
+        <button
+          type="submit"
+          class="h-13 min-h-13 flex-[1.35] rounded-lg bg-white px-5 text-base font-black text-slate-950 shadow-[0_16px_42px_rgba(255,255,255,0.16)] transition hover:-translate-y-0.5 hover:bg-emerald-100 hover:shadow-[0_22px_54px_rgba(52,211,153,0.28)] active:scale-[0.98] disabled:opacity-60"
+          [disabled]="saving()"
+        >
+          {{ saving() ? 'Salvando...' : 'Confirmar agendamento' }}
+        </button>
+        <button
+          type="button"
+          class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-400 transition hover:bg-white/10 hover:text-slate-100 active:scale-[0.98]"
+          (click)="closeScheduleModal()"
+        >
+          Cancelar
+        </button>
+      </div>
     </form>
   </div>
-
-  <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
-    <div class="mb-5 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-      <div>
-        <p class="text-sm font-semibold text-white">Agenda de {{ selectedDate() | date: 'dd/MM/yyyy' }}</p>
-        <p class="mt-1 text-sm text-slate-400">{{ appointments().length }} agendamento(s) encontrado(s)</p>
-      </div>
-      <button
-        type="button"
-        class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
-        (click)="loadInitialData()"
-      >
-        Recarregar
-      </button>
-    </div>
-
-    @if (loading()) {
-      <div class="grid min-h-64 place-items-center text-sm text-slate-400">Carregando agenda...</div>
-    } @else if (appointments().length === 0) {
-      <div class="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/10 text-center">
-        <div>
-          <p class="font-semibold text-white">Dia livre por enquanto</p>
-          <p class="mt-2 text-sm text-slate-400">Crie o primeiro agendamento para esta data.</p>
-        </div>
-      </div>
-    } @else {
-      <div class="space-y-3">
-        @for (appointment of appointments(); track appointment.id) {
-          <article class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
-            <div class="grid gap-4 lg:grid-cols-[120px_1fr_auto] lg:items-center">
-              <div class="rounded-lg border border-emerald-300/20 bg-emerald-300/10 px-3 py-3 text-center">
-                <p class="text-lg font-black text-emerald-100">{{ labelForTime(appointment.startTime) }}</p>
-                <p class="text-xs text-emerald-200/80">ate {{ labelForTime(appointment.endTime) }}</p>
-              </div>
-              <div class="min-w-0">
-                <h2 class="truncate text-base font-bold text-white">{{ appointment.clientName }}</h2>
-                <p class="mt-1 text-sm text-slate-300">{{ appointment.service }}</p>
-                <p class="mt-2 text-xs text-slate-500">Criado em {{ appointment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
-              </div>
-              <div class="flex gap-2">
-                <button
-                  type="button"
-                  class="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10"
-                  (click)="startEdit(appointment)"
-                >
-                  Editar
-                </button>
-                <button
-                  type="button"
-                  class="rounded-lg border border-red-300/20 px-3 py-2 text-xs font-semibold text-red-100 transition hover:bg-red-400/10"
-                  (click)="deleteAppointment(appointment)"
-                >
-                  Remover
-                </button>
-              </div>
-            </div>
-          </article>
-        }
-      </div>
-    }
-  </div>
-</section>
+}
 
 @if (editingAppointment()) {
-  <div class="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 backdrop-blur-sm">
+  <div class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
     <form
       class="w-full max-w-md rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
       [formGroup]="updateForm"
       (ngSubmit)="saveEdit()"
     >
       <h2 class="text-xl font-bold text-white">Editar agendamento</h2>
-      <p class="mt-2 text-sm text-slate-400">O backend permite alterar apenas servico e horario final.</p>
+      <p class="mt-2 text-sm text-slate-400">Altere somente o serviço e o horário final.</p>
 
       <label class="mt-5 block">
-        <span class="mb-2 block text-sm font-medium text-slate-300">Servico</span>
+        <span class="mb-2 block text-sm font-medium text-slate-300">Serviço</span>
         <input
           type="text"
           formControlName="service"
@@ -199,33 +236,73 @@
         />
       </label>
 
-      <label class="mt-4 block">
-        <span class="mb-2 block text-sm font-medium text-slate-300">Novo horario final</span>
-        <select
-          formControlName="endTime"
-          class="h-12 w-full rounded-lg border border-white/10 bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:border-emerald-300/70 focus:ring-4 focus:ring-emerald-300/10"
-        >
-          @for (time of timeOptions; track time.value) {
-            <option [value]="time.value">{{ time.label }}</option>
-          }
-        </select>
-      </label>
+      <div class="mt-4">
+        <p class="mb-2 text-sm font-medium text-slate-300">Horário fim</p>
+        <div class="max-h-44 overflow-y-auto rounded-lg border border-white/10 bg-slate-950/50 p-2">
+          <div class="grid gap-2">
+            @for (time of availableEndOptions(); track time.value) {
+              <button
+                type="button"
+                class="h-10 w-full rounded-lg border px-3 text-left text-sm font-bold transition hover:border-emerald-300/50 hover:bg-emerald-300/10 hover:text-white active:scale-[0.99]"
+                [class.border-emerald-300]="updateForm.controls.endTime.value === time.value"
+                [class.bg-emerald-300]="updateForm.controls.endTime.value === time.value"
+                [class.text-slate-950]="updateForm.controls.endTime.value === time.value"
+                [class.border-white\/10]="updateForm.controls.endTime.value !== time.value"
+                [class.text-slate-200]="updateForm.controls.endTime.value !== time.value"
+                (click)="setUpdateEndTime(time.value)"
+              >
+                {{ time.label }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
 
       <div class="mt-6 flex gap-2">
         <button
           type="submit"
-          class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300"
+          class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+          [disabled]="saving() || updateForm.invalid"
         >
           Salvar
         </button>
         <button
           type="button"
           class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
-          (click)="cancelEdit()"
+          (click)="closeEditModal()"
         >
           Cancelar
         </button>
       </div>
     </form>
+  </div>
+}
+
+@if (deletingAppointment()) {
+  <div class="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-md rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl">
+      <h2 class="text-xl font-bold text-white">Excluir agendamento?</h2>
+      <p class="mt-3 text-sm leading-6 text-slate-400">
+        Confirme a remoção do atendimento de
+        <strong class="text-white">{{ deletingAppointment()?.clientName }}</strong>.
+      </p>
+      <div class="mt-6 flex gap-2">
+        <button
+          type="button"
+          class="h-11 flex-1 rounded-lg bg-red-400 px-4 text-sm font-bold text-white transition hover:bg-red-300 disabled:opacity-50"
+          [disabled]="saving()"
+          (click)="confirmDelete()"
+        >
+          Confirmar exclusão
+        </button>
+        <button
+          type="button"
+          class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          (click)="closeDeleteModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
   </div>
 }

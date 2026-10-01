@@ -46,9 +46,8 @@ export class LoginPage {
       .subscribe({
         next: () => void this.router.navigateByUrl('/app/welcome'),
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel fazer login.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível fazer login.'));
         },
       });
   }
 }
-

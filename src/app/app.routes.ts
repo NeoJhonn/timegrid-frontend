@@ -3,6 +3,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { managerGuard } from './core/guards/manager.guard';
 import { AccessDeniedPage } from './features/access-denied/access-denied.page';
+import { AccountPage } from './features/account/account.page';
 import { AgendaPage } from './features/agenda/agenda.page';
 import { ClientsPage } from './features/clients/clients.page';
 import { HistoryPage } from './features/history/history.page';
@@ -23,6 +24,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'welcome', component: WelcomePage },
+      { path: 'account', component: AccountPage },
       { path: 'agenda', component: AgendaPage },
       { path: 'clients', component: ClientsPage },
       { path: 'history', component: HistoryPage },

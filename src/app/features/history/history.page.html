@@ -1,6 +1,6 @@
 <section class="grid gap-5 lg:grid-cols-[360px_1fr]">
   <aside class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
-    <p class="text-sm font-semibold text-emerald-200">Historico</p>
+    <p class="text-sm font-semibold text-emerald-200">Histórico</p>
     <h1 class="mt-2 text-3xl font-black text-white">Por cliente</h1>
     <p class="mt-3 text-sm leading-6 text-slate-400">
       Consulte uma janela de agendamentos e veja tudo que pertence ao cliente selecionado.
@@ -34,7 +34,7 @@
             }
           } @else {
             <div class="rounded-lg border border-amber-300/20 bg-amber-300/10 px-3 py-3 text-sm text-amber-100">
-              Cliente nao encontrado.
+              Cliente não encontrado.
             </div>
           }
         </div>
@@ -47,28 +47,28 @@
         class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
         (click)="setWindow(7, 7)"
       >
-        Ultimos 7 dias + proximos 7
+        Últimos 7 dias + próximos 7
       </button>
       <button
         type="button"
         class="rounded-lg border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-left text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/15"
         (click)="setWindow(30, 30)"
       >
-        Ultimos 30 dias + proximos 30
+        Últimos 30 dias + próximos 30
       </button>
       <button
         type="button"
         class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
         (click)="setWindow(90, 30)"
       >
-        Ultimos 90 dias + proximos 30
+        Últimos 90 dias + próximos 30
       </button>
       <button
         type="button"
         class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
         (click)="setWindow(365, 0)"
       >
-        Ultimos 365 dias
+        Últimos 365 dias
       </button>
     </div>
 
@@ -99,19 +99,19 @@
     </div>
 
     @if (loading()) {
-      <div class="grid min-h-64 place-items-center text-sm text-slate-400">Montando historico...</div>
+      <div class="grid min-h-64 place-items-center text-sm text-slate-400">Montando histórico...</div>
     } @else if (clients().length === 0) {
       <div class="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/10 text-center">
         <div>
           <p class="font-semibold text-white">Nenhum cliente cadastrado</p>
-          <p class="mt-2 text-sm text-slate-400">Cadastre clientes para consultar historicos.</p>
+          <p class="mt-2 text-sm text-slate-400">Cadastre clientes para consultar históricos.</p>
         </div>
       </div>
     } @else if (appointments().length === 0) {
       <div class="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/10 text-center">
         <div>
-          <p class="font-semibold text-white">Sem historico nesta janela</p>
-          <p class="mt-2 text-sm text-slate-400">Ajuste o periodo ou crie um agendamento para este cliente.</p>
+          <p class="font-semibold text-white">Sem histórico nesta janela</p>
+          <p class="mt-2 text-sm text-slate-400">Ajuste o período ou crie um agendamento para este cliente.</p>
         </div>
       </div>
     } @else {

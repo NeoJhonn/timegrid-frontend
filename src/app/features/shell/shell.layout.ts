@@ -31,12 +31,13 @@ export class ShellLayout implements OnInit {
 
   protected readonly quickLinks: QuickLink[] = [
     { label: 'Agenda', path: '/app/agenda', symbol: 'A' },
-    { label: 'Historico', path: '/app/history', symbol: 'H' },
+    { label: 'Histórico', path: '/app/history', symbol: 'H' },
     { label: 'Cliente', path: '/app/clients', symbol: 'C' },
+    { label: 'Conta', path: '/app/account', symbol: 'P' },
   ];
 
   protected readonly managerLink: QuickLink = {
-    label: 'Novo usuario',
+    label: 'Gerenciar usuários',
     path: '/app/users/new',
     symbol: 'U',
   };

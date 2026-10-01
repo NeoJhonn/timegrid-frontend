@@ -20,10 +20,9 @@ export function apiErrorMessage(error: unknown, fallback: string): string {
     }
 
     if (error.status === 0) {
-      return 'Nao foi possivel conectar ao backend. Confirme se ele esta rodando.';
+      return 'Não foi possível conectar ao backend. Confirme se ele está rodando.';
     }
   }
 
   return fallback;
 }
-

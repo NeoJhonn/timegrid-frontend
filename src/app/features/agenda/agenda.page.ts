@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -9,11 +8,11 @@ import { AppointmentApiService } from '../../core/services/appointment-api.servi
 import { AuthService } from '../../core/services/auth.service';
 import { ClientApiService } from '../../core/services/client-api.service';
 import { apiErrorMessage } from '../../shared/api-error-message';
-import { TIME_GRID_OPTIONS, timeGridLabel } from '../../shared/time-grid-options';
+import { TIME_GRID_OPTIONS, TimeGridOption, timeGridLabel } from '../../shared/time-grid-options';
 
 @Component({
   selector: 'app-agenda-page',
-  imports: [DatePipe, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './agenda.page.html',
   styleUrl: './agenda.page.scss',
 })
@@ -28,29 +27,39 @@ export class AgendaPage implements OnInit {
   protected readonly selectedClientId = signal('');
   protected readonly clients = signal<ClientResponse[]>([]);
   protected readonly appointments = signal<AppointmentResponse[]>([]);
+  protected readonly selectedStartTime = signal<TimeGrid | null>(null);
   protected readonly editingAppointment = signal<AppointmentResponse | null>(null);
+  protected readonly deletingAppointment = signal<AppointmentResponse | null>(null);
   protected readonly loading = signal(false);
   protected readonly saving = signal(false);
   protected readonly message = signal('');
   protected readonly errorMessage = signal('');
+  protected readonly scheduleValidationMessage = signal('');
   protected readonly timeOptions = TIME_GRID_OPTIONS;
-  protected readonly availableTimeOptions = computed(() => {
-    const occupied = this.occupiedTimeValues();
-    return this.timeOptions.filter((option) => !occupied.has(option.value));
-  });
-  protected readonly hasAvailableSlots = computed(() => this.availableTimeOptions().length > 0);
 
   protected readonly appointmentForm = this.formBuilder.nonNullable.group({
     clientId: ['', Validators.required],
     service: ['', Validators.required],
     appointmentDate: [this.today(), Validators.required],
-    startTime: ['T0900' as TimeGrid, Validators.required],
-    endTime: ['T0930' as TimeGrid, Validators.required],
+    startTime: ['T0800' as TimeGrid, Validators.required],
+    endTime: ['T0830' as TimeGrid, Validators.required],
   });
 
   protected readonly updateForm = this.formBuilder.nonNullable.group({
     service: ['', Validators.required],
-    endTime: ['T0930' as TimeGrid, Validators.required],
+    endTime: ['T0830' as TimeGrid, Validators.required],
+  });
+
+  protected readonly selectedDateInfo = computed(() => {
+    const date = this.dateFromIso(this.selectedDate());
+    return {
+      weekday: new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(date),
+      date: new Intl.DateTimeFormat('pt-BR', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      }).format(date),
+    };
   });
 
   protected readonly filteredClients = computed(() => {
@@ -70,23 +79,26 @@ export class AgendaPage implements OnInit {
     return this.clients().find((client) => client.id === clientId) ?? null;
   });
 
-  private readonly occupiedTimeValues = computed(() => {
-    const occupied = new Set<TimeGrid>();
+  protected readonly availableEndOptions = computed(() => {
+    const startTime = this.selectedStartTime() ?? this.editingAppointment()?.startTime;
 
-    for (const appointment of this.appointments()) {
-      const startIndex = this.timeOptions.findIndex((option) => option.value === appointment.startTime);
-      const endIndex = this.timeOptions.findIndex((option) => option.value === appointment.endTime);
-
-      if (startIndex < 0 || endIndex < 0) {
-        continue;
-      }
-
-      for (let index = startIndex; index <= endIndex; index += 1) {
-        occupied.add(this.timeOptions[index].value);
-      }
+    if (!startTime) {
+      return this.timeOptions;
     }
 
-    return occupied;
+    const startIndex = this.indexOfTime(startTime);
+    const editingId = this.editingAppointment()?.id;
+    const nextAppointmentIndex = this.appointments()
+      .filter((appointment) => appointment.id !== editingId)
+      .map((appointment) => this.indexOfTime(appointment.startTime))
+      .filter((index) => index > startIndex)
+      .sort((a, b) => a - b)[0];
+
+    const maxIndex = nextAppointmentIndex === undefined ? this.timeOptions.length - 1 : nextAppointmentIndex - 1;
+
+    return this.timeOptions
+      .slice(startIndex, maxIndex + 1)
+      .filter((option) => option.value === startTime || this.canUseAsEndTime(option, editingId));
   });
 
   ngOnInit(): void {
@@ -112,10 +124,9 @@ export class AgendaPage implements OnInit {
         next: ({ clients, appointments }) => {
           this.clients.set(clients);
           this.appointments.set(this.sortAppointments(appointments));
-          this.adjustAvailableTimeDefaults();
         },
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar a agenda.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível carregar a agenda.'));
         },
       });
   }
@@ -140,27 +151,55 @@ export class AgendaPage implements OnInit {
       .listByDate(userId, this.selectedDate())
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (appointments) => {
-          this.appointments.set(this.sortAppointments(appointments));
-          this.adjustAvailableTimeDefaults();
-        },
+        next: (appointments) => this.appointments.set(this.sortAppointments(appointments)),
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar agendamentos.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível carregar agendamentos.'));
         },
       });
+  }
+
+  protected openScheduleModal(startTime: TimeGrid): void {
+    const endTime = this.nextAvailableEndTime(startTime);
+    this.selectedStartTime.set(startTime);
+    this.clientQuery.set('');
+    this.selectedClientId.set('');
+    this.scheduleValidationMessage.set('');
+    this.appointmentForm.reset({
+      clientId: '',
+      service: '',
+      appointmentDate: this.selectedDate(),
+      startTime,
+      endTime,
+    });
+  }
+
+  protected closeScheduleModal(): void {
+    this.selectedStartTime.set(null);
+    this.clientQuery.set('');
+    this.selectedClientId.set('');
+    this.scheduleValidationMessage.set('');
+    this.appointmentForm.reset({
+      clientId: '',
+      service: '',
+      appointmentDate: this.selectedDate(),
+      startTime: 'T0800',
+      endTime: 'T0830',
+    });
   }
 
   protected submitAppointment(): void {
     const userId = this.userId();
 
-    if (!userId || this.appointmentForm.invalid || this.saving() || !this.hasAvailableSlots()) {
+    if (!userId || this.appointmentForm.invalid || this.saving()) {
       this.appointmentForm.markAllAsTouched();
+      this.scheduleValidationMessage.set('Preencha todos os campos obrigatórios para confirmar o agendamento.');
       return;
     }
 
     this.saving.set(true);
     this.message.set('');
     this.errorMessage.set('');
+    this.scheduleValidationMessage.set('');
 
     this.appointmentApi
       .create(userId, this.appointmentForm.getRawValue())
@@ -168,13 +207,11 @@ export class AgendaPage implements OnInit {
       .subscribe({
         next: () => {
           this.message.set('Agendamento criado com sucesso.');
-          this.appointmentForm.patchValue({ service: '', clientId: '' });
-          this.clientQuery.set('');
-          this.selectedClientId.set('');
+          this.closeScheduleModal();
           this.loadAppointments();
         },
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel criar o agendamento.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível criar o agendamento.'));
         },
       });
   }
@@ -183,6 +220,7 @@ export class AgendaPage implements OnInit {
     this.appointmentForm.controls.clientId.setValue(client.id);
     this.selectedClientId.set(client.id);
     this.clientQuery.set(client.name);
+    this.scheduleValidationMessage.set('');
   }
 
   protected updateClientQuery(value: string): void {
@@ -191,7 +229,12 @@ export class AgendaPage implements OnInit {
     this.selectedClientId.set('');
   }
 
-  protected startEdit(appointment: AppointmentResponse): void {
+  protected setAppointmentEndTime(endTime: TimeGrid): void {
+    this.appointmentForm.controls.endTime.setValue(endTime);
+    this.appointmentForm.controls.endTime.markAsTouched();
+  }
+
+  protected openEditModal(appointment: AppointmentResponse): void {
     this.editingAppointment.set(appointment);
     this.updateForm.setValue({
       service: appointment.service,
@@ -199,16 +242,21 @@ export class AgendaPage implements OnInit {
     });
   }
 
-  protected cancelEdit(): void {
+  protected closeEditModal(): void {
     this.editingAppointment.set(null);
-    this.updateForm.reset({ service: '', endTime: 'T0930' });
+    this.updateForm.reset({ service: '', endTime: 'T0830' });
+  }
+
+  protected setUpdateEndTime(endTime: TimeGrid): void {
+    this.updateForm.controls.endTime.setValue(endTime);
+    this.updateForm.controls.endTime.markAsTouched();
   }
 
   protected saveEdit(): void {
     const userId = this.userId();
     const appointment = this.editingAppointment();
 
-    if (!userId || !appointment || this.updateForm.invalid) {
+    if (!userId || !appointment || this.updateForm.invalid || this.saving()) {
       this.updateForm.markAllAsTouched();
       return;
     }
@@ -223,57 +271,101 @@ export class AgendaPage implements OnInit {
       .subscribe({
         next: () => {
           this.message.set('Agendamento atualizado.');
-          this.cancelEdit();
+          this.closeEditModal();
           this.loadAppointments();
         },
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel atualizar o agendamento.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível atualizar o agendamento.'));
         },
       });
   }
 
-  protected deleteAppointment(appointment: AppointmentResponse): void {
-    const userId = this.userId();
+  protected openDeleteModal(appointment: AppointmentResponse): void {
+    this.deletingAppointment.set(appointment);
+  }
 
-    if (!userId) {
+  protected closeDeleteModal(): void {
+    this.deletingAppointment.set(null);
+  }
+
+  protected confirmDelete(): void {
+    const userId = this.userId();
+    const appointment = this.deletingAppointment();
+
+    if (!userId || !appointment || this.saving()) {
       return;
     }
 
+    this.saving.set(true);
     this.errorMessage.set('');
     this.message.set('');
 
-    this.appointmentApi.delete(userId, appointment.id).subscribe({
-      next: () => {
-        this.message.set('Agendamento removido.');
-        this.loadAppointments();
-      },
-      error: (error: unknown) => {
-        this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel remover o agendamento.'));
-      },
+    this.appointmentApi
+      .delete(userId, appointment.id)
+      .pipe(finalize(() => this.saving.set(false)))
+      .subscribe({
+        next: () => {
+          this.message.set('Agendamento removido.');
+          this.closeDeleteModal();
+          this.loadAppointments();
+        },
+        error: (error: unknown) => {
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível remover o agendamento.'));
+        },
+      });
+  }
+
+  protected appointmentStartingAt(time: TimeGrid): AppointmentResponse | null {
+    return this.appointments().find((appointment) => appointment.startTime === time) ?? null;
+  }
+
+  protected isCoveredByPreviousAppointment(time: TimeGrid): boolean {
+    const index = this.indexOfTime(time);
+
+    return this.appointments().some((appointment) => {
+      const startIndex = this.indexOfTime(appointment.startTime);
+      const endIndex = this.indexOfTime(appointment.endTime);
+      return startIndex < index && endIndex >= index;
     });
+  }
+
+  protected appointmentSpan(appointment: AppointmentResponse): number {
+    return this.indexOfTime(appointment.endTime) - this.indexOfTime(appointment.startTime) + 1;
+  }
+
+  protected canScheduleAt(time: TimeGrid): boolean {
+    return !this.appointmentStartingAt(time) && !this.isCoveredByPreviousAppointment(time);
   }
 
   protected labelForTime = timeGridLabel;
 
-  private adjustAvailableTimeDefaults(): void {
-    const available = this.availableTimeOptions();
+  private nextAvailableEndTime(startTime: TimeGrid): TimeGrid {
+    const startIndex = this.indexOfTime(startTime);
+    const nextAppointmentIndex = this.appointments()
+      .map((appointment) => this.indexOfTime(appointment.startTime))
+      .filter((index) => index > startIndex)
+      .sort((a, b) => a - b)[0];
+    const nextIndex = Math.min(
+      nextAppointmentIndex === undefined ? startIndex + 1 : nextAppointmentIndex - 1,
+      this.timeOptions.length - 1,
+    );
 
-    if (available.length === 0) {
-      return;
-    }
+    return this.timeOptions[Math.max(startIndex, nextIndex)].value;
+  }
 
-    const startTime = this.appointmentForm.controls.startTime.value;
-    const endTime = this.appointmentForm.controls.endTime.value;
-    const firstAvailable = available[0].value;
-    const secondAvailable = available[1]?.value ?? firstAvailable;
+  private canUseAsEndTime(option: TimeGridOption, editingId?: string): boolean {
+    return !this.appointments()
+      .filter((appointment) => appointment.id !== editingId)
+      .some((appointment) => {
+        const optionIndex = this.indexOfTime(option.value);
+        const startIndex = this.indexOfTime(appointment.startTime);
+        const endIndex = this.indexOfTime(appointment.endTime);
+        return startIndex <= optionIndex && endIndex >= optionIndex;
+      });
+  }
 
-    if (!available.some((option) => option.value === startTime)) {
-      this.appointmentForm.controls.startTime.setValue(firstAvailable);
-    }
-
-    if (!available.some((option) => option.value === endTime)) {
-      this.appointmentForm.controls.endTime.setValue(secondAvailable);
-    }
+  private indexOfTime(time: TimeGrid): number {
+    return this.timeOptions.findIndex((option) => option.value === time);
   }
 
   private sortAppointments(appointments: AppointmentResponse[]): AppointmentResponse[] {
@@ -286,5 +378,9 @@ export class AgendaPage implements OnInit {
 
   private today(): string {
     return new Date().toISOString().slice(0, 10);
+  }
+
+  private dateFromIso(value: string): Date {
+    return new Date(`${value}T00:00:00`);
   }
 }

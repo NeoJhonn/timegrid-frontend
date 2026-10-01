@@ -19,4 +19,12 @@ export class UserApiService {
   findById(userId: string): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${API_BASE_URL}/users/${userId}`);
   }
+
+  update(userId: string, request: UserRequest): Observable<UserResponse> {
+    return this.http.put<UserResponse>(`${API_BASE_URL}/users/${userId}`, request);
+  }
+
+  delete(userId: string): Observable<void> {
+    return this.http.delete<void>(`${API_BASE_URL}/users/${userId}`);
+  }
 }

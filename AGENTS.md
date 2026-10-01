@@ -5,7 +5,25 @@
 Frontend do TimeGrid, aplicacao de agendamento que consome o backend Spring Boot
 em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
-Atualizado em: 2026-09-27.
+Atualizado em: 2026-10-01.
+
+## Context Checkpoint
+
+Este arquivo foi atualizado depois de uma falha fatal na conversa anterior da API.
+O historico conversado foi perdido, mas o estado do projeto foi recuperado pelo Git
+e pelo workspace local.
+
+Importante:
+
+- O backend nao deve ser tratado como area ativa de trabalho nesta etapa.
+- O backend ja estava pronto em outra conversa e fica neste workspace apenas para
+  consulta de contratos e para rodar localmente junto com o frontend.
+- O foco atual e exclusivamente o frontend em `timegrid-frontend`.
+- Em 2026-10-01, o frontend tem alteracoes locais ainda nao commitadas que devem ser
+  salvas em commit pelo usuario.
+- Preferencia do usuario: sempre que uma alteracao for feita no frontend, atualizar
+  tambem este `AGENTS.md` com o contexto/checkpoint da mudanca, sem precisar pedir
+  confirmacao antes.
 
 ## Current Workspace
 
@@ -34,28 +52,62 @@ Frontend local esperado:
 - Tailwind CSS 4 via `@tailwindcss/postcss`
 - SCSS
 
-## Current Frontend Structure
+## Current Frontend Status
 
-Estado inicial do projeto:
+O frontend ja deixou de ser scaffold inicial e tem um MVP funcional com:
 
-- `src/app/app.ts`
-- `src/app/app.html`
-- `src/app/app.scss`
-- `src/app/app.config.ts`
-- `src/app/app.routes.ts`
-- `src/styles.scss`
+- login com JWT e refresh token
+- armazenamento local simples de tokens para desenvolvimento
+- interceptor HTTP para `Authorization: Bearer <token>`
+- guards de autenticacao, visitante e permissao `MANAGER`
+- layout autenticado com menu responsivo
+- pagina inicial autenticada
+- agenda por data
+- criacao, edicao e remocao de agendamentos
+- gerenciamento de clientes
+- historico
+- tela de acesso negado
+- gerenciamento de usuarios restrito a `MANAGER`
+- pagina de conta do usuario logado
 
-Configuracoes importantes:
+Configuracoes importantes continuam validas:
 
 - `src/styles.scss` importa Tailwind com `@use 'tailwindcss';`
 - `app.config.ts` usa `provideZonelessChangeDetection()`
 - `app.config.ts` usa `provideRouter(routes)`
 - `app.config.ts` usa `provideClientHydration(withEventReplay())`
-- `app.routes.ts` ainda esta vazio
+
+Rotas atuais principais:
+
+- `/login`
+- `/app/welcome`
+- `/app/agenda`
+- `/app/clients`
+- `/app/history`
+- `/app/account`
+- `/app/users/new`, protegida por `managerGuard`
+- `/app/access-denied`
+
+Arquivos centrais do frontend:
+
+- `src/app/core/config/api.config.ts`
+- `src/app/core/interceptors/auth.interceptor.ts`
+- `src/app/core/guards/auth.guard.ts`
+- `src/app/core/guards/guest.guard.ts`
+- `src/app/core/guards/manager.guard.ts`
+- `src/app/core/services/auth.service.ts`
+- `src/app/core/services/token-storage.service.ts`
+- `src/app/core/services/user-api.service.ts`
+- `src/app/core/services/client-api.service.ts`
+- `src/app/core/services/appointment-api.service.ts`
+- `src/app/shared/api-error-message.ts`
+- `src/app/shared/time-grid-options.ts`
+- `src/app/shared/user-display-name.ts`
 
 ## Backend Context
 
-O backend ja esta finalizado para a etapa atual da aula, com:
+O backend ja esta finalizado para a etapa atual da aula e nao foi alterado nesta
+recuperacao. Ele serve como contrato de API para o front, com:
 
 - API REST em Spring Boot
 - JWT access token
@@ -340,18 +392,106 @@ Ao implementar o front:
 
 ## Recommended Frontend Direction
 
-Fluxo inicial recomendado:
+Direcao atual:
 
-1. Criar pagina de login.
-2. Criar servico de autenticacao.
-3. Armazenar access token e refresh token de forma simples para desenvolvimento.
-4. Criar interceptor HTTP para `Authorization: Bearer <token>`.
-5. Criar models TypeScript para responses/requests do backend.
-6. Criar layout autenticado da aplicacao.
-7. Criar tela principal de agenda por data.
-8. Criar gerenciamento de clientes.
-9. Criar criacao/edicao/remocao de agendamentos.
-10. Criar gerenciamento de usuarios, respeitando role `MANAGER`.
+1. Preservar os contratos existentes do backend.
+2. Continuar lapidando UX e responsividade das telas ja criadas.
+3. Validar manualmente fluxo completo com backend local: login, agenda, clientes,
+   conta e usuarios.
+4. Commitar o checkpoint recuperado do frontend antes de novas mudancas grandes.
+5. Evitar mexer no backend salvo, exceto se o usuario pedir explicitamente.
+6. Ao finalizar qualquer mudanca no frontend, registrar o que mudou neste arquivo.
+
+## Recovered Worktree State On 2026-10-01
+
+Backend:
+
+- `timegrid-backend` estava limpo no Git.
+- `mvn test` passou com sucesso: 73 testes, 0 falhas.
+- Backend nao foi modificado.
+
+Frontend:
+
+- `npm.cmd run build` passou com sucesso.
+- Havia alteracoes locais recuperadas, ainda nao commitadas.
+- Arquivos modificados:
+  - `src/app/app.routes.ts`
+  - `src/app/core/services/user-api.service.ts`
+  - `src/app/features/agenda/agenda.page.html`
+  - `src/app/features/agenda/agenda.page.scss`
+  - `src/app/features/agenda/agenda.page.ts`
+  - `src/app/features/shell/shell.layout.ts`
+  - `src/app/features/users/user-create.page.html`
+  - `src/app/features/users/user-create.page.ts`
+- Pasta nova nao rastreada:
+  - `src/app/features/account/`
+
+Resumo do que as alteracoes locais fazem:
+
+- adicionam rota e menu de `Conta`
+- adicionam tela `Minha conta` com dados do usuario logado e formulario de senha
+- expandem `UserApiService` com `update` e `delete`
+- transformam a tela de usuarios em gerenciamento de usuarios ativos
+- adicionam listagem, edicao e exclusao/desativacao de usuarios para `MANAGER`
+- melhoram a agenda com modal de criar agendamento por horario
+- adicionam edicao e exclusao de agendamentos
+- calculam horarios ocupados e opcoes de termino disponiveis na UI
+
+## Recovered Conversation Notes From Previous Thread
+
+O usuario conseguiu copiar parte da conversa anterior, com detalhes de UX que nao
+aparecem claramente so pelo diff. Esses pontos devem orientar a continuidade:
+
+- Na agenda em mobile, o usuario pediu para reaproveitar os efeitos bonitos de hover
+  feitos nos cards da versao desktop, mas adaptados para toque.
+- Foi implementado feedback de toque nos cards e botoes da agenda:
+  - `active:scale` para sensacao de pressionar
+  - leve realce de fundo ao tocar
+  - hover mantido para desktop
+  - `npm.cmd run build` passou depois dessa etapa
+- No modal de novo agendamento, o usuario pediu destaque maior para o botao
+  `Confirmar agendamento`, deixando `Cancelar` e acoes secundarias mais discretas.
+- O botao `Confirmar agendamento` foi aumentado, ganhou fonte mais forte, verde mais
+  vivo, sombra e feedback de hover/toque.
+- Em seguida, o usuario achou o verde ainda apagado. O botao foi ajustado para alto
+  contraste, com fundo claro/branco e hover verde claro.
+- Tambem foi pedido que o formulario de agendamento nao falhasse silenciosamente.
+  Ao clicar em confirmar sem preencher campos obrigatorios, deve aparecer a mensagem:
+  `Preencha todos os campos obrigatorios para confirmar o agendamento.`
+- Campos obrigatorios vazios no modal de agendamento devem ficar com borda vermelha
+  apos a tentativa de envio.
+- Depois desses ajustes de validacao visual no modal, `npm.cmd run build` passou.
+- Ultimo pedido antes da conversa cair:
+  - adicionar efeito hover/toque suave nos horarios livres da agenda, mesmo antes de
+    abrir/agendar
+  - fazer uma revisao ortografica dos textos visiveis do frontend todo
+- A conversa caiu depois de o assistente anterior dizer que iria iniciar essa varredura
+  de hover/toque nos horarios livres e correcao ortografica. Portanto, antes de assumir
+  que essa ultima etapa foi concluida, conferir o diff atual e os textos visiveis.
+
+Observacao importante:
+
+- O backend atual aceita `PUT /users/{id}` com `username`, `email`, `password` e `role`.
+- Ainda nao existe no contrato do backend um campo `currentPassword`.
+- As telas recuperadas possuem campos visuais de senha atual em conta/edicao, mas esse
+  valor nao e enviado pela API atual. Antes de tratar isso como regra de negocio,
+  decidir se a UI deve remover esse campo ou se o backend recebera um endpoint proprio
+  de troca de senha.
+
+## Frontend Change Log
+
+### 2026-10-01 - Agenda end-time selector
+
+- Corrigido problema no modal de agendamento em que o dropdown nativo de `Horario fim`
+  podia ficar cortado no final da tela, dificultando selecionar o ultimo horario
+  (`22:00`).
+- O `select` nativo de horario final foi substituido por uma grade rolavel de botoes
+  dentro do proprio modal.
+- A mesma solucao foi aplicada ao modal de edicao de agendamento para manter o padrao.
+- Foram adicionados metodos em `agenda.page.ts` para definir `endTime` nos formularios
+  de criacao e edicao marcando o campo como tocado.
+- Ajuste posterior do usuario: os horarios finais devem aparecer um embaixo do outro,
+  como um dropdown vertical rolavel, tanto no desktop quanto no mobile.
 
 ## Development Rules For Future Agents
 

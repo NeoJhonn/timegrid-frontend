@@ -3,14 +3,14 @@
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(16,185,129,0.2),transparent_28%),radial-gradient(circle_at_70%_18%,rgba(56,189,248,0.18),transparent_22%)]"></div>
     <div class="relative">
       <p class="mb-3 inline-flex rounded-lg border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs font-semibold text-emerald-100">
-        Sessao iniciada - {{ role() }}
+        Sessão iniciada - {{ role() }}
       </p>
       <h1 class="max-w-3xl text-4xl font-black leading-tight text-white sm:text-6xl">
         Bem-vindo ao seu centro de agenda.
       </h1>
       <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-        <span class="welcome-name">{{ displayName() }}</span>, tudo esta pronto para organizar clientes,
-        horarios e historico com menos atrito.
+        <span class="welcome-name">{{ displayName() }}</span>, tudo está pronto para organizar clientes,
+        horários e histórico com menos atrito.
       </p>
 
       <div class="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -27,7 +27,7 @@
       <button
         type="button"
         class="absolute bottom-8 left-1/2 h-60 w-60 -translate-x-1/2 cursor-pointer rounded-full outline-none transition duration-500 hover:scale-[1.02] focus-visible:ring-4 focus-visible:ring-emerald-300/30 sm:h-80 sm:w-80"
-        aria-label="Ocultar animacao de boas-vindas"
+        aria-label="Ocultar animação de boas-vindas"
         (click)="hideAnimation()"
       >
         <span class="welcome-ring absolute inset-0 rounded-full border border-emerald-300/30"></span>
@@ -47,10 +47,10 @@
   <aside class="grid gap-4">
     <a routerLink="/app/agenda" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 transition hover:border-emerald-300/40 hover:bg-emerald-300/10">
       <p class="text-sm font-semibold text-white">Agenda do dia</p>
-      <p class="mt-2 text-sm text-slate-400">Consulte horarios e crie novos atendimentos por data.</p>
+      <p class="mt-2 text-sm text-slate-400">Consulte horários e crie novos atendimentos por data.</p>
     </a>
     <a routerLink="/app/history" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 transition hover:border-emerald-300/40 hover:bg-emerald-300/10">
-      <p class="text-sm font-semibold text-white">Historico por cliente</p>
+      <p class="text-sm font-semibold text-white">Histórico por cliente</p>
       <p class="mt-2 text-sm text-slate-400">Veja os atendimentos recentes de cada pessoa cadastrada.</p>
     </a>
     <a routerLink="/app/clients" class="rounded-lg border border-white/10 bg-white/[0.055] p-5 transition hover:border-emerald-300/40 hover:bg-emerald-300/10">

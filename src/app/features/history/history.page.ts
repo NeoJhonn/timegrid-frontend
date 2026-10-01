@@ -73,7 +73,7 @@ export class HistoryPage implements OnInit {
           }
         },
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar clientes.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível carregar clientes.'));
         },
       });
   }
@@ -141,7 +141,7 @@ export class HistoryPage implements OnInit {
       .subscribe({
         next: (appointments) => this.appointments.set(appointments),
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar historico.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível carregar histórico.'));
         },
       });
   }

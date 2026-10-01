@@ -63,7 +63,7 @@ export class ClientsPage implements OnInit {
       .subscribe({
         next: (clients) => this.clients.set(clients),
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel carregar clientes.'));
+          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível carregar clientes.'));
         },
       });
   }
@@ -93,7 +93,7 @@ export class ClientsPage implements OnInit {
         this.loadClients();
       },
       error: (error: unknown) => {
-        this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel salvar o cliente.'));
+        this.errorMessage.set(apiErrorMessage(error, 'Não foi possível salvar o cliente.'));
       },
     });
   }
@@ -127,7 +127,7 @@ export class ClientsPage implements OnInit {
         this.loadClients();
       },
       error: (error: unknown) => {
-        this.errorMessage.set(apiErrorMessage(error, 'Nao foi possivel remover o cliente.'));
+        this.errorMessage.set(apiErrorMessage(error, 'Não foi possível remover o cliente.'));
       },
     });
   }
@@ -140,4 +140,3 @@ export class ClientsPage implements OnInit {
     return this.authService.currentUser()?.userId ?? null;
   }
 }
-
