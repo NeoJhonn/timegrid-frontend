@@ -30,6 +30,7 @@ export class ClientsPage implements OnInit {
   protected readonly message = signal('');
   protected readonly errorMessage = signal('');
   protected readonly editingClient = signal<ClientResponse | null>(null);
+  protected readonly clientModalOpen = signal(false);
   protected readonly search = signal('');
 
   protected readonly form = this.formBuilder.nonNullable.group({
@@ -112,14 +113,26 @@ export class ClientsPage implements OnInit {
 
   protected edit(client: ClientResponse): void {
     this.editingClient.set(client);
+    this.clientModalOpen.set(true);
+    this.message.set('');
+    this.errorMessage.set('');
     this.form.setValue({
       name: client.name,
       phone: this.formatPhone(client.phone),
     });
   }
 
+  protected openCreateModal(): void {
+    this.editingClient.set(null);
+    this.form.reset();
+    this.message.set('');
+    this.errorMessage.set('');
+    this.clientModalOpen.set(true);
+  }
+
   protected cancelEdit(): void {
     this.editingClient.set(null);
+    this.clientModalOpen.set(false);
     this.form.reset();
   }
 

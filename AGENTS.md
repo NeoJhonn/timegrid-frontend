@@ -511,6 +511,14 @@ Observacao importante:
 - A lista de clientes exibe telefones formatados.
 - Ao salvar, o frontend remove a mascara e envia somente os digitos para o backend.
 
+### 2026-10-02 - Client form modal
+
+- A pagina de clientes foi simplificada para priorizar a listagem e busca de clientes.
+- O card fixo de cadastro/edicao foi removido da tela principal.
+- A acao `Cadastrar cliente` agora fica em um botao no topo da pagina.
+- O formulario de cadastro e edicao de cliente abre em um modal reutilizando as mesmas
+  validacoes e mascara de telefone.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

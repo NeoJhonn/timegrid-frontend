@@ -1,87 +1,39 @@
-<section class="grid gap-5 lg:grid-cols-[410px_1fr]">
+<section class="grid gap-5">
   <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
-    <p class="text-sm font-semibold text-emerald-200">Clientes</p>
-    <h1 class="mt-2 text-3xl font-black text-white">Cadastro de clientes</h1>
-    <p class="mt-3 text-sm leading-6 text-slate-400">
-      Cadastre clientes antes de criar agendamentos. A agenda usa esta base para o autocomplete.
-    </p>
-
-    <form class="mt-6 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
-      <label class="block">
-        <span class="mb-2 block text-sm font-medium text-slate-300">Nome</span>
-        <input
-          type="text"
-          formControlName="name"
-          class="h-12 w-full rounded-lg border bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:ring-4 focus:ring-emerald-300/10"
-          [class.border-red-300]="form.controls.name.invalid && form.controls.name.touched"
-          [class.border-white\/10]="!(form.controls.name.invalid && form.controls.name.touched)"
-          [class.focus:border-red-300]="form.controls.name.invalid && form.controls.name.touched"
-          [class.focus:border-emerald-300\/70]="!(form.controls.name.invalid && form.controls.name.touched)"
-          placeholder="Nome do cliente"
-        />
-        @if (form.controls.name.invalid && form.controls.name.touched) {
-          <span class="mt-2 block text-xs font-semibold text-red-200">Informe o nome do cliente.</span>
-        }
-      </label>
-
-      <label class="block">
-        <span class="mb-2 block text-sm font-medium text-slate-300">Telefone</span>
-        <input
-          type="text"
-          formControlName="phone"
-          inputmode="tel"
-          class="h-12 w-full rounded-lg border bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:ring-4 focus:ring-emerald-300/10"
-          [class.border-red-300]="form.controls.phone.invalid && form.controls.phone.touched"
-          [class.border-white\/10]="!(form.controls.phone.invalid && form.controls.phone.touched)"
-          [class.focus:border-red-300]="form.controls.phone.invalid && form.controls.phone.touched"
-          [class.focus:border-emerald-300\/70]="!(form.controls.phone.invalid && form.controls.phone.touched)"
-          placeholder="(00) 00000-0000"
-          (input)="updatePhone($any($event.target).value)"
-        />
-        @if (form.controls.phone.invalid && form.controls.phone.touched) {
-          <span class="mt-2 block text-xs font-semibold text-red-200">
-            Informe um telefone com DDD, usando 10 ou 11 dígitos.
-          </span>
-        }
-      </label>
-
-      @if (errorMessage()) {
-        <div class="rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
-          {{ errorMessage() }}
-        </div>
-      }
-
-      @if (message()) {
-        <div class="rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
-          {{ message() }}
-        </div>
-      }
-
-      <div class="flex flex-col gap-2 sm:flex-row">
-        <button
-          type="submit"
-          class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
-          [disabled]="saving()"
-        >
-          {{ editingClient() ? 'Salvar alterações' : 'Cadastrar cliente' }}
-        </button>
-        @if (editingClient()) {
-          <button
-            type="button"
-            class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
-            (click)="cancelEdit()"
-          >
-            Cancelar
-          </button>
-        }
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <p class="text-sm font-semibold text-emerald-200">Clientes</p>
+        <h1 class="mt-2 text-3xl font-black text-white">Base de clientes</h1>
+        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-400">
+          Consulte, busque e mantenha os clientes usados nos agendamentos.
+        </p>
       </div>
-    </form>
+      <button
+        type="button"
+        class="h-11 rounded-lg bg-emerald-400 px-5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 active:scale-[0.98]"
+        (click)="openCreateModal()"
+      >
+        Cadastrar cliente
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="mt-5 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-sm text-red-100">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if (message()) {
+      <div class="mt-5 rounded-lg border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
+        {{ message() }}
+      </div>
+    }
   </div>
 
   <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
     <div class="mb-5 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
-        <p class="text-sm font-semibold text-white">Base cadastrada</p>
+        <p class="text-sm font-semibold text-white">Clientes cadastrados</p>
         <p class="mt-1 text-sm text-slate-400">{{ clients().length }} cliente(s) no sistema</p>
       </div>
       <label class="block md:w-72">
@@ -138,3 +90,87 @@
     }
   </div>
 </section>
+
+@if (clientModalOpen()) {
+  <div class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
+    <form
+      class="w-full max-w-md rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white">
+            {{ editingClient() ? 'Editar cliente' : 'Cadastrar cliente' }}
+          </h2>
+          <p class="mt-2 text-sm leading-6 text-slate-400">
+            Informe os dados do cliente para usar nos agendamentos.
+          </p>
+        </div>
+        <button
+          type="button"
+          class="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/10 text-lg text-slate-300 transition hover:bg-white/10 hover:text-white"
+          aria-label="Fechar modal de cliente"
+          (click)="cancelEdit()"
+        >
+          x
+        </button>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-300">Nome</span>
+          <input
+            type="text"
+            formControlName="name"
+            class="h-12 w-full rounded-lg border bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:ring-4 focus:ring-emerald-300/10"
+            [class.border-red-300]="form.controls.name.invalid && form.controls.name.touched"
+            [class.border-white\/10]="!(form.controls.name.invalid && form.controls.name.touched)"
+            [class.focus:border-red-300]="form.controls.name.invalid && form.controls.name.touched"
+            [class.focus:border-emerald-300\/70]="!(form.controls.name.invalid && form.controls.name.touched)"
+            placeholder="Nome do cliente"
+          />
+          @if (form.controls.name.invalid && form.controls.name.touched) {
+            <span class="mt-2 block text-xs font-semibold text-red-200">Informe o nome do cliente.</span>
+          }
+        </label>
+
+        <label class="block">
+          <span class="mb-2 block text-sm font-medium text-slate-300">Telefone</span>
+          <input
+            type="text"
+            formControlName="phone"
+            inputmode="tel"
+            class="h-12 w-full rounded-lg border bg-slate-950/70 px-4 text-sm text-white outline-none transition focus:ring-4 focus:ring-emerald-300/10"
+            [class.border-red-300]="form.controls.phone.invalid && form.controls.phone.touched"
+            [class.border-white\/10]="!(form.controls.phone.invalid && form.controls.phone.touched)"
+            [class.focus:border-red-300]="form.controls.phone.invalid && form.controls.phone.touched"
+            [class.focus:border-emerald-300\/70]="!(form.controls.phone.invalid && form.controls.phone.touched)"
+            placeholder="(00) 00000-0000"
+            (input)="updatePhone($any($event.target).value)"
+          />
+          @if (form.controls.phone.invalid && form.controls.phone.touched) {
+            <span class="mt-2 block text-xs font-semibold text-red-200">
+              Informe um telefone com DDD, usando 10 ou 11 dígitos.
+            </span>
+          }
+        </label>
+
+        <button
+          type="submit"
+          class="h-12 w-full rounded-lg bg-emerald-400 px-5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+          [disabled]="saving()"
+        >
+          {{ saving() ? 'Salvando...' : editingClient() ? 'Salvar alterações' : 'Cadastrar cliente' }}
+        </button>
+        <button
+          type="button"
+          class="h-11 w-full rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          (click)="cancelEdit()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+}
