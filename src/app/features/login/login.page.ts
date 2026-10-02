@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -25,7 +25,9 @@ export class LoginPage {
     password: ['', Validators.required],
   });
 
-  protected readonly canSubmit = computed(() => this.form.valid && !this.loading());
+  protected canSubmit(): boolean {
+    return this.form.valid && !this.loading();
+  }
 
   protected togglePassword(): void {
     this.showPassword.update((value) => !value);

@@ -567,6 +567,14 @@ Observacao importante:
 - Removidos os valores fixos de desenvolvimento do formulario de login.
 - Os campos de e-mail e senha agora iniciam em branco ao abrir a tela de login.
 
+### 2026-10-02 - Login submit button state
+
+- Corrigido o estado do botao de login apos remover os valores padrao.
+- O botao usava um `computed()` lendo `form.valid`, mas Reactive Forms nao expõe esse
+  estado como signal; com campos vazios iniciais, o botao podia permanecer desabilitado
+  mesmo apos preencher e-mail e senha.
+- `canSubmit` agora e um metodo que lê o estado atual do formulario e do loading.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
