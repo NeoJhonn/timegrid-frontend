@@ -493,6 +493,15 @@ Observacao importante:
 - Ajuste posterior do usuario: os horarios finais devem aparecer um embaixo do outro,
   como um dropdown vertical rolavel, tanto no desktop quanto no mobile.
 
+### 2026-10-02 - Account password modal
+
+- A pagina `Minha conta` foi simplificada para exibir os dados da conta em um card
+  unico, sem o card fixo lateral de atualizacao de senha.
+- A acao de senha agora fica em um botao `Alterar senha` abaixo dos dados da conta.
+- O formulario de senha foi movido para um modal, deixando a pagina mais limpa.
+- Ao atualizar a senha com sucesso, o modal fecha, o formulario e limpo e a mensagem
+  de sucesso aparece na pagina da conta.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

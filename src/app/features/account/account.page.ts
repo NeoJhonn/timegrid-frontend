@@ -23,6 +23,7 @@ export class AccountPage implements OnInit {
   protected readonly saving = signal(false);
   protected readonly message = signal('');
   protected readonly errorMessage = signal('');
+  protected readonly passwordModalOpen = signal(false);
   protected readonly showCurrentPassword = signal(false);
   protected readonly showNewPassword = signal(false);
 
@@ -80,12 +81,29 @@ export class AccountPage implements OnInit {
         next: (updatedUser) => {
           this.account.set(updatedUser);
           this.passwordForm.reset();
+          this.closePasswordModal();
           this.message.set('Senha atualizada com sucesso.');
         },
         error: (error: unknown) => {
           this.errorMessage.set(apiErrorMessage(error, 'Não foi possível atualizar sua senha.'));
         },
       });
+  }
+
+  protected openPasswordModal(): void {
+    this.message.set('');
+    this.errorMessage.set('');
+    this.passwordForm.reset();
+    this.showCurrentPassword.set(false);
+    this.showNewPassword.set(false);
+    this.passwordModalOpen.set(true);
+  }
+
+  protected closePasswordModal(): void {
+    this.passwordModalOpen.set(false);
+    this.passwordForm.reset();
+    this.showCurrentPassword.set(false);
+    this.showNewPassword.set(false);
   }
 
   protected toggleCurrentPassword(): void {
