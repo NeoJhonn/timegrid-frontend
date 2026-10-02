@@ -550,6 +550,18 @@ Observacao importante:
   espacos sejam tratados como invalidos.
 - Telefone continua sendo salvo somente com digitos; a mascara fica apenas na UI.
 
+### 2026-10-02 - Client list cache
+
+- `ClientApiService` agora mantém um cache em memória da lista de clientes por `userId`.
+- Chamadas repetidas a `list(userId)` reutilizam os clientes já carregados durante a
+  sessão da aplicação, evitando novas idas ao backend para autocomplete/listagens.
+- O cache é atualizado quando um cliente é criado ou editado e remove o cliente quando
+  ele é excluído.
+- O cache não é persistido em `localStorage`; ao recarregar a página, a lista é buscada
+  novamente.
+- A agenda por data não foi cacheada de propósito: ao trocar a data, a tela deve buscar
+  os agendamentos atuais daquela data no backend.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
