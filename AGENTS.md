@@ -502,6 +502,15 @@ Observacao importante:
 - Ao atualizar a senha com sucesso, o modal fecha, o formulario e limpo e a mensagem
   de sucesso aparece na pagina da conta.
 
+### 2026-10-02 - Client form validation and phone mask
+
+- A tela de clientes agora mostra validacao visual por campo quando o usuario tenta
+  cadastrar ou editar com `Nome` ou `Telefone` invalidos.
+- O telefone recebe mascara durante a digitacao no formato `(DD) 00000-0000` ou
+  `(DD) 0000-0000`, aceitando 10 ou 11 digitos.
+- A lista de clientes exibe telefones formatados.
+- Ao salvar, o frontend remove a mascara e envia somente os digitos para o backend.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

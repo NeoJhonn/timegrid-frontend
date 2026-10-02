@@ -1,6 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { finalize } from 'rxjs';
 import { ClientResponse } from '../../core/models/client.model';
 import { AuthService } from '../../core/services/auth.service';
@@ -28,7 +34,7 @@ export class ClientsPage implements OnInit {
 
   protected readonly form = this.formBuilder.nonNullable.group({
     name: ['', Validators.required],
-    phone: ['', Validators.required],
+    phone: ['', [Validators.required, this.phoneValidator]],
   });
 
   protected readonly filteredClients = computed(() => {
@@ -38,9 +44,11 @@ export class ClientsPage implements OnInit {
       return this.clients();
     }
 
-    return this.clients().filter((client) =>
-      `${client.name} ${client.phone}`.toLowerCase().includes(term),
-    );
+    return this.clients().filter((client) => {
+      const phone = this.formatPhone(client.phone);
+      const digits = this.onlyDigits(client.phone);
+      return `${client.name} ${phone} ${digits}`.toLowerCase().includes(term);
+    });
   });
 
   ngOnInit(): void {
@@ -80,7 +88,11 @@ export class ClientsPage implements OnInit {
     this.message.set('');
     this.errorMessage.set('');
 
-    const request = this.form.getRawValue();
+    const rawValue = this.form.getRawValue();
+    const request = {
+      name: rawValue.name.trim(),
+      phone: this.onlyDigits(rawValue.phone),
+    };
     const editing = this.editingClient();
     const operation = editing
       ? this.clientApi.update(userId, editing.id, request)
@@ -102,7 +114,7 @@ export class ClientsPage implements OnInit {
     this.editingClient.set(client);
     this.form.setValue({
       name: client.name,
-      phone: client.phone,
+      phone: this.formatPhone(client.phone),
     });
   }
 
@@ -136,7 +148,36 @@ export class ClientsPage implements OnInit {
     this.search.set(value);
   }
 
+  protected updatePhone(value: string): void {
+    this.form.controls.phone.setValue(this.formatPhone(value));
+  }
+
+  protected formatPhone(value: string): string {
+    const digits = this.onlyDigits(value).slice(0, 11);
+
+    if (digits.length <= 2) {
+      return digits ? `(${digits}` : '';
+    }
+
+    const ddd = digits.slice(0, 2);
+    const number = digits.slice(2);
+    const firstPartSize = digits.length > 10 ? 5 : 4;
+    const firstPart = number.slice(0, firstPartSize);
+    const secondPart = number.slice(firstPartSize);
+
+    return secondPart ? `(${ddd}) ${firstPart}-${secondPart}` : `(${ddd}) ${firstPart}`;
+  }
+
   private userId(): string | null {
     return this.authService.currentUser()?.userId ?? null;
+  }
+
+  private onlyDigits(value: string): string {
+    return value.replace(/\D/g, '');
+  }
+
+  private phoneValidator(control: AbstractControl<string>): ValidationErrors | null {
+    const digits = control.value.replace(/\D/g, '');
+    return digits.length === 10 || digits.length === 11 ? null : { phone: true };
   }
 }
