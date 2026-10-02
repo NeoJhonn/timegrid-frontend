@@ -21,6 +21,7 @@ export class UserCreatePage implements OnInit {
 
   protected readonly users = signal<UserResponse[]>([]);
   protected readonly currentAccount = signal<UserResponse | null>(null);
+  protected readonly createModalOpen = signal(false);
   protected readonly editingUser = signal<UserResponse | null>(null);
   protected readonly deletingUser = signal<UserResponse | null>(null);
   protected readonly loading = signal(false);
@@ -87,6 +88,7 @@ export class UserCreatePage implements OnInit {
         next: (user) => {
           this.message.set(`Usuario ${user.username} criado com sucesso.`);
           this.createForm.reset({ username: '', email: '', password: '', role: 'ADMIN' });
+          this.closeCreate();
           this.loadData();
         },
         error: (error: unknown) => {
@@ -95,8 +97,24 @@ export class UserCreatePage implements OnInit {
       });
   }
 
+  protected openCreate(): void {
+    this.createForm.reset({ username: '', email: '', password: '', role: 'ADMIN' });
+    this.showCreatePassword.set(false);
+    this.message.set('');
+    this.errorMessage.set('');
+    this.createModalOpen.set(true);
+  }
+
+  protected closeCreate(): void {
+    this.createModalOpen.set(false);
+    this.showCreatePassword.set(false);
+    this.createForm.reset({ username: '', email: '', password: '', role: 'ADMIN' });
+  }
+
   protected openEdit(user: UserResponse): void {
     this.editingUser.set(user);
+    this.showEditCurrentPassword.set(false);
+    this.showEditNewPassword.set(false);
     this.editForm.setValue({
       username: user.username,
       email: user.email,
@@ -108,6 +126,8 @@ export class UserCreatePage implements OnInit {
 
   protected closeEdit(): void {
     this.editingUser.set(null);
+    this.showEditCurrentPassword.set(false);
+    this.showEditNewPassword.set(false);
     this.editForm.reset({
       username: '',
       email: '',

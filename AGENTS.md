@@ -529,6 +529,17 @@ Observacao importante:
   data passada e o submit exibe mensagem caso seja acionado indevidamente.
 - A comparacao usa data local no formato `yyyy-MM-dd`, evitando diferenca por UTC/fuso.
 
+### 2026-10-02 - User management create modal
+
+- A tela de gerenciamento de usuarios foi simplificada para priorizar a conta logada
+  e a lista de usuarios ativos.
+- O formulario fixo de cadastro de usuario foi movido para um modal aberto pelo botao
+  `Cadastrar usuario`.
+- A validacao de e-mail ja existia via `Validators.email`; agora ela tambem aparece
+  visualmente no cadastro e na edicao com mensagem `Informe um e-mail valido.`
+- Campos obrigatorios de nome, e-mail e senha inicial exibem mensagens no modal de
+  cadastro quando o usuario tenta salvar sem preencher corretamente.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
