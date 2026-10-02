@@ -575,6 +575,13 @@ Observacao importante:
   mesmo apos preencher e-mail e senha.
 - `canSubmit` agora e um metodo que lê o estado atual do formulario e do loading.
 
+### 2026-10-02 - Agenda header cleanup
+
+- O cabecalho da agenda foi simplificado.
+- Removidos o eyebrow `Agenda`, o titulo `Agenda por horarios` e a descricao auxiliar.
+- A tela agora exibe apenas um titulo grande `Agenda` no card superior, mantendo o date
+  picker e o restante da experiencia sem mudancas.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
