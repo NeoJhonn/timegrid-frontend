@@ -62,6 +62,8 @@ export class AgendaPage implements OnInit {
     };
   });
 
+  protected readonly canCreateAppointment = computed(() => this.selectedDate() >= this.today());
+
   protected readonly filteredClients = computed(() => {
     const query = this.clientQuery().trim().toLowerCase();
 
@@ -134,6 +136,7 @@ export class AgendaPage implements OnInit {
   protected changeDate(date: string): void {
     this.selectedDate.set(date);
     this.appointmentForm.controls.appointmentDate.setValue(date);
+    this.closeScheduleModal();
     this.loadAppointments();
   }
 
@@ -159,6 +162,10 @@ export class AgendaPage implements OnInit {
   }
 
   protected openScheduleModal(startTime: TimeGrid): void {
+    if (!this.canCreateAppointment()) {
+      return;
+    }
+
     const endTime = this.nextAvailableEndTime(startTime);
     this.selectedStartTime.set(startTime);
     this.clientQuery.set('');
@@ -189,6 +196,11 @@ export class AgendaPage implements OnInit {
 
   protected submitAppointment(): void {
     const userId = this.userId();
+
+    if (!this.canCreateAppointment()) {
+      this.scheduleValidationMessage.set('Não é possível criar agendamento em uma data passada.');
+      return;
+    }
 
     if (!userId || this.appointmentForm.invalid || this.saving()) {
       this.appointmentForm.markAllAsTouched();
@@ -377,7 +389,12 @@ export class AgendaPage implements OnInit {
   }
 
   private today(): string {
-    return new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = `${now.getMonth() + 1}`.padStart(2, '0');
+    const day = `${now.getDate()}`.padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   private dateFromIso(value: string): Date {

@@ -519,6 +519,16 @@ Observacao importante:
 - O formulario de cadastro e edicao de cliente abre em um modal reutilizando as mesmas
   validacoes e mascara de telefone.
 
+### 2026-10-02 - Past-date scheduling guard
+
+- A agenda agora trata data passada como somente leitura para criacao de novos
+  agendamentos.
+- Quando a data selecionada e anterior a data local de hoje, os horarios livres deixam
+  de exibir o botao `Agendar` e mostram um indicador discreto de `Data passada`.
+- A protecao tambem existe no componente: o modal de novo agendamento nao abre para
+  data passada e o submit exibe mensagem caso seja acionado indevidamente.
+- A comparacao usa data local no formato `yyyy-MM-dd`, evitando diferenca por UTC/fuso.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
