@@ -80,6 +80,11 @@ export class ClientsPage implements OnInit {
   protected submit(): void {
     const userId = this.userId();
 
+    this.form.setValue({
+      name: this.form.controls.name.value.trim(),
+      phone: this.form.controls.phone.value.trim(),
+    });
+
     if (!userId || this.form.invalid || this.saving()) {
       this.form.markAllAsTouched();
       return;

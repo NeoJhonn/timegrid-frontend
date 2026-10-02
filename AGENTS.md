@@ -540,6 +540,16 @@ Observacao importante:
 - Campos obrigatorios de nome, e-mail e senha inicial exibem mensagens no modal de
   cadastro quando o usuario tenta salvar sem preencher corretamente.
 
+### 2026-10-02 - Form submit trimming
+
+- Antes de validar/enviar formularios principais, o frontend agora remove espacos no
+  inicio e no fim de campos textuais.
+- Aplicado em login, cadastro/edicao de usuarios, cadastro/edicao de clientes,
+  criacao/edicao de agendamentos e alteracao de senha da conta.
+- A normalizacao acontece antes da validacao para que campos preenchidos apenas com
+  espacos sejam tratados como invalidos.
+- Telefone continua sendo salvo somente com digitos; a mascara fica apenas na UI.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

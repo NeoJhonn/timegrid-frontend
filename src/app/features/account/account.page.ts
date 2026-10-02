@@ -60,6 +60,11 @@ export class AccountPage implements OnInit {
   protected updatePassword(): void {
     const user = this.account();
 
+    this.passwordForm.setValue({
+      currentPassword: this.passwordForm.controls.currentPassword.value.trim(),
+      newPassword: this.passwordForm.controls.newPassword.value.trim(),
+    });
+
     if (!user || this.passwordForm.invalid || this.saving()) {
       this.passwordForm.markAllAsTouched();
       return;

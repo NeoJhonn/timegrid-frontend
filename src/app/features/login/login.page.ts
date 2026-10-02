@@ -32,6 +32,11 @@ export class LoginPage {
   }
 
   protected submit(): void {
+    this.form.setValue({
+      email: this.form.controls.email.value.trim(),
+      password: this.form.controls.password.value.trim(),
+    });
+
     if (this.form.invalid || this.loading()) {
       this.form.markAllAsTouched();
       return;

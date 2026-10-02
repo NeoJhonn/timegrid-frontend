@@ -72,6 +72,13 @@ export class UserCreatePage implements OnInit {
   }
 
   protected createUser(): void {
+    this.createForm.setValue({
+      username: this.createForm.controls.username.value.trim(),
+      email: this.createForm.controls.email.value.trim(),
+      password: this.createForm.controls.password.value.trim(),
+      role: this.createForm.controls.role.value,
+    });
+
     if (this.createForm.invalid || this.saving()) {
       this.createForm.markAllAsTouched();
       return;
@@ -139,6 +146,14 @@ export class UserCreatePage implements OnInit {
 
   protected saveEdit(): void {
     const user = this.editingUser();
+
+    this.editForm.setValue({
+      username: this.editForm.controls.username.value.trim(),
+      email: this.editForm.controls.email.value.trim(),
+      currentPassword: this.editForm.controls.currentPassword.value.trim(),
+      newPassword: this.editForm.controls.newPassword.value.trim(),
+      role: this.editForm.controls.role.value,
+    });
 
     if (!user || this.editForm.invalid || this.saving()) {
       this.editForm.markAllAsTouched();

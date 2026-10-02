@@ -197,6 +197,10 @@ export class AgendaPage implements OnInit {
   protected submitAppointment(): void {
     const userId = this.userId();
 
+    this.appointmentForm.patchValue({
+      service: this.appointmentForm.controls.service.value.trim(),
+    });
+
     if (!this.canCreateAppointment()) {
       this.scheduleValidationMessage.set('Não é possível criar agendamento em uma data passada.');
       return;
@@ -267,6 +271,10 @@ export class AgendaPage implements OnInit {
   protected saveEdit(): void {
     const userId = this.userId();
     const appointment = this.editingAppointment();
+
+    this.updateForm.patchValue({
+      service: this.updateForm.controls.service.value.trim(),
+    });
 
     if (!userId || !appointment || this.updateForm.invalid || this.saving()) {
       this.updateForm.markAllAsTouched();
