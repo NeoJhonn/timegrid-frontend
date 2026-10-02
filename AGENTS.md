@@ -562,6 +562,11 @@ Observacao importante:
 - A agenda por data não foi cacheada de propósito: ao trocar a data, a tela deve buscar
   os agendamentos atuais daquela data no backend.
 
+### 2026-10-02 - Blank login form
+
+- Removidos os valores fixos de desenvolvimento do formulario de login.
+- Os campos de e-mail e senha agora iniciam em branco ao abrir a tela de login.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

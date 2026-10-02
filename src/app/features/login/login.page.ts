@@ -21,8 +21,8 @@ export class LoginPage {
   protected readonly showPassword = signal(false);
 
   protected readonly form = this.formBuilder.nonNullable.group({
-    email: ['john.manager@timegrid.test', [Validators.required, Validators.email]],
-    password: ['123456', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
   });
 
   protected readonly canSubmit = computed(() => this.form.valid && !this.loading());
