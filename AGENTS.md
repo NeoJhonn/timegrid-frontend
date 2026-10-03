@@ -634,6 +634,15 @@ Observacao importante:
 - Ao tentar salvar a edicao de usuario com `Nova senha` vazia, a tela agora marca o
   campo e exibe a mensagem `Informe a nova senha.`.
 
+### 2026-10-03 - Login column balance
+
+- A tela de login passou a usar duas colunas iguais no desktop (`lg:grid-cols-2`) para
+  deixar o card de acesso visualmente mais centralizado e equilibrado em relacao as
+  laterais.
+- Ajuste posterior no mobile: o bloco do formulario agora usa largura explicita
+  `w-[calc(100vw-2rem)]`, `mx-auto` e `max-w-md`, evitando depender do padding lateral
+  do container para parecer centralizado em viewports como Galaxy A55.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
