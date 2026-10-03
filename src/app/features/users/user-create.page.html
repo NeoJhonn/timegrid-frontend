@@ -294,17 +294,17 @@
         </select>
       </label>
 
-      <div class="mt-6 flex flex-col gap-2 sm:flex-row">
+      <div class="mt-6 grid gap-2 sm:grid-cols-2">
         <button
           type="submit"
-          class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+          class="h-12 rounded-lg bg-emerald-400 px-5 text-sm font-black text-slate-950 shadow-[0_16px_42px_rgba(52,211,153,0.18)] transition hover:-translate-y-0.5 hover:bg-emerald-300 hover:shadow-[0_22px_54px_rgba(52,211,153,0.28)] active:scale-[0.98] active:bg-emerald-200 disabled:opacity-60"
           [disabled]="saving() || editForm.invalid"
         >
           Salvar alterações
         </button>
         <button
           type="button"
-          class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          class="h-12 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
           (click)="closeEdit()"
         >
           Cancelar

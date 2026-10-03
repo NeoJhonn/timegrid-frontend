@@ -627,6 +627,10 @@ Observacao importante:
 - O campo visual `Senha atual` foi removido da edicao de usuario porque o backend atual
   nao recebe nem valida `currentPassword`; a tela mantem apenas `Nova senha` ate existir
   um endpoint proprio de troca de senha.
+- O botao `Salvar alteracoes` do modal de edicao de usuario ganhou mais destaque visual,
+  altura alinhada ao `Cancelar`, texto branco e verde mais forte.
+- Ajuste posterior: o botao `Salvar alteracoes` passou a reutilizar o tratamento verde
+  vivo aprovado na Agenda (`bg-emerald-400`, texto escuro, hover `emerald-300` e sombra).
 
 ## Development Rules For Future Agents
 
