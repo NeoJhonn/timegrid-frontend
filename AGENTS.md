@@ -598,6 +598,8 @@ Observacao importante:
 - O botao `Atualizar` fica desabilitado enquanto nao houver cliente selecionado.
 - O autocomplete de cliente no historico so abre sugestoes depois que o usuario digita
   algum texto, evitando mostrar os primeiros clientes apenas ao focar o campo.
+- Os botoes de janela do historico agora destacam visualmente o periodo selecionado
+  conforme `daysBack` e `daysForward`, em vez de deixar `30 + 30` fixo.
 
 ## Development Rules For Future Agents
 

@@ -44,28 +44,28 @@
     <div class="mt-5 grid gap-2">
       <button
         type="button"
-        class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        [class]="windowButtonClass(7, 7)"
         (click)="setWindow(7, 7)"
       >
         Últimos 7 dias + próximos 7
       </button>
       <button
         type="button"
-        class="rounded-lg border border-emerald-300/25 bg-emerald-300/10 px-4 py-3 text-left text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/15"
+        [class]="windowButtonClass(30, 30)"
         (click)="setWindow(30, 30)"
       >
         Últimos 30 dias + próximos 30
       </button>
       <button
         type="button"
-        class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        [class]="windowButtonClass(90, 30)"
         (click)="setWindow(90, 30)"
       >
         Últimos 90 dias + próximos 30
       </button>
       <button
         type="button"
-        class="rounded-lg border border-white/10 px-4 py-3 text-left text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        [class]="windowButtonClass(365, 0)"
         (click)="setWindow(365, 0)"
       >
         Últimos 365 dias
@@ -146,3 +146,4 @@
     }
   </div>
 </section>
+

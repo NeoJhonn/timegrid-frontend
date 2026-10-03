@@ -110,6 +110,20 @@ export class HistoryPage implements OnInit {
     }
   }
 
+  protected windowButtonClass(daysBack: number, daysForward: number): string {
+    const baseClass =
+      'rounded-lg border px-4 py-3 text-left text-sm font-semibold transition';
+    const selectedClass =
+      'border-emerald-300/25 bg-emerald-300/10 text-emerald-100 hover:bg-emerald-300/15';
+    const defaultClass = 'border-white/10 text-slate-200 hover:bg-white/10';
+
+    return `${baseClass} ${
+      this.daysBack() === daysBack && this.daysForward() === daysForward
+        ? selectedClass
+        : defaultClass
+    }`;
+  }
+
   protected loadHistory(): void {
     const userId = this.userId();
     const clientId = this.selectedClientId();
