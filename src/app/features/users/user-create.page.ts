@@ -36,6 +36,7 @@ export class UserCreatePage implements OnInit {
   protected readonly errorMessage = signal('');
   protected readonly showCreatePassword = signal(false);
   protected readonly showEditNewPassword = signal(false);
+  protected readonly editSubmitAttempted = signal(false);
 
   protected readonly createForm = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
@@ -125,6 +126,7 @@ export class UserCreatePage implements OnInit {
   protected openEdit(user: UserResponse): void {
     this.editingUser.set(user);
     this.showEditNewPassword.set(false);
+    this.editSubmitAttempted.set(false);
     this.editForm.setValue({
       username: user.username,
       email: user.email,
@@ -136,6 +138,7 @@ export class UserCreatePage implements OnInit {
   protected closeEdit(): void {
     this.editingUser.set(null);
     this.showEditNewPassword.set(false);
+    this.editSubmitAttempted.set(false);
     this.editForm.reset({
       username: '',
       email: '',
@@ -146,6 +149,7 @@ export class UserCreatePage implements OnInit {
 
   protected saveEdit(): void {
     const user = this.editingUser();
+    this.editSubmitAttempted.set(true);
 
     this.editForm.setValue({
       username: this.editForm.controls.username.value.trim(),
@@ -226,6 +230,10 @@ export class UserCreatePage implements OnInit {
   }
 
   protected passwordMessage(control: AbstractControl<string>): string {
+    if (control.errors?.['required']) {
+      return 'Informe a nova senha.';
+    }
+
     return control.errors?.['passwordStrength']
       ? 'Use no minimo 8 caracteres, com letra maiuscula e minuscula.'
       : 'Informe uma senha.';

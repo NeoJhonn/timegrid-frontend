@@ -257,10 +257,10 @@
       <label class="mt-4 block">
         <span class="mb-2 block text-sm font-medium text-slate-300">Nova senha</span>
         <span class="flex h-12 rounded-lg border bg-slate-950/70 transition focus-within:ring-4 focus-within:ring-emerald-300/10"
-          [class.border-red-300]="editForm.controls.newPassword.invalid && editForm.controls.newPassword.touched"
-          [class.border-white\/10]="!(editForm.controls.newPassword.invalid && editForm.controls.newPassword.touched)"
-          [class.focus-within:border-red-300]="editForm.controls.newPassword.invalid && editForm.controls.newPassword.touched"
-          [class.focus-within:border-emerald-300\/70]="!(editForm.controls.newPassword.invalid && editForm.controls.newPassword.touched)"
+          [class.border-red-300]="editForm.controls.newPassword.invalid && (editForm.controls.newPassword.touched || editSubmitAttempted())"
+          [class.border-white\/10]="!(editForm.controls.newPassword.invalid && (editForm.controls.newPassword.touched || editSubmitAttempted()))"
+          [class.focus-within:border-red-300]="editForm.controls.newPassword.invalid && (editForm.controls.newPassword.touched || editSubmitAttempted())"
+          [class.focus-within:border-emerald-300\/70]="!(editForm.controls.newPassword.invalid && (editForm.controls.newPassword.touched || editSubmitAttempted()))"
         >
           <input
             [type]="showEditNewPassword() ? 'text' : 'password'"
@@ -276,7 +276,7 @@
             {{ showEditNewPassword() ? 'Ocultar' : 'Mostrar' }}
           </button>
         </span>
-        @if (editForm.controls.newPassword.invalid && editForm.controls.newPassword.touched) {
+        @if (editForm.controls.newPassword.invalid && (editForm.controls.newPassword.touched || editSubmitAttempted())) {
           <span class="mt-2 block text-xs font-semibold text-red-200">
             {{ passwordMessage(editForm.controls.newPassword) }}
           </span>
@@ -298,7 +298,7 @@
         <button
           type="submit"
           class="h-12 rounded-lg bg-emerald-400 px-5 text-sm font-black text-slate-950 shadow-[0_16px_42px_rgba(52,211,153,0.18)] transition hover:-translate-y-0.5 hover:bg-emerald-300 hover:shadow-[0_22px_54px_rgba(52,211,153,0.28)] active:scale-[0.98] active:bg-emerald-200 disabled:opacity-60"
-          [disabled]="saving() || editForm.invalid"
+          [disabled]="saving()"
         >
           Salvar alterações
         </button>

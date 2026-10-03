@@ -631,6 +631,8 @@ Observacao importante:
   altura alinhada ao `Cancelar`, texto branco e verde mais forte.
 - Ajuste posterior: o botao `Salvar alteracoes` passou a reutilizar o tratamento verde
   vivo aprovado na Agenda (`bg-emerald-400`, texto escuro, hover `emerald-300` e sombra).
+- Ao tentar salvar a edicao de usuario com `Nova senha` vazia, a tela agora marca o
+  campo e exibe a mensagem `Informe a nova senha.`.
 
 ## Development Rules For Future Agents
 
