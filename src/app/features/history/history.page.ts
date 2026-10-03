@@ -37,7 +37,7 @@ export class HistoryPage implements OnInit {
     const query = this.clientQuery().trim().toLowerCase();
 
     if (!query) {
-      return this.clients().slice(0, 6);
+      return [];
     }
 
     return this.clients()
@@ -81,7 +81,7 @@ export class HistoryPage implements OnInit {
 
   protected updateClientQuery(value: string): void {
     this.clientQuery.set(value);
-    this.clientSuggestionsOpen.set(true);
+    this.clientSuggestionsOpen.set(value.trim().length > 0);
     this.selectedClientId.set('');
     this.appointments.set([]);
   }
@@ -93,7 +93,7 @@ export class HistoryPage implements OnInit {
   }
 
   protected openClientSuggestions(): void {
-    this.clientSuggestionsOpen.set(true);
+    this.clientSuggestionsOpen.set(this.clientQuery().trim().length > 0);
   }
 
   protected selectClientAndLoad(client: ClientResponse): void {

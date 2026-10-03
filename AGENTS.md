@@ -596,6 +596,8 @@ Observacao importante:
 - O painel de resultados orienta o usuario a digitar ou escolher um cliente antes de
   carregar registros.
 - O botao `Atualizar` fica desabilitado enquanto nao houver cliente selecionado.
+- O autocomplete de cliente no historico so abre sugestoes depois que o usuario digita
+  algum texto, evitando mostrar os primeiros clientes apenas ao focar o campo.
 
 ## Development Rules For Future Agents
 
