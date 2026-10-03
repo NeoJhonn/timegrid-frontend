@@ -589,6 +589,14 @@ Observacao importante:
   pode ser desfeita.
 - A exclusao so e enviada para o backend quando o usuario confirma em `Remover cliente`.
 
+### 2026-10-03 - Blank history initial state
+
+- A pagina `Historico` nao seleciona mais automaticamente o primeiro cliente carregado.
+- Ao abrir a tela, o campo de cliente fica em branco e nenhum historico e buscado.
+- O painel de resultados orienta o usuario a digitar ou escolher um cliente antes de
+  carregar registros.
+- O botao `Atualizar` fica desabilitado enquanto nao houver cliente selecionado.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

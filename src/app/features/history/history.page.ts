@@ -67,10 +67,6 @@ export class HistoryPage implements OnInit {
       .subscribe({
         next: (clients) => {
           this.clients.set(clients);
-          if (clients.length > 0 && !this.selectedClientId()) {
-            this.selectClient(clients[0]);
-            this.loadHistory();
-          }
         },
         error: (error: unknown) => {
           this.errorMessage.set(apiErrorMessage(error, 'Não foi possível carregar clientes.'));
@@ -108,7 +104,10 @@ export class HistoryPage implements OnInit {
   protected setWindow(daysBack: number, daysForward: number): void {
     this.daysBack.set(daysBack);
     this.daysForward.set(daysForward);
-    this.loadHistory();
+
+    if (this.selectedClientId()) {
+      this.loadHistory();
+    }
   }
 
   protected loadHistory(): void {
