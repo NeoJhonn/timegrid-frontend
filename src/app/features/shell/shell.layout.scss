@@ -7,6 +7,26 @@
   text-shadow: 0 0 16px rgba(52, 211, 153, 0.36);
 }
 
+.mobile-menu-drawer {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+.mobile-menu-header {
+  margin-bottom: 1.75rem;
+}
+
+.mobile-menu-nav {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 @keyframes user-glow {
   0%,
   100% {

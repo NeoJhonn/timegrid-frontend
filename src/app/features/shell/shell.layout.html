@@ -53,8 +53,8 @@
 
   @if (menuOpen()) {
     <div class="fixed inset-0 z-50 bg-black/55 backdrop-blur-sm" (click)="closeMenu()"></div>
-    <aside class="fixed left-0 top-0 z-50 flex h-dvh w-[min(86vw,340px)] flex-col border-r border-white/10 bg-[#0b111b] p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-2xl">
-      <div class="mb-7 flex shrink-0 items-center justify-between">
+    <aside class="mobile-menu-drawer fixed left-0 top-0 z-50 w-[min(86vw,340px)] border-r border-white/10 bg-[#0b111b] p-4 shadow-2xl">
+      <div class="mobile-menu-header flex items-center justify-between">
         <div>
           <p class="text-sm font-semibold text-white">Navegação</p>
           <p class="text-xs text-slate-400">Acesso rápido ao TimeGrid</p>
@@ -69,7 +69,7 @@
         </button>
       </div>
 
-      <nav class="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+      <nav class="mobile-menu-nav space-y-2 pr-1">
         <a
           routerLink="/app/welcome"
           routerLinkActive="bg-white/10 text-white"
@@ -101,15 +101,16 @@
             {{ managerLink.label }}
           </a>
         }
+        <button
+          type="button"
+          class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-semibold text-red-100 transition hover:bg-red-400/10"
+          (click)="logout()"
+        >
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-red-400/10 text-xs font-bold text-red-100">S</span>
+          Sair da conta
+        </button>
       </nav>
 
-      <button
-        type="button"
-        class="mt-4 shrink-0 rounded-lg border border-red-300/20 bg-red-400/10 px-4 py-3 text-left text-sm font-semibold text-red-100 transition hover:bg-red-400/15"
-        (click)="logout()"
-      >
-        Sair da conta
-      </button>
     </aside>
   }
 

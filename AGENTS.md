@@ -608,6 +608,25 @@ Observacao importante:
 - A navegacao interna do menu ganhou rolagem propria quando faltar espaco vertical.
 - O botao `Sair da conta` deixou de ficar posicionado de forma absoluta no rodape e
   passou a ficar no fluxo do drawer, respeitando `safe-area-inset-bottom`.
+- Ajuste posterior: o drawer passou a usar classes proprias em SCSS com grid
+  `auto / minmax(0, 1fr) / auto`, mantendo o rodape de logout sempre visivel e
+  deixando somente a lista de navegacao rolar.
+- Ajuste final apos teste no Galaxy A55: o botao `Sair da conta` foi movido para o
+  topo do drawer, logo abaixo do cabecalho, garantindo que apareca assim que o menu
+  sanduiche abrir no mobile.
+- Refinamento posterior: para ficar mais natural, `Sair da conta` passou a ser o ultimo
+  item da lista de navegacao do menu; para `MANAGER`, aparece depois de `Gerenciar
+  usuarios`, e para `ADMIN`, depois de `Conta`.
+
+### 2026-10-03 - User password validation
+
+- O cadastro de usuarios agora exige senha com no minimo 8 caracteres, pelo menos uma
+  letra maiuscula e uma letra minuscula.
+- A mesma regra foi aplicada ao campo `Nova senha` no modal de edicao de usuario.
+- A tela exibe mensagens especificas de validacao para senha obrigatoria ou fraca.
+- O campo visual `Senha atual` foi removido da edicao de usuario porque o backend atual
+  nao recebe nem valida `currentPassword`; a tela mantem apenas `Nova senha` ate existir
+  um endpoint proprio de troca de senha.
 
 ## Development Rules For Future Agents
 

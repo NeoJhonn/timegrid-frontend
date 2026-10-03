@@ -1,6 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { finalize } from 'rxjs';
 import { UserRole } from '../../core/models/auth.model';
 import { UserResponse } from '../../core/models/user.model';
@@ -29,21 +35,19 @@ export class UserCreatePage implements OnInit {
   protected readonly message = signal('');
   protected readonly errorMessage = signal('');
   protected readonly showCreatePassword = signal(false);
-  protected readonly showEditCurrentPassword = signal(false);
   protected readonly showEditNewPassword = signal(false);
 
   protected readonly createForm = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
+    password: ['', [Validators.required, this.passwordValidator]],
     role: ['ADMIN' as UserRole, Validators.required],
   });
 
   protected readonly editForm = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    currentPassword: ['', Validators.required],
-    newPassword: ['', Validators.required],
+    newPassword: ['', [Validators.required, this.passwordValidator]],
     role: ['ADMIN' as UserRole, Validators.required],
   });
 
@@ -120,12 +124,10 @@ export class UserCreatePage implements OnInit {
 
   protected openEdit(user: UserResponse): void {
     this.editingUser.set(user);
-    this.showEditCurrentPassword.set(false);
     this.showEditNewPassword.set(false);
     this.editForm.setValue({
       username: user.username,
       email: user.email,
-      currentPassword: '',
       newPassword: '',
       role: user.role,
     });
@@ -133,12 +135,10 @@ export class UserCreatePage implements OnInit {
 
   protected closeEdit(): void {
     this.editingUser.set(null);
-    this.showEditCurrentPassword.set(false);
     this.showEditNewPassword.set(false);
     this.editForm.reset({
       username: '',
       email: '',
-      currentPassword: '',
       newPassword: '',
       role: 'ADMIN',
     });
@@ -150,7 +150,6 @@ export class UserCreatePage implements OnInit {
     this.editForm.setValue({
       username: this.editForm.controls.username.value.trim(),
       email: this.editForm.controls.email.value.trim(),
-      currentPassword: this.editForm.controls.currentPassword.value.trim(),
       newPassword: this.editForm.controls.newPassword.value.trim(),
       role: this.editForm.controls.role.value,
     });
@@ -222,11 +221,27 @@ export class UserCreatePage implements OnInit {
     this.showCreatePassword.update((value) => !value);
   }
 
-  protected toggleEditCurrentPassword(): void {
-    this.showEditCurrentPassword.update((value) => !value);
-  }
-
   protected toggleEditNewPassword(): void {
     this.showEditNewPassword.update((value) => !value);
+  }
+
+  protected passwordMessage(control: AbstractControl<string>): string {
+    return control.errors?.['passwordStrength']
+      ? 'Use no minimo 8 caracteres, com letra maiuscula e minuscula.'
+      : 'Informe uma senha.';
+  }
+
+  private passwordValidator(control: AbstractControl<string>): ValidationErrors | null {
+    const value = control.value;
+
+    if (!value) {
+      return null;
+    }
+
+    const hasMinLength = value.length >= 8;
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasLowercase = /[a-z]/.test(value);
+
+    return hasMinLength && hasUppercase && hasLowercase ? null : { passwordStrength: true };
   }
 }
