@@ -601,6 +601,14 @@ Observacao importante:
 - Os botoes de janela do historico agora destacam visualmente o periodo selecionado
   conforme `daysBack` e `daysForward`, em vez de deixar `30 + 30` fixo.
 
+### 2026-10-03 - Mobile menu logout visibility
+
+- O menu sanduiche do layout autenticado agora usa altura dinamica (`h-dvh`) e layout
+  em coluna para funcionar melhor em viewports mobile como Galaxy A55.
+- A navegacao interna do menu ganhou rolagem propria quando faltar espaco vertical.
+- O botao `Sair da conta` deixou de ficar posicionado de forma absoluta no rodape e
+  passou a ficar no fluxo do drawer, respeitando `safe-area-inset-bottom`.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
