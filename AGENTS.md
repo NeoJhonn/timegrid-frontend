@@ -582,6 +582,13 @@ Observacao importante:
 - A tela agora exibe apenas um titulo grande `Agenda` no card superior, mantendo o date
   picker e o restante da experiencia sem mudancas.
 
+### 2026-10-03 - Client delete confirmation
+
+- A remocao de clientes na pagina `Base de clientes` agora exige confirmacao em modal.
+- O clique em `Remover` abre uma mensagem com o nome do cliente e avisa que a acao nao
+  pode ser desfeita.
+- A exclusao so e enviada para o backend quando o usuario confirma em `Remover cliente`.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

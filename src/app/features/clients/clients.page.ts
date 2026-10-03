@@ -31,6 +31,7 @@ export class ClientsPage implements OnInit {
   protected readonly errorMessage = signal('');
   protected readonly editingClient = signal<ClientResponse | null>(null);
   protected readonly clientModalOpen = signal(false);
+  protected readonly clientPendingDeletion = signal<ClientResponse | null>(null);
   protected readonly search = signal('');
 
   protected readonly form = this.formBuilder.nonNullable.group({
@@ -141,10 +142,21 @@ export class ClientsPage implements OnInit {
     this.form.reset();
   }
 
-  protected delete(client: ClientResponse): void {
-    const userId = this.userId();
+  protected askDelete(client: ClientResponse): void {
+    this.clientPendingDeletion.set(client);
+    this.message.set('');
+    this.errorMessage.set('');
+  }
 
-    if (!userId) {
+  protected cancelDelete(): void {
+    this.clientPendingDeletion.set(null);
+  }
+
+  protected confirmDelete(): void {
+    const userId = this.userId();
+    const client = this.clientPendingDeletion();
+
+    if (!userId || !client) {
       return;
     }
 
@@ -154,6 +166,7 @@ export class ClientsPage implements OnInit {
     this.clientApi.delete(userId, client.id).subscribe({
       next: () => {
         this.message.set('Cliente removido.');
+        this.clientPendingDeletion.set(null);
         this.loadClients();
       },
       error: (error: unknown) => {
