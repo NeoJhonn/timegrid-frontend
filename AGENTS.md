@@ -653,6 +653,12 @@ Observacao importante:
   A55 do DevTools (`14rem` no mobile base e `10rem` em `sm`).
 - A animacao orbital da pagina de boas-vindas foi removida temporariamente para reduzir
   poluicao visual e evitar sobreposicao com o conteudo principal.
+- Os modais de criacao e edicao de agendamento agora usam altura maxima baseada em
+  `100dvh`, rolagem interna e lista de horarios finais mais compacta no mobile, deixando
+  os botoes de acao acessiveis no preset Galaxy A55.
+- Ajuste posterior: os modais de agendamento passaram a usar `100svh` e rodape de acoes
+  sticky dentro do formulario, mantendo `Confirmar agendamento`/`Salvar` visiveis mesmo
+  quando o conteudo precisa rolar.
 
 ## Development Rules For Future Agents
 
