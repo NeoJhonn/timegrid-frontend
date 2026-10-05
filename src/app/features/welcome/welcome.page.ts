@@ -16,7 +16,6 @@ export class WelcomePage implements OnInit {
 
   protected readonly user = this.authService.currentUser;
   protected readonly username = signal('');
-  protected readonly animationVisible = signal(true);
   protected readonly displayName = computed(() =>
     firstNameFrom(this.username() || this.user()?.sub, 'usuário'),
   );
@@ -33,9 +32,5 @@ export class WelcomePage implements OnInit {
       next: (user) => this.username.set(user.username),
       error: () => this.username.set(''),
     });
-  }
-
-  protected hideAnimation(): void {
-    this.animationVisible.set(false);
   }
 }

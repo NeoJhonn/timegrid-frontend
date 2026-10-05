@@ -23,25 +23,6 @@
       </div>
     </div>
 
-    @if (animationVisible()) {
-      <button
-        type="button"
-        class="absolute bottom-8 left-1/2 h-60 w-60 -translate-x-1/2 cursor-pointer rounded-full outline-none transition duration-500 hover:scale-[1.02] focus-visible:ring-4 focus-visible:ring-emerald-300/30 sm:h-80 sm:w-80"
-        aria-label="Ocultar animação de boas-vindas"
-        (click)="hideAnimation()"
-      >
-        <span class="welcome-ring absolute inset-0 rounded-full border border-emerald-300/30"></span>
-        <span class="welcome-ring welcome-ring-delay absolute inset-8 rounded-full border border-sky-300/25"></span>
-        <span class="absolute inset-20 grid place-items-center rounded-full bg-emerald-300 text-4xl font-black text-slate-950 shadow-[0_0_80px_rgba(52,211,153,0.38)]">
-          TG
-        </span>
-        @for (item of ['08', '10', '14', '18']; track item) {
-          <span class="orbit-item absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-lg border border-white/10 bg-slate-950/80 text-xs font-bold text-emerald-100">
-            {{ item }}h
-          </span>
-        }
-      </button>
-    }
   </div>
 
   <aside class="grid gap-4">

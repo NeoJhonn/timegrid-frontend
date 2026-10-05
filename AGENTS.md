@@ -643,6 +643,17 @@ Observacao importante:
   `w-[calc(100vw-2rem)]`, `mx-auto` e `max-w-md`, evitando depender do padding lateral
   do container para parecer centralizado em viewports como Galaxy A55.
 
+### 2026-10-05 - Mobile viewport spacing
+
+- O layout autenticado ganhou mais padding inferior em mobile/tablet para evitar que o
+  final das paginas fique encoberto ou apertado em viewports menores.
+- A tela de login passou a usar `min-h-dvh` e alinhar o card no topo no mobile
+  (`items-start`, `pt-6`), mantendo centralizacao vertical somente no desktop.
+- O padding inferior mobile do layout autenticado foi reforcado para o preset Galaxy
+  A55 do DevTools (`14rem` no mobile base e `10rem` em `sm`).
+- A animacao orbital da pagina de boas-vindas foi removida temporariamente para reduzir
+  poluicao visual e evitar sobreposicao com o conteudo principal.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
