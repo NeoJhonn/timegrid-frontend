@@ -659,6 +659,9 @@ Observacao importante:
 - Ajuste posterior: os modais de agendamento passaram a usar `100svh` e rodape de acoes
   sticky dentro do formulario, mantendo `Confirmar agendamento`/`Salvar` visiveis mesmo
   quando o conteudo precisa rolar.
+- Refinamento posterior: o rodape sticky foi removido porque no preset Galaxy A55 a
+  rolagem precisava incluir tambem os botoes de acao. Agora o overlay rola o modal
+  inteiro, incluindo `Confirmar agendamento` e `Cancelar`.
 
 ## Development Rules For Future Agents
 

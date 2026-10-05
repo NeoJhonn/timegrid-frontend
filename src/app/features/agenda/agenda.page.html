@@ -107,7 +107,7 @@
 @if (selectedStartTime()) {
   <div class="fixed inset-0 z-50 grid items-start overflow-y-auto bg-black/60 p-4 py-6 backdrop-blur-sm sm:place-items-center">
     <form
-      class="max-h-[calc(100svh-2rem)] w-full max-w-lg overflow-y-auto rounded-lg border border-white/10 bg-[#101722] p-5 pb-0 shadow-2xl"
+      class="w-full max-w-lg rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
       [formGroup]="appointmentForm"
       (ngSubmit)="submitAppointment()"
     >
@@ -199,7 +199,7 @@
         </div>
       }
 
-      <div class="sticky bottom-0 -mx-5 mt-6 flex flex-col gap-2 border-t border-white/10 bg-[#101722] p-5 sm:flex-row">
+      <div class="mt-6 flex flex-col gap-2 sm:flex-row">
         <button
           type="submit"
           class="h-13 min-h-13 flex-[1.35] rounded-lg bg-white px-5 text-base font-black text-slate-950 shadow-[0_16px_42px_rgba(255,255,255,0.16)] transition hover:-translate-y-0.5 hover:bg-emerald-100 hover:shadow-[0_22px_54px_rgba(52,211,153,0.28)] active:scale-[0.98] disabled:opacity-60"
@@ -222,7 +222,7 @@
 @if (editingAppointment()) {
   <div class="fixed inset-0 z-50 grid items-start overflow-y-auto bg-black/60 p-4 py-6 backdrop-blur-sm sm:place-items-center">
     <form
-      class="max-h-[calc(100svh-2rem)] w-full max-w-md overflow-y-auto rounded-lg border border-white/10 bg-[#101722] p-5 pb-0 shadow-2xl"
+      class="w-full max-w-md rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
       [formGroup]="updateForm"
       (ngSubmit)="saveEdit()"
     >
@@ -260,7 +260,7 @@
         </div>
       </div>
 
-      <div class="sticky bottom-0 -mx-5 mt-6 flex gap-2 border-t border-white/10 bg-[#101722] p-5">
+      <div class="mt-6 flex gap-2">
         <button
           type="submit"
           class="h-11 flex-1 rounded-lg bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
