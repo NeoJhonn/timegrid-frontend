@@ -1,4 +1,4 @@
-<section class="grid gap-5 lg:grid-cols-[360px_1fr]">
+<section class="min-w-0 wrap-anywhere grid gap-5 lg:grid-cols-[360px_minmax(0,1fr)]">
   <aside class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
     <p class="text-sm font-semibold text-emerald-200">Histórico</p>
     <h1 class="mt-2 text-3xl font-black text-white">Por cliente</h1>
@@ -25,10 +25,10 @@
             @for (client of filteredClients(); track client.id) {
               <button
                 type="button"
-                class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm text-slate-200 transition hover:bg-emerald-300/10 hover:text-white"
+                class="flex w-full min-w-0 flex-col items-start gap-1 rounded-lg px-3 py-2 text-left text-sm text-slate-200 transition hover:bg-emerald-300/10 hover:text-white"
                 (click)="selectClientAndLoad(client)"
               >
-                <span>{{ client.name }}</span>
+                <span class="wrap-anywhere">{{ client.name }}</span>
                 <span class="text-xs text-slate-500">{{ client.phone }}</span>
               </button>
             }
@@ -81,7 +81,7 @@
 
   <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
     <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-      <div>
+      <div class="min-w-0">
         <p class="text-sm font-semibold text-white">
           {{ selectedClient()?.name || 'Selecione um cliente' }}
         </p>
@@ -91,7 +91,7 @@
       </div>
       <button
         type="button"
-        class="h-11 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+        class="h-11 shrink-0 rounded-lg border border-white/10 px-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
         [disabled]="!selectedClientId()"
         [class.opacity-50]="!selectedClientId()"
         [class.cursor-not-allowed]="!selectedClientId()"
@@ -128,7 +128,7 @@
       <div class="space-y-3">
         @for (appointment of appointments(); track appointment.id) {
           <article class="rounded-lg border border-white/10 bg-slate-950/45 p-4 transition hover:border-emerald-300/30">
-            <div class="grid gap-4 md:grid-cols-[150px_1fr] md:items-center">
+            <div class="grid gap-4 md:grid-cols-[150px_minmax(0,1fr)] md:items-center">
               <div class="rounded-lg border border-white/10 bg-white/[0.055] px-3 py-3">
                 <p class="text-sm font-bold text-white">{{ appointment.appointmentDate | date: 'dd/MM/yyyy' }}</p>
                 <p class="mt-1 text-xs text-slate-400">

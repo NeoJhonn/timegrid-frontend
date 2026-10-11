@@ -663,6 +663,35 @@ Observacao importante:
   rolagem precisava incluir tambem os botoes de acao. Agora o overlay rola o modal
   inteiro, incluindo `Confirmar agendamento` e `Cancelar`.
 
+### 2026-10-11 - Responsive review in Kosuke Preview
+
+- Revisadas as telas em 360px, 390px, 768px e 1920px, incluindo nomes, e-mails e
+  descrições longas sem espaços. Corrigidos transbordamentos em clientes, conta,
+  usuários e histórico, além de conteúdo cortado na agenda e nas boas-vindas.
+- Aplicados `wrap-anywhere` (Tailwind 4), `min-w-0` e colunas `minmax(0,1fr)` para
+  respeitar a largura disponível sem ocultar os dados. Nomes de clientes agora
+  quebram linha em vez de serem truncados.
+- Horários livres da agenda empilham texto e ação no mobile; ações de edição e
+  exclusão mantêm altura mínima de 44px, inclusive quando dispostas em coluna.
+- Sugestões de cliente separam nome e telefone em duas linhas. Botões de ação e
+  fechamento receberam áreas de toque maiores; navegação do cabeçalho não encolhe.
+- Modais usam um overlay compartilhado com rolagem completa, margens automáticas
+  e padding que respeita safe areas. Confirmações de exclusão também podem rolar;
+  ações ficam em coluna no mobile quando necessário.
+- Reduzido o excesso de espaço inferior do layout autenticado, preservando safe
+  area. Campos usam fonte de 16px no mobile para evitar zoom automático ao focar.
+- Validação: `npm run build` aprovado; verificações de geometria e interação no
+  navegador com dados fictícios isolados na sessão de teste. Modais e menu também
+  verificados em 360x320, com acesso ao início e às ações finais por rolagem; login
+  e autocomplete conferidos nas quatro larguras solicitadas. O ambiente possui
+  apenas o frontend: não foi validado o fluxo real com o backend Spring Boot.
+- Alterações restritas a HTML/SCSS e a este checkpoint. Lógica de negócio,
+  autenticação, contratos de API e credenciais não foram alterados.
+- As correções foram apresentadas no Preview sem commits ou push inicialmente.
+- O usuário aprovou as alterações e autorizou explicitamente o commit e o push na
+  `main`. Resumo dos arquivos e mensagem de commit em inglês apresentados antes
+  da publicação: `fix: improve responsive layouts across TimeGrid frontend`.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

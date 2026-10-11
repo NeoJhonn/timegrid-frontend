@@ -4,6 +4,8 @@
 
 .welcome-name {
   display: inline-block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   color: #a7f3d0;
   font-size: 1.35rem;
   font-weight: 900;

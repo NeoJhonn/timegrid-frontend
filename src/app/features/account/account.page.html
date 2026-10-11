@@ -1,4 +1,4 @@
-<section class="grid gap-5">
+<section class="min-w-0 wrap-anywhere grid gap-5">
   <div class="rounded-lg border border-white/10 bg-white/[0.055] p-5">
     <p class="text-sm font-semibold text-emerald-200">Conta</p>
     <h1 class="mt-2 text-3xl font-black text-white">Minha conta</h1>
@@ -12,11 +12,11 @@
       <div class="mt-6 grid gap-3 sm:grid-cols-2">
         <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Usuário</p>
-          <p class="mt-2 break-words text-lg font-bold text-white">{{ account()?.username }}</p>
+          <p class="mt-2 wrap-anywhere text-lg font-bold text-white">{{ account()?.username }}</p>
         </div>
         <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</p>
-          <p class="mt-2 break-words text-lg font-bold text-white">{{ account()?.email }}</p>
+          <p class="mt-2 wrap-anywhere text-lg font-bold text-white">{{ account()?.email }}</p>
         </div>
         <div class="rounded-lg border border-white/10 bg-slate-950/45 p-4">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Role</p>
@@ -58,7 +58,7 @@
 </section>
 
 @if (passwordModalOpen()) {
-  <div class="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
+  <div class="modal-overlay fixed inset-0 z-50 bg-black/60 backdrop-blur-sm">
     <form
       class="w-full max-w-md rounded-lg border border-white/10 bg-[#101722] p-5 shadow-2xl"
       [formGroup]="passwordForm"
@@ -73,7 +73,7 @@
         </div>
         <button
           type="button"
-          class="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/10 text-lg text-slate-300 transition hover:bg-white/10 hover:text-white"
+          class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/10 text-lg text-slate-300 transition hover:bg-white/10 hover:text-white"
           aria-label="Fechar modal de senha"
           (click)="closePasswordModal()"
         >
