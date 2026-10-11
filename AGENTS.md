@@ -5,13 +5,13 @@
 Frontend do TimeGrid, aplicacao de agendamento que consome o backend Spring Boot
 em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
-Atualizado em: 2026-10-01.
+Atualizado em: 2026-10-11.
 
 ## Context Checkpoint
 
-Este arquivo foi atualizado depois de uma falha fatal na conversa anterior da API.
-O historico conversado foi perdido, mas o estado do projeto foi recuperado pelo Git
-e pelo workspace local.
+Este arquivo reúne o contexto atual do projeto e o histórico de recuperação após
+uma falha na conversa anterior da API. As seções de recuperação de 2026-10-01
+são registros históricos; o checkpoint abaixo reflete a situação em 2026-10-11.
 
 Importante:
 
@@ -19,8 +19,13 @@ Importante:
 - O backend ja estava pronto em outra conversa e fica neste workspace apenas para
   consulta de contratos e para rodar localmente junto com o frontend.
 - O foco atual e exclusivamente o frontend em `timegrid-frontend`.
-- Em 2026-10-01, o frontend tem alteracoes locais ainda nao commitadas que devem ser
-  salvas em commit pelo usuario.
+- As correções de responsividade foram aprovadas e publicadas na `main` no commit
+  `39b59fc` (`fix: improve responsive layouts across TimeGrid frontend`).
+- O desenvolvimento segue na `dev`, com revisão por Pull Request para a `main`.
+- O PR #1 (`dev` → `main`) integrou a documentação das branches no commit
+  `57df7c5`. O PR #2 (`main` → `dev`) sincronizou a `dev` no commit `0745fb1`.
+- Antes desta atualização de contexto, o workspace estava limpo; `main` e `dev`
+  tinham o mesmo conteúdo, com histórico de merges diferente.
 - Preferencia do usuario: sempre que uma alteracao for feita no frontend, atualizar
   tambem este `AGENTS.md` com o contexto/checkpoint da mudanca, sem precisar pedir
   confirmacao antes.
@@ -38,6 +43,17 @@ Backend local esperado:
 
 Frontend local esperado:
 `http://localhost:4200`
+
+Ambiente Kosuke:
+
+- Workspace: `/app/project`, com trabalho atual na branch `dev`.
+- Apenas o frontend está em execução; o backend Spring Boot não está disponível
+  neste sandbox. Os caminhos Windows acima se referem ao ambiente local do usuário.
+- A configuração de execução válida fica em `/tmp/kosuke.config.json`, fora do
+  repositório. O Angular usa a porta 4200 e permite o hostname específico do Preview,
+  calculado em cada sandbox, mantendo a verificação de hosts ativa.
+- Os testes anteriores das telas internas no Preview usaram dados fictícios isolados
+  no navegador e não validaram a integração real com o backend.
 
 ## Tech Stack
 
@@ -398,7 +414,8 @@ Direcao atual:
 2. Continuar lapidando UX e responsividade das telas ja criadas.
 3. Validar manualmente fluxo completo com backend local: login, agenda, clientes,
    conta e usuarios.
-4. Commitar o checkpoint recuperado do frontend antes de novas mudancas grandes.
+4. Trabalhar na `dev` e submeter alterações à `main` por Pull Request, conforme
+   autorização do usuário; conferir o estado remoto antes de iniciar novas mudanças.
 5. Evitar mexer no backend salvo, exceto se o usuario pedir explicitamente.
 6. Ao finalizar qualquer mudanca no frontend, registrar o que mudou neste arquivo.
 
@@ -697,7 +714,20 @@ Observacao importante:
 - README atualizado para documentar as branches `main` e `dev` e o fluxo de
   revisão por Pull Request de `dev` para `main`.
 - Alteração de documentação feita na `dev`, com commit, push e abertura de PR
-  autorizados pelo usuário. A integração na `main` fica para revisão do PR.
+  autorizados pelo usuário. O PR #1 foi integrado pelo usuário à `main` em
+  2026-10-11, no commit `57df7c5`.
+
+### 2026-10-11 - Context refresh after branch merges
+
+- Atualizados a data e o checkpoint para distinguir o estado atual dos registros
+  históricos de recuperação que mencionam alterações ainda não commitadas.
+- Registrados os merges do [PR #1](https://github.com/NeoJhonn/timegrid-frontend/pull/1)
+  (`dev` → `main`) e do [PR #2](https://github.com/NeoJhonn/timegrid-frontend/pull/2)
+  (`main` → `dev`), além do fluxo de desenvolvimento e revisão entre as branches.
+- Documentados o workspace Kosuke, a configuração temporária de hosts do Preview
+  e a ausência do backend neste ambiente.
+- Esta atualização é restrita ao `AGENTS.md`; o usuário autorizou sua publicação
+  em novo PR. Não há mudanças na aplicação ou nos contratos de API.
 
 ## Development Rules For Future Agents
 
