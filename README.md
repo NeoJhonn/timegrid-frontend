@@ -6,6 +6,16 @@ O objetivo deste projeto e entregar uma interface moderna, responsiva e elegante
 para consumir a API do TimeGrid Backend, permitindo login, cadastro de clientes,
 agendamento, consulta de agenda e historico de atendimentos.
 
+## Branches
+
+O repositório possui duas branches principais:
+
+- `main`: versão principal do projeto, com as alterações aprovadas.
+- `dev`: branch de desenvolvimento, usada para preparar novas alterações.
+
+As alterações feitas na `dev` devem ser revisadas em um Pull Request para a
+`main` antes de serem integradas.
+
 ## Tecnologias
 
 - Angular 20
