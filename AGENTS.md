@@ -692,6 +692,13 @@ Observacao importante:
   `main`. Resumo dos arquivos e mensagem de commit em inglês apresentados antes
   da publicação: `fix: improve responsive layouts across TimeGrid frontend`.
 
+### 2026-10-11 - Branch documentation
+
+- README atualizado para documentar as branches `main` e `dev` e o fluxo de
+  revisão por Pull Request de `dev` para `main`.
+- Alteração de documentação feita na `dev`, com commit, push e abertura de PR
+  autorizados pelo usuário. A integração na `main` fica para revisão do PR.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
