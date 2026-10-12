@@ -729,6 +729,39 @@ Observacao importante:
 - Esta atualização é restrita ao `AGENTS.md`; o usuário autorizou sua publicação
   em novo PR. Não há mudanças na aplicação ou nos contratos de API.
 
+### 2026-10-12 - SEO metadata and agenda mobile action
+
+- `src/index.html` recebeu metadados principais do TimeGrid: titulo, descricao,
+  idioma `pt-BR`, `theme-color`, robots, Open Graph e Twitter summary.
+- No card de horario livre da Agenda em viewport mobile, o botao `Agendar` voltou a
+  ficar alinhado a direita dentro do card, ao lado do texto do horario livre.
+- Contexto do backend foi relido. Foram identificados contratos novos relacionados a
+  update de usuario e troca/reset de senha, mas as adaptacoes no front ainda aguardam
+  explicacao do usuario antes de qualquer implementacao.
+
+### 2026-10-12 - Password endpoint alignment
+
+- Frontend alinhado aos novos contratos de senha do backend.
+- A pagina `Minha conta` passou a trocar a propria senha via `PATCH /users/me/password`,
+  enviando `currentPassword` e `newPassword`.
+- A tela `Gerenciar usuarios` passou a atualizar os dados gerais via `PUT /users/{id}`
+  sem senha e redefinir a senha via `PATCH /users/{id}/password`, enviando somente
+  `newPassword`.
+- `UserApiService` e os modelos TypeScript foram atualizados com `UserUpdateRequest`,
+  `ChangePasswordRequest` e `ResetPasswordRequest`.
+
+### 2026-10-12 - Account password modal errors
+
+- Na pagina `Minha conta`, erros da troca de senha agora aparecem dentro do modal de
+  alteracao de senha, logo acima da acao principal.
+- A mensagem de sucesso continua aparecendo no card principal da pagina depois que o
+  modal fecha.
+
+### 2026-10-12 - Metadata Portuguese copy
+
+- Corrigidas as descricoes das meta tags em `src/index.html` para portugues do Brasil
+  com acentuacao adequada.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
