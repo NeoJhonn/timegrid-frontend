@@ -23,6 +23,7 @@ export class AccountPage implements OnInit {
   protected readonly saving = signal(false);
   protected readonly message = signal('');
   protected readonly errorMessage = signal('');
+  protected readonly passwordErrorMessage = signal('');
   protected readonly passwordModalOpen = signal(false);
   protected readonly showCurrentPassword = signal(false);
   protected readonly showNewPassword = signal(false);
@@ -72,7 +73,7 @@ export class AccountPage implements OnInit {
 
     this.saving.set(true);
     this.message.set('');
-    this.errorMessage.set('');
+    this.passwordErrorMessage.set('');
 
     this.userApi
       .changeOwnPassword({
@@ -87,7 +88,7 @@ export class AccountPage implements OnInit {
           this.message.set('Senha atualizada com sucesso.');
         },
         error: (error: unknown) => {
-          this.errorMessage.set(apiErrorMessage(error, 'Não foi possível atualizar sua senha.'));
+          this.passwordErrorMessage.set(apiErrorMessage(error, 'Não foi possível atualizar sua senha.'));
         },
       });
   }
@@ -95,6 +96,7 @@ export class AccountPage implements OnInit {
   protected openPasswordModal(): void {
     this.message.set('');
     this.errorMessage.set('');
+    this.passwordErrorMessage.set('');
     this.passwordForm.reset();
     this.showCurrentPassword.set(false);
     this.showNewPassword.set(false);
@@ -104,6 +106,7 @@ export class AccountPage implements OnInit {
   protected closePasswordModal(): void {
     this.passwordModalOpen.set(false);
     this.passwordForm.reset();
+    this.passwordErrorMessage.set('');
     this.showCurrentPassword.set(false);
     this.showNewPassword.set(false);
   }

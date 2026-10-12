@@ -750,6 +750,13 @@ Observacao importante:
 - `UserApiService` e os modelos TypeScript foram atualizados com `UserUpdateRequest`,
   `ChangePasswordRequest` e `ResetPasswordRequest`.
 
+### 2026-10-12 - Account password modal errors
+
+- Na pagina `Minha conta`, erros da troca de senha agora aparecem dentro do modal de
+  alteracao de senha, logo acima da acao principal.
+- A mensagem de sucesso continua aparecendo no card principal da pagina depois que o
+  modal fecha.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
