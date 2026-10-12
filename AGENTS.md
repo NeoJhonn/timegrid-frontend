@@ -757,6 +757,11 @@ Observacao importante:
 - A mensagem de sucesso continua aparecendo no card principal da pagina depois que o
   modal fecha.
 
+### 2026-10-12 - Metadata Portuguese copy
+
+- Corrigidas as descricoes das meta tags em `src/index.html` para portugues do Brasil
+  com acentuacao adequada.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
