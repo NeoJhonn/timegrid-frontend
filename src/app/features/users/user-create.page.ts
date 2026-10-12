@@ -7,7 +7,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { finalize, switchMap } from 'rxjs';
 import { UserRole } from '../../core/models/auth.model';
 import { UserResponse } from '../../core/models/user.model';
 import { AuthService } from '../../core/services/auth.service';
@@ -171,13 +171,19 @@ export class UserCreatePage implements OnInit {
       .update(user.id, {
         username: this.editForm.controls.username.value,
         email: this.editForm.controls.email.value,
-        password: this.editForm.controls.newPassword.value,
         role: this.editForm.controls.role.value,
       })
-      .pipe(finalize(() => this.saving.set(false)))
+      .pipe(
+        switchMap((updatedUser) =>
+          this.userApi.resetPassword(updatedUser.id, {
+            newPassword: this.editForm.controls.newPassword.value,
+          }),
+        ),
+        finalize(() => this.saving.set(false)),
+      )
       .subscribe({
-        next: (updatedUser) => {
-          this.message.set(`Usuário ${updatedUser.username} atualizado.`);
+        next: () => {
+          this.message.set(`Usuário ${user.username} atualizado.`);
           this.closeEdit();
           this.loadData();
         },

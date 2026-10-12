@@ -75,16 +75,13 @@ export class AccountPage implements OnInit {
     this.errorMessage.set('');
 
     this.userApi
-      .update(user.id, {
-        username: user.username,
-        email: user.email,
-        password: this.passwordForm.controls.newPassword.value,
-        role: user.role,
+      .changeOwnPassword({
+        currentPassword: this.passwordForm.controls.currentPassword.value,
+        newPassword: this.passwordForm.controls.newPassword.value,
       })
       .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
-        next: (updatedUser) => {
-          this.account.set(updatedUser);
+        next: () => {
           this.passwordForm.reset();
           this.closePasswordModal();
           this.message.set('Senha atualizada com sucesso.');

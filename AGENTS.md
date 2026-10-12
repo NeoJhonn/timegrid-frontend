@@ -739,6 +739,17 @@ Observacao importante:
   update de usuario e troca/reset de senha, mas as adaptacoes no front ainda aguardam
   explicacao do usuario antes de qualquer implementacao.
 
+### 2026-10-12 - Password endpoint alignment
+
+- Frontend alinhado aos novos contratos de senha do backend.
+- A pagina `Minha conta` passou a trocar a propria senha via `PATCH /users/me/password`,
+  enviando `currentPassword` e `newPassword`.
+- A tela `Gerenciar usuarios` passou a atualizar os dados gerais via `PUT /users/{id}`
+  sem senha e redefinir a senha via `PATCH /users/{id}/password`, enviando somente
+  `newPassword`.
+- `UserApiService` e os modelos TypeScript foram atualizados com `UserUpdateRequest`,
+  `ChangePasswordRequest` e `ResetPasswordRequest`.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
