@@ -729,6 +729,16 @@ Observacao importante:
 - Esta atualização é restrita ao `AGENTS.md`; o usuário autorizou sua publicação
   em novo PR. Não há mudanças na aplicação ou nos contratos de API.
 
+### 2026-10-12 - SEO metadata and agenda mobile action
+
+- `src/index.html` recebeu metadados principais do TimeGrid: titulo, descricao,
+  idioma `pt-BR`, `theme-color`, robots, Open Graph e Twitter summary.
+- No card de horario livre da Agenda em viewport mobile, o botao `Agendar` voltou a
+  ficar alinhado a direita dentro do card, ao lado do texto do horario livre.
+- Contexto do backend foi relido. Foram identificados contratos novos relacionados a
+  update de usuario e troca/reset de senha, mas as adaptacoes no front ainda aguardam
+  explicacao do usuario antes de qualquer implementacao.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
