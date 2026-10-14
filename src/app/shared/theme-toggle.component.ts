@@ -1,36 +1,30 @@
 import { Component, computed, inject } from '@angular/core';
-import { AppTheme, THEME_OPTIONS, ThemeService } from '../core/services/theme.service';
+import { THEME_OPTIONS, ThemeService } from '../core/services/theme.service';
 
 @Component({
   selector: 'app-theme-toggle',
   template: `
-    <div
-      class="theme-toggle inline-flex shrink-0 rounded-lg border border-white/10 bg-white/[0.06] p-1"
-      aria-label="Selecionar tema"
+    <button
+      type="button"
+      class="theme-toggle grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.06] text-lg font-black text-slate-200 shadow-[0_12px_30px_rgba(15,23,42,0.12)] transition hover:border-emerald-300/40 hover:bg-white/10 hover:text-white active:scale-[0.98]"
+      [attr.aria-label]="activeTheme().label + '. Clique para alternar tema.'"
+      [title]="activeTheme().label"
+      (click)="nextTheme()"
     >
-      @for (theme of themes; track theme.value) {
-        <button
-          type="button"
-          class="grid h-9 w-9 place-items-center rounded-md text-base font-black text-slate-300 transition hover:bg-white/10 hover:text-white"
-          [class.theme-toggle-active]="currentTheme() === theme.value"
-          [attr.aria-label]="theme.label"
-          [attr.aria-pressed]="currentTheme() === theme.value"
-          [title]="theme.label"
-          (click)="setTheme(theme.value)"
-        >
-          {{ theme.icon }}
-        </button>
-      }
-    </div>
+      {{ activeTheme().icon }}
+    </button>
   `,
 })
 export class ThemeToggleComponent {
   private readonly themeService = inject(ThemeService);
 
-  protected readonly themes = THEME_OPTIONS;
   protected readonly currentTheme = computed(() => this.themeService.currentTheme());
+  protected readonly activeTheme = computed(
+    () =>
+      THEME_OPTIONS.find((theme) => theme.value === this.currentTheme()) ?? THEME_OPTIONS[0],
+  );
 
-  protected setTheme(theme: AppTheme): void {
-    this.themeService.setTheme(theme);
+  protected nextTheme(): void {
+    this.themeService.nextTheme();
   }
 }

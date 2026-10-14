@@ -790,6 +790,20 @@ Observacao importante:
 - Ajuste posterior: contraste do tema claro foi reforcado com bordas mais visiveis,
   fundos internos em tom off-white/azulado e sombras mais marcadas.
 
+### 2026-10-14 - Compact theme toggle
+
+- O seletor de tema deixou de exibir tres botoes ao mesmo tempo.
+- `ThemeToggleComponent` agora mostra apenas o icone do tema atual e alterna em ciclo
+  entre escuro, claro e violeta a cada clique.
+
+### 2026-10-14 - Portuguese network errors
+
+- `apiErrorMessage` passou a tratar erros de rede/status `0` antes de exibir qualquer
+  texto cru vindo do navegador.
+- Mensagens como `Failed to fetch`, `NetworkError` e `Load failed` agora aparecem para
+  o usuario em portugues do Brasil: `Nao foi possivel conectar ao backend. Verifique
+  sua conexao e tente novamente.`
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
