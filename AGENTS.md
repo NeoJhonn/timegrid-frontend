@@ -762,6 +762,13 @@ Observacao importante:
 - Corrigidas as descricoes das meta tags em `src/index.html` para portugues do Brasil
   com acentuacao adequada.
 
+### 2026-10-14 - Production backend URL
+
+- `src/app/core/config/api.config.ts` passou a apontar para o backend em producao:
+  `https://timegrid-backend-production-b8dc.up.railway.app`.
+- Backend mantido somente leitura nesta conversa; nenhuma alteracao foi feita em
+  `timegrid-backend`.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
