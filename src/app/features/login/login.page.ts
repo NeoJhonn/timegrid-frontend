@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
 import { apiErrorMessage } from '../../shared/api-error-message';
+import { ThemeToggleComponent } from '../../shared/theme-toggle.component';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ThemeToggleComponent],
   templateUrl: './login.page.html',
   styleUrl: './login.page.scss',
 })

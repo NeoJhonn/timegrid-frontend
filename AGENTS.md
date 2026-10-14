@@ -769,6 +769,27 @@ Observacao importante:
 - Backend mantido somente leitura nesta conversa; nenhuma alteracao foi feita em
   `timegrid-backend`.
 
+### 2026-10-14 - Frontend theme selector
+
+- Criado suporte a tres temas no frontend: escuro verde padrao, claro e violeta
+  escuro.
+- Adicionado `ThemeService` com persistencia em `localStorage` e aplicacao via
+  atributo `data-theme` no documento.
+- Criado `ThemeToggleComponent`, usado na tela de login e no canto superior direito
+  do layout autenticado.
+- `src/styles.scss` recebeu a camada global de variaveis e overrides para adaptar as
+  classes Tailwind existentes sem refatorar tela por tela.
+- Validado com `npm.cmd run build` e verificacao visual no navegador local servindo o
+  build gerado; alternancia entre claro e violeta e persistencia apos reload passaram.
+
+### 2026-10-14 - Light theme card elevation
+
+- Tema claro recebeu sombras suaves nos cards, modais, blocos internos e header para
+  melhorar a separacao visual entre superficies brancas.
+- Temas escuro e violeta foram preservados sem alteracoes visuais nessa etapa.
+- Ajuste posterior: contraste do tema claro foi reforcado com bordas mais visiveis,
+  fundos internos em tom off-white/azulado e sombras mais marcadas.
+
 ## Development Rules For Future Agents
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.

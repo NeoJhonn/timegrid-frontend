@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserApiService } from '../../core/services/user-api.service';
 import { firstNameFrom } from '../../shared/user-display-name';
+import { ThemeToggleComponent } from '../../shared/theme-toggle.component';
 
 interface QuickLink {
   label: string;
@@ -12,7 +13,7 @@ interface QuickLink {
 
 @Component({
   selector: 'app-shell-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ThemeToggleComponent],
   templateUrl: './shell.layout.html',
   styleUrl: './shell.layout.scss',
 })
