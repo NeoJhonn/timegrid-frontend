@@ -843,3 +843,49 @@ Preferências confirmadas pelo usuário em 2026-10-15:
 13. Rodar build/testes do Angular apos mudancas relevantes.
 14. Para UX, construir a aplicacao real como primeira tela apos login; nao criar landing page.
 15. Antes de alterar backend por necessidade do front, confirmar se a mudanca faz sentido para a aula.
+
+### 2026-10-15 - Agenda date selection and light theme contrast
+
+- Substituído o input de data nativo da Agenda por um calendário em componente
+  standalone, com diálogo modal, navegação de mês e datas em português.
+- Selecionar um dia fecha o calendário e chama imediatamente `changeDate`, que
+  carrega os agendamentos do dia sem confirmação adicional. Datas usam formato
+  local, sem conversão UTC. Diálogo permite fechar sem selecionar e usar Escape.
+- Tema claro: botões de excluir da Agenda e de confirmar exclusão receberam fundo
+  vermelho escuro, texto branco, borda e sombra, além de estados hover e foco.
+- Cabeçalho autenticado identificado por `shell-header`; no tema claro, seus
+  links e controles usam texto branco sobre fundo escuro. Estilos restritos ao
+  tema claro e aos elementos identificados, preservando os outros temas.
+- Adicionados testes do calendário: fechamento/emissão imediatos ao escolher dia
+  e navegação entre dezembro/janeiro sem emissão prematura.
+- Validação: `npm.cmd run build` aprovado; `npm.cmd test -- --watch=false
+  --browsers=ChromeHeadless` aprovado (4 testes). Não houve validação visual em
+  celular físico nem chamadas de teste à API de produção.
+- Backend não alterado. Commit e push ficam a cargo do usuário.
+- Sugestão de commit: `fix: auto-select agenda dates and improve light theme contrast`.
+
+### 2026-10-15 - Reliable session renewal
+
+- Consultados somente para leitura o filtro JWT, SecurityConfig, JwtService e
+  AuthServiceImpl do backend. Contrato: access token de 60 minutos e refresh token
+  de 24 horas, cuja validade original não é estendida pelas renovações.
+- Interceptor mantido e atualizado: verifica expiração antes das chamadas protegidas
+  à API, com margem de 30 segundos, e espera pela renovação antes de enviar a chamada.
+- Login e refresh não recebem mais o bearer antigo. URLs externas não recebem token.
+- AuthService compartilha uma única renovação entre requisições simultâneas.
+- Autenticação local considera refresh válido para retomar a sessão após inatividade
+  ou reload e reavalia a validade pelo relógio, sem computed que memorize expiração.
+- HTTP 401 ainda permite uma única tentativa após renovação; um segundo 401 encerra
+  a sessão. HTTP 403 das rotas protegidas não causa renovação ou logout indevidos.
+- Refresh ausente/expirado ou recusado com 400/401/403 limpa a sessão e volta ao login.
+  Erros de rede e 5xx preservam a sessão para uma nova tentativa.
+- Resposta tardia de refresh não restaura a sessão após logout ou novo login.
+- A renovação acontece sob demanda antes da API; não depende de timer em segundo
+  plano, que pode ser suspenso em celulares. Não há promessa de atividade da API
+  enquanto a aplicação está fechada.
+- Validação: build de produção aprovado; suíte ChromeHeadless aprovada (15 testes,
+  incluindo 11 novos casos de sessão com API e expiração simuladas). Não foi feito
+  teste de uma sessão real de 24 horas nem reproduzida a falha em produção; erros
+  de CORS/rede ainda podem exigir investigação no backend se persistirem.
+- Backend não alterado. Nenhum commit ou push executado.
+- Sugestão: `fix: reliably refresh access tokens and handle session expiration`.

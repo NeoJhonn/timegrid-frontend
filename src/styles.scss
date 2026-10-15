@@ -294,3 +294,28 @@ html[data-theme='violet'] {
     font-size: 1rem;
   }
 }
+
+// Keep destructive actions and the dark desktop header readable in the light theme.
+html[data-theme='light'] {
+  .agenda-delete-button {
+    background-color: #b91c1c !important;
+    border-color: #991b1b !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.22);
+
+    &:hover { background-color: #991b1b !important; }
+    &:focus-visible { outline: 3px solid #dc2626; outline-offset: 3px; }
+  }
+
+  .shell-header {
+    background-color: #0f172a;
+
+    a, button, [class~='text-white'], [class~='text-slate-100'],
+    [class~='text-slate-300'], [class~='text-emerald-100'] {
+      color: #ffffff !important;
+    }
+
+    nav a { border-color: #64748b !important; }
+    nav a:hover, nav a[aria-current='page'] { background-color: #334155 !important; }
+  }
+}

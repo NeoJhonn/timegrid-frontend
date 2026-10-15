@@ -1,3 +1,4 @@
+﻿import { AgendaDatePickerComponent } from '../../shared/agenda-date-picker.component';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -12,7 +13,7 @@ import { TIME_GRID_OPTIONS, TimeGridOption, timeGridLabel } from '../../shared/t
 
 @Component({
   selector: 'app-agenda-page',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AgendaDatePickerComponent],
   templateUrl: './agenda.page.html',
   styleUrl: './agenda.page.scss',
 })
@@ -409,3 +410,4 @@ export class AgendaPage implements OnInit {
     return new Date(`${value}T00:00:00`);
   }
 }
+

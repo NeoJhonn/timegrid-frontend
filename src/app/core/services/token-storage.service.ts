@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+﻿import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { JwtClaims, LoginResponse } from '../models/auth.model';
 
@@ -44,17 +44,27 @@ export class TokenStorageService {
   }
 
   isAuthenticated(): boolean {
-    const claims = this.claims();
-
-    if (!claims) {
-      return false;
-    }
-
-    return claims.exp * 1000 > Date.now();
+    return this.isAccessTokenValid() || this.isRefreshTokenValid();
   }
 
+  isAccessTokenValid(): boolean {
+    return this.isTokenValid(this.getAccessToken(), 'access', 30);
+  }
+
+  isRefreshTokenValid(): boolean {
+    return this.isTokenValid(this.getRefreshToken(), 'refresh');
+  }
+
+  private isTokenValid(token: string | null, type: JwtClaims['type'], margin = 0): boolean {
+    const claims = this.decodeToken(token);
+    return claims?.type === type && Number.isFinite(claims.exp) &&
+      claims.exp * 1000 > Date.now() + margin * 1000;
+  }
   private decodeAccessToken(): JwtClaims | null {
-    const token = this.getAccessToken();
+    return this.decodeToken(this.getAccessToken());
+  }
+
+  private decodeToken(token: string | null): JwtClaims | null {
 
     if (!token || !this.isBrowser) {
       return null;
@@ -69,4 +79,5 @@ export class TokenStorageService {
     }
   }
 }
+
 
