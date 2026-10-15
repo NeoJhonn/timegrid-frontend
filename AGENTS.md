@@ -906,3 +906,22 @@ Preferências confirmadas pelo usuário em 2026-10-15:
   Não realizada validação visual no navegador nesta etapa.
 - Somente frontend alterado; nenhum commit ou push executado.
 - Sugestão: `fix: refine agenda feedback and user profile display`.
+
+### 2026-10-15 - Social sharing preview image
+
+- `src/index.html` atualizado com Open Graph completo: URL canônica de produção,
+  título, descrição, idioma, site e imagem HTTPS absoluta, com MIME, dimensões
+  reais (1536x1024) e texto alternativo. Twitter/X usa `summary_large_image` com
+  a mesma imagem e descrição.
+- Imagem fornecida pelo usuário preservada em `src/assets/TimeGrid_thumb.png`.
+  URL após deploy: `https://timegrid-frontend.vercel.app/assets/TimeGrid_thumb.png`.
+- `angular.json` configurado para copiar `src/assets` para `/assets/` nos alvos
+  de build e teste, preservando também os arquivos de `public`.
+- Validação: `npm.cmd run build` aprovado; imagem encontrada no diretório de saída
+  com SHA256 idêntico à origem; tags verificadas no HTML de login pré-renderizado
+  e no index CSR. Não foi realizado deploy nem teste de preview nas redes sociais.
+- O domínio utilizado é o de produção registrado no contexto do backend. Se mudar,
+  atualizar canonical, og:url, og:image, og:image:secure_url e twitter:image.
+- Para publicar, incluir também a pasta `src/assets/` no commit; ela estava não
+  rastreada no Git durante a verificação. Commit e push ficam com o usuário.
+- Sugestão: `feat: add social sharing metadata and preview image`.
