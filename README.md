@@ -1,142 +1,84 @@
-# TimeGrid Frontend
+﻿# TimeGrid Frontend
 
-Frontend da aplicacao TimeGrid, desenvolvido com Angular 20 e Tailwind CSS.
+Interface do TimeGrid, aplicação de gerenciamento de clientes e agendamentos,
+desenvolvida com Angular 20 e Tailwind CSS 4 e integrada à API Spring Boot.
 
-O objetivo deste projeto e entregar uma interface moderna, responsiva e elegante
-para consumir a API do TimeGrid Backend, permitindo login, cadastro de clientes,
-agendamento, consulta de agenda e historico de atendimentos.
+O projeto já possui um MVP funcional. O contexto de desenvolvimento e o histórico
+das mudanças estão no [AGENTS.md](AGENTS.md).
 
-## Branches
+## Funcionalidades implementadas
 
-O repositório possui duas branches principais:
+- Login com JWT, refresh token e envio automático do token nas requisições.
+- Rotas protegidas por autenticação e permissão `MANAGER`.
+- Página de boas-vindas e navegação com menu responsivo.
+- Agenda por data, com criação, edição e exclusão de agendamentos em modais.
+- Busca e autocomplete de clientes durante o agendamento.
+- Cadastro, busca, edição e exclusão de clientes, com máscara de telefone.
+- Histórico por cliente dentro de uma janela de datas selecionada.
+- Página `Minha conta`, com troca de senha mediante validação da senha atual.
+- Gerenciamento de usuários ativos para `MANAGER`: cadastro, edição,
+  desativação e redefinição de senha.
+- Tela de acesso negado e mensagens de validação e erro em português.
+- Temas escuro com verde, claro e violeta escuro, com preferência persistida
+  no navegador e alternância por um botão no login e no layout autenticado.
+- Metadados de título, descrição, idioma `pt-BR`, Open Graph e Twitter summary.
 
-- `main`: versão principal do projeto, com as alterações aprovadas.
-- `dev`: branch de desenvolvimento, usada para preparar novas alterações.
-
-As alterações feitas na `dev` devem ser revisadas em um Pull Request para a
-`main` antes de serem integradas.
+As telas e os modais receberam ajustes de responsividade para desktop, tablet e
+celular, incluindo rolagem, quebra de textos longos e áreas de toque.
 
 ## Tecnologias
 
-- Angular 20
-- TypeScript
-- Angular Router
-- Angular Forms
-- RxJS
-- Tailwind CSS 4
-- SCSS
+- Angular 20 e TypeScript 5.9.
+- Componentes standalone e detecção de mudanças zoneless.
+- Angular Router, Angular Forms e RxJS.
+- Tailwind CSS 4 via `@tailwindcss/postcss` e SCSS.
+- SSR e hidratação configurados pelo scaffold Angular.
+- Jasmine e Karma na configuração de testes.
 
-## Projeto Relacionado
+## Branches
 
-Backend:
+- `main`: versão principal, com as alterações aprovadas.
+- `dev`: branch de desenvolvimento.
+
+As alterações da `dev` devem ser revisadas em um Pull Request para a `main`
+antes de serem integradas.
+
+## Integração com o backend
+
+O endereço da API é definido em `src/app/core/config/api.config.ts`.
+Atualmente, o frontend aponta para o backend de produção no Railway:
+
+```text
+https://timegrid-backend-production-b8dc.up.railway.app
+```
+
+Assim, executar o frontend localmente também utiliza essa API e seus dados.
+Para trabalhar com uma API local, ajuste explicitamente `API_BASE_URL` para
+`http://localhost:8080` e execute o backend com o perfil `dev`. A seleção de
+ambiente não é automática.
+
+O backend fica no projeto relacionado:
 
 ```text
 D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend
 ```
 
-Frontend:
+### Autenticação e permissões
 
-```text
-D:\Projetos\Projetos-Java-Spring-Boot\timegrid-frontend
-```
+- `POST /auth/login` recebe `email` e `password` e retorna `accessToken` e
+  `refreshToken`.
+- `POST /auth/refresh` recebe `refreshToken` e renova o access token.
+- Requisições protegidas enviam `Authorization: Bearer <accessToken>`.
+- O access token expira em 60 minutos por padrão; o refresh token, em 24 horas.
+- Os tokens são armazenados localmente no navegador. Se a renovação falhar,
+  a aplicação retorna ao login.
+- `MANAGER` possui acesso administrativo, incluindo criação, desativação e reset
+  de senha de usuários. `ADMIN` acessa as funcionalidades autenticadas permitidas
+  pelo backend. A API é responsável pela autorização final.
 
-URLs esperadas em desenvolvimento:
+### Endpoints principais
 
-```text
-Backend:  http://localhost:8080
-Frontend: http://localhost:4200
-```
-
-## Objetivo do Frontend
-
-O TimeGrid Frontend deve ser a interface principal para o usuario gerenciar sua
-rotina de agendamentos.
-
-A primeira tela da aplicacao deve ser a tela de login. Depois da autenticacao,
-o usuario deve visualizar uma pagina de boas-vindas com uma animacao marcante,
-moderna e coerente com o tema escuro do sistema.
-
-## Requisitos de Interface
-
-- A aplicacao deve ser responsiva.
-- Deve funcionar bem em desktops, laptops, tablets e celulares Android/iOS.
-- O tema visual deve ser escuro, elegante e com animacoes.
-- A experiencia deve parecer uma aplicacao real de agenda, nao uma landing page.
-- O menu principal deve ficar dentro de um menu sanduiche.
-- Devem existir links rapidos visiveis para:
-  - Agenda
-  - Historico
-  - Cadastro de cliente
-
-## Requisitos Funcionais
-
-- Exibir tela de login como primeira tela da aplicacao.
-- Autenticar o usuario consumindo o backend.
-- Exibir tela de boas-vindas apos login.
-- Permitir cadastro de clientes.
-- Exigir que clientes sejam cadastrados antes de criar agendamentos.
-- Permitir criacao de agendamentos para clientes cadastrados.
-- Permitir consulta da agenda por data.
-- Permitir consulta do historico de agendamentos de cada cliente.
-- Permitir busca/autocomplete de cliente durante o agendamento.
-- Ao digitar as primeiras letras do nome do cliente, sugerir clientes ja cadastrados.
-- Quando o cliente nao existir, orientar o usuario a cadastrar o cliente antes do agendamento.
-
-## Fluxo Principal Esperado
-
-1. Usuario acessa o frontend.
-2. Aplicacao exibe a tela de login.
-3. Usuario informa email e senha.
-4. Backend retorna access token e refresh token.
-5. Aplicacao exibe uma tela de boas-vindas animada.
-6. Usuario acessa agenda, historico ou cadastro de clientes.
-7. Usuario cadastra clientes quando necessario.
-8. Usuario cria agendamentos somente para clientes existentes.
-9. Usuario consulta a agenda e o historico por cliente.
-
-## Integracao com Backend
-
-O backend usa autenticacao JWT.
-
-Endpoint de login:
-
-```http
-POST /auth/login
-```
-
-Exemplo de request:
-
-```json
-{
-  "email": "john.manager@timegrid.test",
-  "password": "123456"
-}
-```
-
-Exemplo de response:
-
-```json
-{
-  "accessToken": "...",
-  "refreshToken": "..."
-}
-```
-
-Rotas protegidas devem enviar:
-
-```http
-Authorization: Bearer <accessToken>
-```
-
-Endpoint de refresh:
-
-```http
-POST /auth/refresh
-```
-
-## Endpoints Principais
-
-Usuarios:
+Usuários:
 
 ```http
 POST /users
@@ -145,7 +87,14 @@ GET /users/{id}
 PUT /users/{id}
 DELETE /users/{id}
 PATCH /users/{id}/active?active=true
+PATCH /users/me/password
+PATCH /users/{id}/password
 ```
+
+O update geral envia `username`, `email` e `role`, sem alterar senha.
+A troca da própria senha envia `currentPassword` e `newPassword`; o reset
+administrativo envia apenas `newPassword`. A exclusão de usuário é lógica
+(`active=false`), e a listagem retorna usuários ativos.
 
 Clientes:
 
@@ -166,71 +115,82 @@ PUT /users/{userId}/appointments/{appointmentId}
 DELETE /users/{userId}/appointments/{appointmentId}
 ```
 
-## Regras Importantes
+## Regras de funcionamento
 
-- Clientes precisam existir antes de um agendamento ser criado.
-- O autocomplete de clientes deve usar a lista de clientes cadastrados do usuario.
-- O backend valida se o cliente pertence ao usuario informado.
-- Agendamentos sao consultados por data.
-- O historico por cliente deve ser construido a partir dos agendamentos vinculados ao cliente.
-- Horarios devem ser enviados para a API usando o enum `TimeGrid`.
-- Na interface, os horarios devem aparecer em formato amigavel, como `08:00` ou `08:30`.
+- Um cliente deve estar cadastrado e pertencer ao usuário antes do agendamento.
+- Telefones são exibidos com máscara, mas enviados à API somente com dígitos.
+- A lista de clientes possui cache em memória por usuário durante a sessão;
+  a agenda busca os dados da API ao consultar uma data.
+- Os horários usam intervalos de 30 minutos, de `08:00` a `22:00`, e são enviados
+  no formato do enum da API, como `T0800` e `T0830`.
+- Horários encostados são considerados conflito: após `09:00–10:00`, o próximo
+  início permitido é `10:30`.
+- A edição de um agendamento altera somente o serviço e o horário final.
+- Datas passadas não permitem a criação de novos agendamentos na interface.
+- O histórico é montado no frontend a partir das consultas por data e filtrado
+  pelo cliente escolhido; não existe um endpoint específico de histórico.
 
-## Direcao de Implementacao
+## Rotas
 
-Ordem sugerida para desenvolver o frontend:
+| Rota | Tela |
+| --- | --- |
+| `/login` | Login |
+| `/app/welcome` | Boas-vindas |
+| `/app/agenda` | Agenda |
+| `/app/clients` | Clientes |
+| `/app/history` | Histórico |
+| `/app/account` | Minha conta |
+| `/app/users/new` | Gerenciamento de usuários (`MANAGER`) |
+| `/app/access-denied` | Acesso negado |
 
-1. Estruturar modelos TypeScript da API.
-2. Criar configuracao base de ambiente/API.
-3. Criar tela de login.
-4. Criar servico de autenticacao.
-5. Criar interceptor para enviar o token JWT.
-6. Criar rotas publicas e protegidas.
-7. Criar layout autenticado com menu sanduiche e links rapidos.
-8. Criar tela de boas-vindas animada.
-9. Criar cadastro/listagem de clientes.
-10. Criar agenda por data.
-11. Criar formulario de agendamento com autocomplete de clientes.
-12. Criar historico de agendamentos por cliente.
+## Estrutura principal
 
-## Como Rodar
+```text
+src/app/
+  core/
+    config/          # Endereço da API
+    guards/          # Autenticação, visitante e MANAGER
+    interceptors/    # Autenticação das requisições
+    models/          # Contratos TypeScript da API
+    services/        # Autenticação, API, tokens e temas
+  features/          # Páginas e layout autenticado
+  shared/            # Erros, horários, nomes e seletor de tema
+```
 
-Instalar dependencias:
+## Como executar
+
+Com Node.js e npm compatíveis com Angular 20 instalados, execute na pasta do frontend:
 
 ```bash
 npm install
-```
-
-Subir o servidor de desenvolvimento:
-
-```bash
 npm start
 ```
 
-Acessar:
+Acesse [http://localhost:4200](http://localhost:4200).
+No PowerShell, se a execução de `npm.ps1` estiver bloqueada, use `npm.cmd`.
 
-```text
-http://localhost:4200
-```
+## Build e testes
 
-## Build
-
-Gerar build de producao:
+Gerar o build de produção:
 
 ```bash
 npm run build
 ```
 
-## Testes
-
-Executar testes:
+Executar os testes configurados com Jasmine/Karma:
 
 ```bash
 npm test
 ```
 
-## Status Atual
+O checkpoint registra build aprovado após a implementação dos temas em
+14/10/2026, com verificação visual da alternância e persistência após recarregar.
+A revisão responsiva de 11/10/2026 utilizou dados fictícios no Preview, sem
+validar a integração real com o backend naquele ambiente.
 
-Projeto Angular 20 criado e Tailwind CSS configurado.
+## Continuidade
 
-Implementacao das telas e integracao com backend ainda nao iniciada.
+O foco atual é refinar a experiência e validar os fluxos completos com a API:
+login, agenda, clientes, histórico, conta e usuários. Os contratos existentes do
+backend devem ser preservados. Consulte o `AGENTS.md` antes de novas mudanças,
+pois ele também contém registros históricos de etapas já superadas.

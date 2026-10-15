@@ -5,7 +5,7 @@
 Frontend do TimeGrid, aplicacao de agendamento que consome o backend Spring Boot
 em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
-Atualizado em: 2026-10-11.
+Atualizado em: 2026-10-15.
 
 ## Context Checkpoint
 
@@ -805,6 +805,28 @@ Observacao importante:
   sua conexao e tente novamente.`
 
 ## Development Rules For Future Agents
+
+Preferências confirmadas pelo usuário em 2026-10-15:
+
+- Nesta conversa, o backend é somente leitura; alterações são restritas ao frontend.
+- Pedir confirmação antes de qualquer nova alteração. A atualização do contexto
+  ao concluir uma alteração autorizada já está autorizada pelo usuário.
+- Ao finalizar, registrar neste arquivo o que mudou e como foi validado.
+- Sugerir uma mensagem de commit em inglês no padrão Conventional Commits.
+- O usuário fará os commits; não executar commit ou push por iniciativa própria.
+
+### 2026-10-15 - README aligned with current frontend
+
+- README atualizado com o MVP implementado, tecnologias, temas, rotas, regras de
+  agendamento e integração com a API de produção no Railway.
+- Documentados os contratos atuais de troca/reset de senha, o fluxo de branches,
+  os comandos de execução e as limitações das validações históricas.
+- Removida a descrição desatualizada de que as telas e a integração ainda não
+  haviam sido iniciadas.
+- Validação: revisão documental contra este contexto e os arquivos de rotas,
+  configuração da API, serviço de usuários, histórico, temas e package.json.
+  Build e testes não executados, pois a alteração foi somente documental.
+- Backend e código da aplicação não foram alterados. Commit fica a cargo do usuário.
 
 1. Manter o front alinhado ao backend atual; nao inventar endpoints.
 2. Antes de implementar features que consomem API, conferir os DTOs no backend.
