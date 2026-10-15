@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+﻿import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserApiService } from '../../core/services/user-api.service';
@@ -17,7 +17,7 @@ export class WelcomePage implements OnInit {
   protected readonly user = this.authService.currentUser;
   protected readonly username = signal('');
   protected readonly displayName = computed(() =>
-    firstNameFrom(this.username() || this.user()?.sub, 'usuário'),
+    firstNameFrom(this.username(), ''),
   );
   protected readonly role = computed(() => this.user()?.role ?? 'ADMIN');
 

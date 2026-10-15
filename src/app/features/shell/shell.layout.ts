@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+﻿import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { UserApiService } from '../../core/services/user-api.service';
@@ -25,7 +25,7 @@ export class ShellLayout implements OnInit {
   protected readonly username = signal('');
   protected readonly user = this.authService.currentUser;
   protected readonly displayName = computed(() =>
-    firstNameFrom(this.username() || this.user()?.sub, 'Usuario'),
+    firstNameFrom(this.username(), ''),
   );
   protected readonly role = computed(() => this.user()?.role ?? 'ADMIN');
   protected readonly isManager = computed(() => this.role() === 'MANAGER');

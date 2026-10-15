@@ -1,4 +1,4 @@
-<section class="min-w-0 wrap-anywhere grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+﻿<section class="min-w-0 wrap-anywhere grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
   <div class="relative min-h-[520px] overflow-hidden rounded-lg border border-white/10 bg-white/[0.055] p-5 shadow-2xl sm:p-8">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(16,185,129,0.2),transparent_28%),radial-gradient(circle_at_70%_18%,rgba(56,189,248,0.18),transparent_22%)]"></div>
     <div class="relative">
@@ -9,7 +9,7 @@
         Bem-vindo ao seu centro de agenda.
       </h1>
       <p class="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-        <span class="welcome-name">{{ displayName() }}</span>, tudo está pronto para organizar clientes,
+        @if (displayName()) {<span class="welcome-name">{{ displayName() }}</span>, tudo} @else {Tudo} está pronto para organizar clientes,
         horários e histórico com menos atrito.
       </p>
 

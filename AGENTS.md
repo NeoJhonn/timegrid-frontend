@@ -889,3 +889,20 @@ Preferências confirmadas pelo usuário em 2026-10-15:
   de CORS/rede ainda podem exigir investigação no backend se persistirem.
 - Backend não alterado. Nenhum commit ou push executado.
 - Sugestão: `fix: reliably refresh access tokens and handle session expiration`.
+
+### 2026-10-15 - Agenda feedback and user-facing copy
+
+- Removida a mensagem de sucesso após criar agendamento. O modal continua fechando
+  e a agenda é recarregada para mostrar o novo atendimento. Erros de criação e
+  mensagens das outras operações foram preservados.
+- Rótulos visíveis `Role` substituídos por `Perfil` em Minha conta e nos formulários
+  de cadastro/edição de usuários. Propriedades `role`, enums e contratos da API
+  permanecem com os nomes originais.
+- Boas-vindas e cabeçalho deixaram de usar o `sub` do JWT (e-mail) como nome provisório.
+  O primeiro nome é exibido somente após carregar `username` pela API; enquanto isso,
+  as boas-vindas usam uma frase neutra e o cabeçalho não exibe nome provisório.
+  Em caso de falha no carregamento, o e-mail não é usado como fallback.
+- Validação: `npm.cmd run build` aprovado e busca pelos textos antigos nas features.
+  Não realizada validação visual no navegador nesta etapa.
+- Somente frontend alterado; nenhum commit ou push executado.
+- Sugestão: `fix: refine agenda feedback and user profile display`.

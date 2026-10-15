@@ -223,7 +223,7 @@ export class AgendaPage implements OnInit {
       .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
         next: () => {
-          this.message.set('Agendamento criado com sucesso.');
+
           this.closeScheduleModal();
           this.loadAppointments();
         },
@@ -410,4 +410,3 @@ export class AgendaPage implements OnInit {
     return new Date(`${value}T00:00:00`);
   }
 }
-
