@@ -7,7 +7,24 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Matching edit and delete styling (2026-10-18)
+## Latest Checkpoint - Vercel refresh fallback (2026-10-18)
+
+- Relato de 404 ao atualizar página publicada. Build atual gera apenas
+  `browser/index.csr.html`, sem arquivos HTML por rota; faltava fallback do host
+  após a mudança para RenderMode.Client. A correção anterior estava incompleta
+  quanto à hospedagem estática; ng serve não reproduz essa falta de configuração.
+- Adicionado vercel.json: build npm run build, publicação de dist/timegrid-frontend/browser,
+  framework null para hospedagem estática explícita e rewrite de rotas para
+  /index.csr.html. Arquivos existentes têm precedência segundo documentação Vercel.
+  Rewrite mantém a URL original e seus query parameters para o Angular.
+- 104 testes ChromeHeadless e build aprovados (aviso existente de bundle 448 bytes
+  acima de 500 kB). Checados fallback gerado, correspondência das rotas principais,
+  bundles JS/CSS, tema inicial e imagem social. Sem deploy ou validação do edge Vercel.
+- Após commit/push do usuário, aguardar novo deploy e conferir refresh nas rotas
+  autenticadas. Backend não alterado; nenhum commit/push executado.
+- Sugestão: `fix: configure Vercel fallback for page refreshes`.
+
+## Previous Checkpoint - Matching edit and delete styling (2026-10-18)
 
 - Botão Excluir no card da agenda em tema claro agora acompanha o estilo do
   Editar: fundo vermelho a 12%, texto vermelho-escuro, borda vermelha a 40% e
