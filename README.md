@@ -183,10 +183,47 @@ Executar os testes configurados com Jasmine/Karma:
 npm test
 ```
 
-O checkpoint registra build aprovado após a implementação dos temas em
-14/10/2026, com verificação visual da alternância e persistência após recarregar.
-A revisão responsiva de 11/10/2026 utilizou dados fictícios no Preview, sem
-validar a integração real com o backend naquele ambiente.
+O comando acima mantém os testes em execução e repete a suíte quando os arquivos
+mudam. Para uma execução única no Chrome sem interface:
+
+```bash
+npm run test:ci
+```
+
+Verificar testes e, se passarem, gerar o build de produção:
+
+```bash
+npm run verify
+```
+
+Gerar o relatório de cobertura em `coverage/`:
+
+```bash
+npm run test:coverage
+```
+
+É necessário ter Chrome instalado para os comandos headless. Se o Karma não
+encontrar o executável, configure `CHROME_BIN` com o caminho da instalação local.
+Não são necessárias credenciais, banco ou backend em execução: os testes usam
+dados fictícios e respostas HTTP simuladas, sem acessar a API de produção.
+
+A suíte cobre autenticação e renovação de sessão, permissões, agenda, clientes,
+login, senha da conta, gerenciamento de usuários, histórico, exibição de nomes,
+cache de clientes, contratos HTTP, temas e mensagens de erro. Os novos casos
+estão em `src/testing/`, junto de dados fictícios compartilhados; os testes
+anteriores permanecem junto dos componentes e do interceptor.
+
+Em 18/10/2026, 79 testes passaram em Chrome/Karma com compilação Angular AOT e
+empacotamento de diagnóstico temporários, usando o navegador do aplicativo. A
+checagem TypeScript também passou. Os comandos padrão de testes e build
+encerraram durante a compilação neste ambiente Windows, antes da execução;
+portanto, `npm run verify` ainda precisa ser validado em um terminal funcional.
+O caminho de diagnóstico não substitui a validação do pipeline padrão nem dos
+estilos globais.
+
+Testes de unidade e componentes não substituem a conferência visual em telas
+mobile/desktop nem testes completos com o backend. A cada correção de bug,
+adicione um caso de regressão quando aplicável e execute a suíte antes de concluir.
 
 ## Continuidade
 

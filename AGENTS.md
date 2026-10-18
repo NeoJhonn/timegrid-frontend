@@ -5,7 +5,7 @@
 Frontend do TimeGrid, aplicacao de agendamento que consome o backend Spring Boot
 em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
-Atualizado em: 2026-10-15.
+Atualizado em: 2026-10-18.
 
 ## Context Checkpoint
 
@@ -925,3 +925,50 @@ Preferências confirmadas pelo usuário em 2026-10-15:
 - Para publicar, incluir também a pasta `src/assets/` no commit; ela estava não
   rastreada no Git durante a verificação. Commit e push ficam com o usuário.
 - Sugestão: `feat: add social sharing metadata and preview image`.
+
+### 2026-10-18 - Frontend regression suite
+
+- Usuário solicitou ampliar os testes automatizados antes das próximas correções.
+  A cobertura anterior era de 15 testes em 3 arquivos: app, calendário e sessão.
+- Adicionados 64 casos em 7 arquivos `src/testing/*.spec.ts` e fixtures tipadas em
+  `src/testing/test-data.ts`, totalizando 79 testes. Arquivos e regras da aplicação
+  e backend não foram alterados.
+- Agenda: integração do evento do calendário, datas passadas, validações, payload
+  com enums, criação sem banner, duplicidade de submit, erros recuperáveis, limites
+  ocupados, edição restrita, confirmação de exclusão e seleção de cliente.
+- Clientes: carga por usuário, validações, máscara removida no envio, edição,
+  duplicidade de submit, falhas, busca e confirmação/cancelamento de exclusão.
+- Login/conta: credenciais, navegação após sucesso, erros, submissão concorrente,
+  contrato de senha atual/nova, mensagens no modal e limpeza de dados sensíveis.
+- Usuários: força de senha, cadastro, contratos separados de update/reset,
+  sequência das operações, falha de update e confirmação/cancelamento de exclusão.
+- Histórico: consulta somente após seleção, autocomplete, filtro por cliente,
+  ordenação e janela de datas. Boas-vindas e cabeçalho: primeiro nome após resposta
+  assíncrona, sem fallback para e-mail mesmo se a consulta falhar.
+- Guards: acesso autenticado, visitante e MANAGER. Serviços: contratos HTTP,
+  isolamento/manutenção do cache por usuário, falha sem corromper cache e agenda
+  sem cache. Temas: ciclo, persistência, restauração, valor inválido e SSR. Erros:
+  mensagens de rede, validação e negócio.
+- Scripts adicionados: `test:ci` (ChromeHeadless, execução única), `test:coverage`
+  (relatório em coverage/) e `verify` (testes seguidos de build se passarem).
+  README atualizado com comandos, escopo e limitações.
+- Validação: TypeScript `tsc --noEmit -p tsconfig.spec.json` e compilação completa
+  Angular AOT (`ngc`, configuração temporária) aprovados. Os 79 testes passaram
+  em Karma/Chrome 155 pelo navegador integrado, com bundle temporário do código
+  compilado AOT e templates reais; sem stylesheet global e sem chamadas à produção.
+- Limitação do ambiente: executor de shell falha com erro CET; Angular CLI test e
+  build encerram com código 3221225477 antes de concluir a compilação. Chrome
+  externo também falhou ao iniciar processos gráficos. O teste no navegador
+  integrado confirmou os casos, mas não valida o pipeline padrão, build de produção,
+  coverage ou aparência/responsividade. Nenhum resultado de coverage foi medido.
+  Não adicionar ao repositório os scripts/bundles temporários de diagnóstico.
+- Para próximas mudanças: executar `npm run verify` em ambiente funcional e criar
+  regressões para bugs corrigidos quando aplicável. Se houver bloqueio de execução,
+  informar o bloqueio e distinguir testes aprovados de checagens não realizadas.
+  Mudanças visuais também precisam de conferência visual nas larguras relevantes.
+- Preferência reforçada pelo usuário: abrir e testar a interface sempre no Angular
+  local em `http://localhost:4200/` (ng serve). Não usar o deploy para testes de telas.
+  O servidor interno do Jasmine/Karma é independente do ng serve; os testes unitários
+  não dependem da aplicação na porta 4200 e simulam as APIs, sem acessar produção.
+- Nenhum commit ou push executado; continuam a cargo do usuário.
+- Sugestão: `test: expand frontend regression coverage and verification scripts`.
