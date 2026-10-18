@@ -7,7 +7,27 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Preserve agenda date on refresh (2026-10-18)
+## Latest Checkpoint - Matching edit and delete styling (2026-10-18)
+
+- Botão Excluir no card da agenda em tema claro agora acompanha o estilo do
+  Editar: fundo vermelho a 12%, texto vermelho-escuro, borda vermelha a 40% e
+  sombra vermelha discreta. Hover a 20%. Substitui o ajuste anterior de alpha 0.8.
+- Teste existente verifica fundo, texto, borda, sombra e opacidade integral do texto.
+- 104 testes ChromeHeadless e build aprovados; permanece aviso de bundle inicial
+  acima de 500 kB. Sem conferência visual autenticada no localhost nesta etapa.
+- Backend não alterado. Sem commit/push. Sugestão:
+  `style: match agenda delete button to subtle edit styling`.
+
+## Previous Checkpoint - Softer agenda delete background (2026-10-18)
+
+- Fundo vermelho do botão Excluir no card da agenda em tema claro suavizado:
+  alpha de 0.88 para 0.8, mantendo o texto branco totalmente opaco.
+- Teste de estilo existente atualizado; 104 testes ChromeHeadless aprovados e
+  build de produção concluído com o aviso já existente de bundle acima de 500 kB.
+  Sem conferência visual no localhost nesta etapa. Backend não alterado.
+- Nenhum commit/push. Sugestão: `style: soften agenda delete button background`.
+
+## Previous Checkpoint - Preserve agenda date on refresh (2026-10-18)
 
 - Agenda passa a registrar a data selecionada no query parameter `date`, com
   replaceUrl e preservação dos demais parâmetros. Reload restaura a data antes

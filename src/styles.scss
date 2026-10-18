@@ -337,10 +337,12 @@ html[data-theme='light'] {
   }
 
   .appointment-card .agenda-delete-button {
-    background-color: rgba(185, 28, 28, 0.88) !important;
-    border-color: rgba(153, 27, 27, 0.7) !important;
+    background-color: rgba(220, 38, 38, 0.12) !important;
+    border-color: rgba(220, 38, 38, 0.4) !important;
+    color: #991b1b !important;
+    box-shadow: 0 3px 10px rgba(220, 38, 38, 0.12);
 
-    &:hover { background-color: rgba(153, 27, 27, 0.96) !important; }
+    &:hover { background-color: rgba(220, 38, 38, 0.2) !important; }
   }
 
   .appointment-card button:not(.agenda-delete-button) {

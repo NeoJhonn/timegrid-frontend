@@ -49,8 +49,10 @@ describe('Light theme action contrast', () => {
     const edit = getComputedStyle(buttons[0]); const remove = getComputedStyle(buttons[1]);
     expect(edit.color).toBe('rgb(30, 64, 175)');
     expect(edit.backgroundColor).toBe('rgba(37, 99, 235, 0.12)');
-    expect(remove.backgroundColor).toBe('rgba(185, 28, 28, 0.88)');
-    expect(remove.color).toBe('rgb(255, 255, 255)');
+    expect(remove.backgroundColor).toBe('rgba(220, 38, 38, 0.12)');
+    expect(remove.color).toBe('rgb(153, 27, 27)');
+    expect(remove.borderTopColor).toBe('rgba(220, 38, 38, 0.4)');
+    expect(remove.boxShadow).toContain('rgba(220, 38, 38, 0.12)');
     expect(edit.opacity).toBe('1'); expect(remove.opacity).toBe('1');
   });
 });
