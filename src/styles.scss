@@ -310,7 +310,7 @@ html[data-theme='light'] {
   .shell-header {
     background-color: #0f172a;
 
-    a, button, [class~='text-white'], [class~='text-slate-100'],
+    a, button:not(.theme-toggle), [class~='text-white'], [class~='text-slate-100'],
     [class~='text-slate-300'], [class~='text-emerald-100'] {
       color: #ffffff !important;
     }

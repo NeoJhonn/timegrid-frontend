@@ -972,3 +972,65 @@ Preferências confirmadas pelo usuário em 2026-10-15:
   não dependem da aplicação na porta 4200 e simulam as APIs, sem acessar produção.
 - Nenhum commit ou push executado; continuam a cargo do usuário.
 - Sugestão: `test: expand frontend regression coverage and verification scripts`.
+
+### 2026-10-18 - Theme toggle fix preparation (historical; applied below)
+
+- Usuário relatou ícone do sol invisível no cabeçalho mobile em tema claro e pediu
+  ícones maiores em todos os temas.
+- Diagnóstico: a regra global do tema claro em `.shell-header` força `button` para
+  branco, enquanto o seletor recebe fundo claro pelo override de `bg-white/[0.06]`.
+  Os símbolos atuais também dependem do tamanho/renderização de glifos da fonte.
+- Preparado `theme-toggle-fix.patch`: exclui `.theme-toggle` da regra genérica de
+  cor dos botões, usa cores próprias por variáveis do tema e substitui glifos por
+  SVGs de 34px dentro do botão de 44px, preservando ciclo e rótulos acessíveis.
+- O patch inclui dois testes de regressão: contraste/tamanho do sol no cabeçalho
+  claro com stylesheet global real e alternância dos três ícones/rótulos.
+- NÃO APLICADO: editor recusou o arquivo por ponto de nova análise no caminho;
+  gravação direta retornou EPERM; executor escalado falhou ao iniciar com erro CET
+  do Windows. Os arquivos da aplicação permanecem intactos.
+- `git apply --check theme-toggle-fix.patch` aprovado (somente validação do patch).
+  Testes novos, build e visual em `http://localhost:4200/` ainda não executados.
+  Retomar aplicação e verificação quando houver executor com gravação funcional.
+- Nenhum commit ou push. Sugestão APÓS aplicar e validar:
+  `fix: improve theme toggle icon size and light mode contrast`.
+
+### 2026-10-18 - Retry interrupted (historical; recovery completed below)
+
+- Usuário pediu nova tentativa e reafirmou autorização para a correção.
+- Executor escalado continua falhando antes do comando com mensagem CET do Windows.
+- `git apply` pelo executor alternativo falhou na gravação e removeu os dois arquivos
+  que pretendia substituir. `src/styles.scss` foi recuperado com a alteração
+  `button:not(.theme-toggle)`; a gravação do componente continua bloqueada por EPERM.
+- Naquela tentativa, `src/app/shared/theme-toggle.component.ts` ficou ausente.
+  O usuário depois o restaurou; ver a validação e o estado atual abaixo.
+- O conteúdo corrigido completo está preservado na raiz em
+  `theme-toggle.component.recovery.ts`. Copiar esse arquivo para
+  `src/app/shared/theme-toggle.component.ts` em um terminal com permissão de escrita.
+- `git restore` e tentativa de gravação atômica também foram recusados. Nenhuma
+  permissão de sistema foi alterada. Nenhum commit ou push foi executado.
+- O patch anterior não deve ser reaplicado cegamente: o stylesheet já foi ajustado.
+  Depois de recuperar o componente, adicionar o teste de regressão preparado no
+  patch e validar suíte, build e visual no localhost:4200.
+
+### 2026-10-18 - Theme toggle recovered, applied and tested
+
+- Recuperação concluída pelo usuário via PowerShell e confirmada por leitura.
+  `src/app/shared/theme-toggle.component.ts` existe e contém os SVGs de 34px,
+  botão de 44px, cores via variáveis do tema, foco e rótulos acessíveis.
+- `src/styles.scss` exclui `.theme-toggle` da regra de texto branco do cabeçalho
+  claro. O sol usa texto escuro sobre fundo claro e não depende mais de glifo.
+- Adicionado `src/testing/theme-toggle.spec.ts` com dois testes: contraste real
+  e dimensões do sol dentro de `.shell-header` claro; ciclo dos três ícones e
+  preservação dos nomes acessíveis.
+- Validação: TypeScript sem emissão e compilador Angular AOT aprovados. Suíte
+  completa de 81 testes aprovada no Karma/Chrome integrado com stylesheet global
+  compilado pelo Sass, incluindo a regressão de contraste. Continuou sendo usado
+  o pipeline temporário de diagnóstico; não confundir com build Angular CLI aprovado.
+- Interface local abriu normalmente em `http://localhost:4200/login`, em viewport
+  mobile de 390x844. Não foi realizado login nem teste visual do cabeçalho autenticado;
+  esse cenário foi exercitado pelo componente de teste com a classe real do header.
+- Patch e cópia de recuperação temporários removidos após confirmar os fontes.
+- Arquivos para commit: este AGENTS.md, `src/app/shared/theme-toggle.component.ts`,
+  `src/styles.scss` e `src/testing/theme-toggle.spec.ts`. Backend não alterado.
+- Nenhum commit ou push executado. Sugestão:
+  `fix: improve theme toggle icon size and light mode contrast`.
