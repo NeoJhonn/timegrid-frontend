@@ -20,7 +20,7 @@ import { THEME_OPTIONS, ThemeService } from '../core/services/theme.service';
             <path d="M12 13v9m-4-4h8" />
           }
           @default {
-            <path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z" />
+            <path d="M16 2C9.4 2 4 6.5 4 12s5.4 10 12 10C7 18 7 6 16 2Z" />
           }
         }
       </svg>

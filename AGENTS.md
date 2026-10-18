@@ -1034,3 +1034,35 @@ Preferências confirmadas pelo usuário em 2026-10-15:
   `src/styles.scss` e `src/testing/theme-toggle.spec.ts`. Backend não alterado.
 - Nenhum commit ou push executado. Sugestão:
   `fix: improve theme toggle icon size and light mode contrast`.
+
+### 2026-10-18 - Moon and light action refinements prepared, not applied
+
+- Usuário aprovou o tamanho dos ícones e pediu uma lua mais marcada, login claro
+  com verde mais forte/texto escuro e botões Editar/Excluir com leve transparência.
+- Nenhum arquivo da aplicação foi removido ou alterado nesta tentativa: editor
+  recusou o caminho por ponto de nova análise; gravação pontual retornou EPERM;
+  executor escalado continua falhando com CET.
+- Preparado `apply-theme-refinements.ps1` na raiz. O script aplica somente ajustes
+  visuais no seletor/stylesheet, adiciona dois testes de contraste e registra a
+  aplicação no contexto. Não executa git apply, remoções, commit ou push.
+- Aguardar execução pelo usuário em PowerShell e depois validar tipos, testes e
+  interface no localhost:4200. Não considerar os refinamentos aplicados ainda.
+
+
+### 2026-10-18 - Moon and light action refinements applied via cmd and Node
+
+- Moon SVG changed to a more pronounced crescent; existing 34px icon size preserved.
+- Light login button uses stronger green with dark text and disabled opacity 0.8.
+  Login validation and disabled behavior unchanged.
+- Agenda card delete background uses red at 88% opacity; text stays fully opaque.
+  Edit uses translucent blue, dark blue text, border and subtle shadow.
+  Delete confirmation modal and other themes are unchanged.
+- Added two global stylesheet regression tests in src/testing/light-action-styles.spec.ts.
+- Applied by the agent using the installed Node runtime through an escalated cmd.exe
+  executor. The user's PowerShell script did not run because execution policy blocked it.
+- Validation: standard `npm.cmd run verify` passed: 83 ChromeHeadless tests and the
+  production Angular build. This supersedes earlier environment validation limitations.
+- Windows execution policy and other security settings were not changed. For future
+  commands prefer `shell: cmd.exe`, `login: false` if the PowerShell executor reports CET.
+- No backend changes, commit or push. Suggested commit after validation:
+  fix: refine moon icon and light theme action contrast

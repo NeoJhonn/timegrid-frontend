@@ -319,3 +319,32 @@ html[data-theme='light'] {
     nav a:hover, nav a[aria-current='page'] { background-color: #334155 !important; }
   }
 }
+
+// TimeGrid theme refinements: moon and action contrast (2026-10-18).
+html[data-theme='light'] {
+  app-login-page button[type='submit'] {
+    background-color: #22c55e !important;
+    color: #052e16 !important;
+    box-shadow: 0 8px 22px rgba(22, 163, 74, 0.25);
+
+    &:hover:not(:disabled) { background-color: #16a34a !important; }
+    &:disabled { opacity: 0.8; }
+  }
+
+  .appointment-card .agenda-delete-button {
+    background-color: rgba(185, 28, 28, 0.88) !important;
+    border-color: rgba(153, 27, 27, 0.7) !important;
+
+    &:hover { background-color: rgba(153, 27, 27, 0.96) !important; }
+  }
+
+  .appointment-card button:not(.agenda-delete-button) {
+    background-color: rgba(37, 99, 235, 0.12) !important;
+    border-color: rgba(37, 99, 235, 0.4) !important;
+    color: #1e40af !important;
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.12);
+
+    &:hover { background-color: rgba(37, 99, 235, 0.2) !important; }
+    &:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+  }
+}

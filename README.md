@@ -213,13 +213,11 @@ cache de clientes, contratos HTTP, temas e mensagens de erro. Os novos casos
 estão em `src/testing/`, junto de dados fictícios compartilhados; os testes
 anteriores permanecem junto dos componentes e do interceptor.
 
-Em 18/10/2026, 79 testes passaram em Chrome/Karma com compilação Angular AOT e
-empacotamento de diagnóstico temporários, usando o navegador do aplicativo. A
-checagem TypeScript também passou. Os comandos padrão de testes e build
-encerraram durante a compilação neste ambiente Windows, antes da execução;
-portanto, `npm run verify` ainda precisa ser validado em um terminal funcional.
-O caminho de diagnóstico não substitui a validação do pipeline padrão nem dos
-estilos globais.
+Em 18/10/2026, `npm run verify` passou pelo pipeline padrão: 83 testes aprovados
+em ChromeHeadless e build Angular de produção concluído. A suíte inclui regressões
+de contraste do seletor de temas, login e ações da agenda com os estilos globais.
+Os bloqueios anteriores de execução foram contornados usando `cmd.exe` como shell,
+sem alterar a política de execução do PowerShell ou outras configurações de segurança.
 
 Testes de unidade e componentes não substituem a conferência visual em telas
 mobile/desktop nem testes completos com o backend. A cada correção de bug,
