@@ -7,7 +7,12 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Vercel refresh fallback (2026-10-18)
+Preferência de idioma: novos registros e atualizações de contexto neste arquivo,
+incluindo títulos, devem ser escritos em português. Manter mensagens sugeridas
+de commit em inglês, seguindo Conventional Commits. Nomes técnicos de arquivos,
+comandos e identificadores permanecem como no código.
+
+## Contexto mais recente - Correção de atualização de páginas na Vercel (2026-10-18)
 
 - Relato de 404 ao atualizar página publicada. Build atual gera apenas
   `browser/index.csr.html`, sem arquivos HTML por rota; faltava fallback do host
