@@ -7,6 +7,22 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
+## Latest Checkpoint - Light theme hamburger contrast (2026-10-18)
+
+- Corrigido botão `Abrir menu` do cabeçalho no tema claro: fundo claro e
+  `color: #334155` (cinza-escuro), herdado pelos três risquinhos via `bg-current`.
+- Regra restrita ao botão do menu no tema claro; navegação, seletor de temas e
+  temas escuro/violeta preservados.
+- Adicionado `src/testing/shell-menu.spec.ts`, usando ShellLayout e CSS global reais.
+  O teste reproduziu branco sobre branco antes da correção e passou depois; também
+  verifica presença das três barras e abertura/fechamento do menu.
+- Validação: `npm.cmd run verify` aprovado, com 84 testes ChromeHeadless e build de
+  produção concluído. Nenhuma chamada à API de produção ou alteração no backend.
+- Não foi realizado login/validação visual do menu autenticado no localhost nesta
+  etapa; o cenário foi validado pelo teste do componente real no navegador headless.
+- Nenhum commit ou push executado. Sugestão:
+  `fix: restore hamburger menu contrast in light theme`.
+
 ## Context Checkpoint
 
 Este arquivo reúne o contexto atual do projeto e o histórico de recuperação após

@@ -317,6 +317,11 @@ html[data-theme='light'] {
 
     nav a { border-color: #64748b !important; }
     nav a:hover, nav a[aria-current='page'] { background-color: #334155 !important; }
+
+    button[aria-label='Abrir menu'] {
+      color: #334155 !important;
+      background-color: #f8fafc !important;
+    }
   }
 }
 
