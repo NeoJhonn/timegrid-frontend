@@ -7,7 +7,27 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Logout and login contrast (2026-10-18)
+## Latest Checkpoint - Initial theme and session rendering (2026-10-18)
+
+- Adicionado `public/theme-init.js`, carregado de forma síncrona no head antes
+  dos estilos e do Angular. Restaura o tema salvo validado, color-scheme e fundo
+  inicial; usa escuro para valor ausente/inválido ou storage indisponível.
+  O fundo usa variável CSS para continuar acompanhando a troca de tema.
+- Rotas alteradas de Prerender para RenderMode.Client. Os tokens estão no
+  localStorage: os guards agora decidem a primeira tela no navegador, sem HTML
+  de login pré-renderizado que seria substituído após restaurar a sessão.
+  A URL protegida é preservada quando a sessão é válida; sessão expirada vai ao login.
+- Metadados Open Graph/Twitter preservados no HTML inicial. As telas passam a
+  depender do JavaScript para renderizar conteúdo, adequado ao estado de sessão local.
+- Adicionados 10 testes de inicialização: temas antes do app, fallback, navegação
+  com access/refresh válidos e expiração, sem instanciar login durante restauração.
+- `npm.cmd run verify` aprovado: 100 testes ChromeHeadless e build de produção.
+  Conferidos HTML de produção, cópia do script e metadados. Não realizada
+  conferência visual de reload com sessão autenticada real nesta etapa.
+- Backend não alterado. Nenhum commit ou push. Sugestão:
+  `fix: restore saved theme and session before initial render`.
+
+## Previous Checkpoint - Logout and login contrast (2026-10-18)
 
 - Ação Sair da conta do drawer recebeu fundo vermelho suave, borda e foco visível.
   Texto vermelho-escuro no tema claro e vermelho-claro nos temas escuro/violeta;
