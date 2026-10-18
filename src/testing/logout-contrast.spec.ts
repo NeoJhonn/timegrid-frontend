@@ -27,7 +27,7 @@ describe('Logout action contrast', () => {
   });
 
   for (const theme of ['light', 'dark', 'violet'] as AppTheme[]) {
-    it('highlights logout and its badge without changing behavior in ' + theme, () => {
+    it('keeps logout readable without a selected background and requires confirmation in ' + theme, () => {
       const logout = jasmine.createSpy('logout');
       TestBed.configureTestingModule({
         imports: [ShellLayout], providers: [provideZonelessChangeDetection(), provideRouter([]),
@@ -43,10 +43,24 @@ describe('Logout action contrast', () => {
       const button = element.querySelector<HTMLButtonElement>('.mobile-menu-nav > button')!;
       expect(button.textContent).toContain('Sair da conta');
       expect(getComputedStyle(button).color).toBe(theme === 'light' ? 'rgb(185, 28, 28)' : 'rgb(252, 165, 165)');
+      expect(getComputedStyle(button).backgroundColor).toBe('rgba(0, 0, 0, 0)');
       const badge = button.querySelector('span')!;
       expect(getComputedStyle(badge).backgroundColor).toBe('rgb(220, 38, 38)');
       expect(getComputedStyle(badge).color).toBe('rgb(255, 255, 255)');
       button.click();
+      fixture.detectChanges();
+      const dialog = element.querySelector<HTMLDialogElement>('dialog')!;
+      expect(dialog.open).toBeTrue();
+      expect(dialog.getAttribute('aria-labelledby')).toBe('logout-title');
+      expect(logout).not.toHaveBeenCalled();
+      dialog.querySelector<HTMLButtonElement>('button')!.click();
+      expect(dialog.open).toBeFalse();
+      expect(logout).not.toHaveBeenCalled();
+      button.click();
+      dialog.querySelector<HTMLButtonElement>('.logout-confirm')!.click();
+      fixture.detectChanges();
+      expect(dialog.open).toBeFalse();
+      expect(element.querySelector('.mobile-menu-nav')).toBeNull();
       expect(logout).toHaveBeenCalledOnceWith();
     });
   }

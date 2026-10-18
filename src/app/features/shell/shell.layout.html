@@ -106,7 +106,7 @@
         <button
           type="button"
           class="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm font-semibold text-red-100 transition hover:bg-red-400/10"
-          (click)="logout()"
+          (click)="logoutDialog.showModal()"
         >
           <span class="grid h-8 w-8 place-items-center rounded-lg bg-red-400/10 text-xs font-bold text-red-100">S</span>
           Sair da conta
@@ -115,6 +115,15 @@
 
     </aside>
   }
+
+  <dialog #logoutDialog class="logout-dialog w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-white/10 bg-[#0b111b] p-6 text-slate-100 shadow-2xl" aria-labelledby="logout-title" aria-describedby="logout-description">
+    <h2 id="logout-title" class="text-lg font-semibold text-white">Sair da conta?</h2>
+    <p id="logout-description" class="mt-3 text-sm text-slate-300">Deseja realmente sair da sua conta no TimeGrid?</p>
+    <div class="mt-6 flex justify-end gap-3">
+      <button type="button" autofocus class="rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold" (click)="logoutDialog.close()">Cancelar</button>
+      <button type="button" class="logout-confirm rounded-lg px-4 py-2 text-sm font-semibold" (click)="logoutDialog.close(); closeMenu(); logout()">Sair da conta</button>
+    </div>
+  </dialog>
 
   <main class="mx-auto max-w-7xl px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-5 sm:px-6 lg:pb-16 lg:pt-8">
     <router-outlet />

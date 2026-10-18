@@ -7,7 +7,22 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Initial theme and session rendering (2026-10-18)
+## Latest Checkpoint - Logout confirmation (2026-10-18)
+
+- Removidos fundo e borda vermelhos permanentes da ação Sair da conta no drawer.
+  Mantidos contraste do texto, badge vermelho e feedback de hover/foco.
+- A ação agora abre um dialog nativo com a pergunta de confirmação, Cancelar e
+  Sair da conta. Cancelar/Escape preservam a sessão; somente confirmar fecha o
+  menu e executa o logout. Modal com rótulo/descrição acessíveis, foco inicial no
+  Cancelar e contenção de foco/backdrop pelo dialog nativo.
+- Testes nos três temas verificam fundo transparente, contraste, abertura,
+  cancelamento sem logout e confirmação com fechamento do drawer.
+- Validação: 100 testes ChromeHeadless e build de produção aprovados.
+  Sem conferência visual autenticada no localhost nesta etapa.
+- Somente frontend alterado; sem commit ou push. Sugestão:
+  `feat: confirm logout before ending the session`.
+
+## Previous Checkpoint - Initial theme and session rendering (2026-10-18)
 
 - Adicionado `public/theme-init.js`, carregado de forma síncrona no head antes
   dos estilos e do Angular. Restaura o tema salvo validado, color-scheme e fundo
