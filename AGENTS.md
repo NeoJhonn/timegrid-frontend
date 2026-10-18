@@ -7,7 +7,24 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Logout confirmation (2026-10-18)
+## Latest Checkpoint - Preserve agenda date on refresh (2026-10-18)
+
+- Agenda passa a registrar a data selecionada no query parameter `date`, com
+  replaceUrl e preservação dos demais parâmetros. Reload restaura a data antes
+  da consulta inicial e mantém formulário/calendário sincronizados.
+- Mudanças de query params são acompanhadas com assinatura encerrada no destroy.
+  Valores ausentes/inválidos (inclusive dias inexistentes) usam a data de hoje.
+- Não existe redirecionamento da agenda para welcome nas rotas atuais. O ajuste
+  anterior RenderMode.Client deve estar publicado para evitar o redirect de login
+  pré-renderizado para welcome durante reload; não foi reproduzido em produção.
+- Novos testes de deep link, troca de data/URL, atualização dos parâmetros e datas
+  inválidas. 104 testes ChromeHeadless aprovados; build de produção aprovado
+  com aviso de bundle inicial 392 bytes acima do orçamento de aviso de 500 kB.
+  Não realizado gesto pull-to-refresh em celular real nesta etapa.
+- Backend não alterado, nenhum commit/push. Sugestão:
+  `fix: preserve agenda date when refreshing the page`.
+
+## Previous Checkpoint - Logout confirmation (2026-10-18)
 
 - Removidos fundo e borda vermelhos permanentes da ação Sair da conta no drawer.
   Mantidos contraste do texto, badge vermelho e feedback de hover/foco.

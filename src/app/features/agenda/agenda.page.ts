@@ -1,7 +1,8 @@
 ﻿import { AgendaDatePickerComponent } from '../../shared/agenda-date-picker.component';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin, finalize } from 'rxjs';
 import { AppointmentResponse, TimeGrid } from '../../core/models/appointment.model';
 import { ClientResponse } from '../../core/models/client.model';
@@ -18,6 +19,9 @@ import { TIME_GRID_OPTIONS, TimeGridOption, timeGridLabel } from '../../shared/t
   styleUrl: './agenda.page.scss',
 })
 export class AgendaPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly appointmentApi = inject(AppointmentApiService);
@@ -105,7 +109,19 @@ export class AgendaPage implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadInitialData();
+    let initial = true;
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      const value = params.get('date');
+      const date = this.validDate(value) ? value : this.today();
+      if (initial || date !== this.selectedDate()) {
+        this.selectedDate.set(date);
+        this.appointmentForm.controls.appointmentDate.setValue(date);
+        this.closeScheduleModal();
+        if (initial) this.loadInitialData();
+        else this.loadAppointments();
+      }
+      initial = false;
+    });
   }
 
   protected loadInitialData(): void {
@@ -135,6 +151,8 @@ export class AgendaPage implements OnInit {
   }
 
   protected changeDate(date: string): void {
+    if (!this.validDate(date)) return;
+    void this.router.navigate([], { relativeTo: this.route, queryParams: { date }, queryParamsHandling: 'merge', replaceUrl: true });
     this.selectedDate.set(date);
     this.appointmentForm.controls.appointmentDate.setValue(date);
     this.closeScheduleModal();
@@ -395,6 +413,13 @@ export class AgendaPage implements OnInit {
 
   private userId(): string | null {
     return this.authService.currentUser()?.userId ?? null;
+  }
+
+  private validDate(value: string | null): value is string {
+    if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+    const date = this.dateFromIso(value);
+    return Number.isFinite(date.getTime()) && date.getFullYear() === Number(value.slice(0, 4)) &&
+      date.getMonth() + 1 === Number(value.slice(5, 7)) && date.getDate() === Number(value.slice(8, 10));
   }
 
   private today(): string {
