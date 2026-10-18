@@ -7,7 +7,37 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-18.
 
-## Latest Checkpoint - Light theme hamburger contrast (2026-10-18)
+## Latest Checkpoint - Logout and login contrast (2026-10-18)
+
+- Ação Sair da conta do drawer recebeu fundo vermelho suave, borda e foco visível.
+  Texto vermelho-escuro no tema claro e vermelho-claro nos temas escuro/violeta;
+  badge S com fundo vermelho vivo e letra branca nos três temas.
+- Texto do botão Entrar no TimeGrid definido como preto nos três temas, mantendo
+  o fundo e o comportamento de validação/submissão existentes.
+- Novos testes em `src/testing/logout-contrast.spec.ts`: cor do texto/badge e
+  execução do logout nos três temas. Testes de estilos do login atualizados para
+  exigir texto preto também nos temas escuro e violeta.
+- `npm.cmd run verify` aprovado: 90 testes ChromeHeadless e build de produção.
+  Sem conferência visual autenticada no localhost nesta etapa; teste usa o
+  componente real, CSS global e serviços simulados, sem chamadas à produção.
+- Preservadas as alterações anteriores ainda não commitadas, incluindo o olho
+  da senha. Backend não alterado. Nenhum commit ou push executado. Sugestão:
+  `fix: improve logout visibility and login button text contrast`.
+
+## Previous Checkpoint - Login password eye icon (2026-10-18)
+
+- Substituídos os textos Mostrar/Ocultar no campo de senha do login por SVGs:
+  olho fechado enquanto a senha está oculta; olho aberto quando está visível.
+- Botão com largura de 48px, ícone de 24px, foco visível, aria-label dinâmico,
+  aria-pressed e aria-controls. A ação continua type=button, sem enviar o login.
+- Teste `src/testing/login-password.spec.ts` verifica estado inicial, alternância
+  dos ícones/tipo de input, preservação da senha, rótulos e ausência de submissão.
+- Validação: `npm.cmd run verify` aprovado com 85 testes e build de produção.
+  Não foi realizada conferência visual no localhost nesta etapa.
+- Backend não alterado. Nenhum commit ou push. Sugestão:
+  `feat: replace login password text toggle with eye icons`.
+
+## Previous Checkpoint - Light theme hamburger contrast (2026-10-18)
 
 - Corrigido botão `Abrir menu` do cabeçalho no tema claro: fundo claro e
   `color: #334155` (cinza-escuro), herdado pelos três risquinhos via `bg-current`.

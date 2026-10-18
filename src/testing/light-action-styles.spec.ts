@@ -29,11 +29,20 @@ describe('Light theme action contrast', () => {
     const fixture = TestBed.createComponent(ActionStyleHost); fixture.detectChanges();
     const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('button[type="submit"]')!;
     const style = getComputedStyle(button);
-    expect(style.color).toBe('rgb(5, 46, 22)');
+    expect(style.color).toBe('rgb(0, 0, 0)');
     expect(style.backgroundColor).toBe('rgb(34, 197, 94)');
     expect(style.opacity).toBe('0.8');
     expect(button.disabled).toBeTrue();
   });
+  for (const theme of ['dark', 'violet']) {
+    it('keeps login text black in ' + theme, () => {
+      document.documentElement.setAttribute('data-theme', theme);
+      const fixture = TestBed.createComponent(ActionStyleHost); fixture.detectChanges();
+      const button = (fixture.nativeElement as HTMLElement).querySelector('button[type="submit"]')!;
+      expect(getComputedStyle(button).color).toBe('rgb(0, 0, 0)');
+    });
+  }
+
   it('distinguishes edit and delete using translucent backgrounds without fading their text', () => {
     const fixture = TestBed.createComponent(ActionStyleHost); fixture.detectChanges();
     const buttons = (fixture.nativeElement as HTMLElement).querySelectorAll('article button');

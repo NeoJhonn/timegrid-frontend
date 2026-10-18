@@ -41,6 +41,7 @@
             <span class="mb-2 block text-sm font-medium text-slate-300">Senha</span>
             <span class="flex h-12 rounded-lg border border-white/10 bg-slate-950/70 transition focus-within:border-emerald-300/70 focus-within:ring-4 focus-within:ring-emerald-300/10">
               <input
+                id="login-password"
                 [type]="showPassword() ? 'text' : 'password'"
                 formControlName="password"
                 class="min-w-0 flex-1 bg-transparent px-4 text-sm text-white outline-none placeholder:text-slate-600"
@@ -48,10 +49,23 @@
               />
               <button
                 type="button"
-                class="w-24 border-l border-white/10 text-xs font-semibold text-slate-300 transition hover:text-white"
+                class="grid w-12 shrink-0 place-items-center rounded-r-lg border-l border-white/10 text-slate-300 transition hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+                [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+                [attr.aria-pressed]="showPassword()"
+                [title]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+                aria-controls="login-password"
                 (click)="togglePassword()"
               >
-                {{ showPassword() ? 'Ocultar' : 'Mostrar' }}
+                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true" focusable="false">
+                  @if (showPassword()) {
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+                    <circle cx="12" cy="12" r="3" />
+                  } @else {
+                    <path d="M3 9c2 4 5 6 9 6s7-2 9-6M4 15l2-2m3 6 1-4m5 4-1-4m6 0-2-2" />
+                  }
+                </svg>
               </button>
             </span>
           </label>
