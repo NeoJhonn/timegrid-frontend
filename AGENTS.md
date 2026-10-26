@@ -7,7 +7,21 @@ em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
 Atualizado em: 2026-10-26.
 
-## Contexto mais recente - Contraste do aviso de cliente não cadastrado (2026-10-26)
+## Contexto mais recente - Botões de clientes e usuários no tema claro (2026-10-26)
+
+- Ações Editar e Remover/Excluir nos cartões de clientes e usuários recebem
+  classes específicas e compartilham as regras visuais dos botões da agenda:
+  azul suave para edição, vermelho suave para remoção, bordas e sombras discretas,
+  com texto escuro, hover e foco visível. Aplicação restrita ao tema claro.
+- Testes dos componentes reais verificam fundo, texto, borda e sombra nas duas
+  páginas; também verificam fundo original transparente nos temas escuro/violeta.
+- Validação: 111 testes ChromeHeadless e build de produção aprovados. Permanece
+  aviso de tamanho do pacote inicial acima de 500 kB. Sem conferência visual
+  autenticada no localhost nesta etapa.
+- Backend não alterado. Nenhum commit ou push. Sugestão:
+  `style: unify light theme client and user action buttons`.
+
+## Contexto anterior - Contraste do aviso de cliente não cadastrado (2026-10-26)
 
 - Aviso no modal de agendamento recebeu classe específica. No tema claro usa
   fundo creme, texto marrom-escuro, borda âmbar e link escuro sublinhado, com
