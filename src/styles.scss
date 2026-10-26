@@ -391,3 +391,17 @@ app-login-page button[type='submit'] {
   .logout-confirm { background: #b91c1c; color: #ffffff; }
   .logout-confirm:hover { background: #991b1b; }
 }
+
+// Contraste do aviso de cliente ausente no modal de agendamento.
+html[data-theme='light'] .agenda-client-not-found {
+  background-color: #fffbeb;
+  border-color: #d97706 !important;
+  color: #78350f;
+
+  a {
+    color: #92400e;
+    text-decoration-color: currentColor;
+    &:hover { color: #78350f; }
+    &:focus-visible { outline: 2px solid #92400e; outline-offset: 3px; }
+  }
+}

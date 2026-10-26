@@ -32,6 +32,25 @@ describe('Agenda regressions', () => {
     page['openScheduleModal']('T0800'); page['selectClient'](client);
     page['appointmentForm'].controls.service.setValue('  Consulta  ');
   }
+  it('shows a readable missing-client notice and registration link in light theme', () => {
+    const previous = document.documentElement.getAttribute('data-theme');
+    try {
+      document.documentElement.setAttribute('data-theme', 'light');
+      page['openScheduleModal']('T0800');
+      page['updateClientQuery']('Cliente inexistente');
+      fixture.detectChanges();
+      const notice = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.agenda-client-not-found')!;
+      expect(notice.textContent).toContain('Cliente não cadastrado');
+      expect(getComputedStyle(notice).color).toBe('rgb(120, 53, 15)');
+      expect(getComputedStyle(notice).backgroundColor).toBe('rgb(255, 251, 235)');
+      const link = notice.querySelector('a')!;
+      expect(getComputedStyle(link).color).toBe('rgb(146, 64, 14)');
+      expect(link.getAttribute('href')).toBe('/app/clients');
+    } finally {
+      if (previous === null) document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', previous);
+    }
+  });
   it('loads the date from the calendar output immediately', () => {
     fixture.debugElement.query(By.directive(AgendaDatePickerComponent)).componentInstance.dateSelected.emit('2099-10-19');
     expect(api.listByDate).toHaveBeenCalledWith(claims.userId, '2099-10-19');

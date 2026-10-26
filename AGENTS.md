@@ -5,7 +5,20 @@
 Frontend do TimeGrid, aplicacao de agendamento que consome o backend Spring Boot
 em `D:\Projetos\Projetos-Java-Spring-Boot\timegrid-backend`.
 
-Atualizado em: 2026-10-18.
+Atualizado em: 2026-10-26.
+
+## Contexto mais recente - Contraste do aviso de cliente não cadastrado (2026-10-26)
+
+- Aviso no modal de agendamento recebeu classe específica. No tema claro usa
+  fundo creme, texto marrom-escuro, borda âmbar e link escuro sublinhado, com
+  foco visível. Regras restritas ao aviso no tema claro.
+- Teste com o componente real abre o modal, pesquisa cliente inexistente e
+  verifica cores calculadas do aviso/link e destino de cadastro de clientes.
+- Validação: 105 testes ChromeHeadless e build de produção aprovados. Permanece
+  aviso de tamanho do pacote inicial: 500,87 kB para limite de aviso de 500 kB.
+  Não realizada conferência visual autenticada no localhost nesta etapa.
+- Backend não alterado. Nenhum commit ou push executado. Sugestão:
+  `fix: improve missing client notice contrast in light theme`.
 
 Preferência de idioma: novos registros e atualizações de contexto neste arquivo,
 incluindo títulos, devem ser escritos em português. Manter mensagens sugeridas
